@@ -1,5 +1,29 @@
-<h3>AddNotesDialogue</h3>
+<MudDialog Style="width:600px">
+    <TitleContent>
+        Dialog Title
+    </TitleContent>
+    <DialogContent>
+        <MudText>Title</MudText>
+        <MudTextField @bind-Value="TextValue" Label="Title" Variant="Variant.Outlined"></MudTextField>
+        <MudDivider/>
+        <MudText>Content</MudText>
+        <MudTextField @bind-Value="TextValue" Label="Content" Variant="Variant.Outlined" Lines="5" AutoGrow="true"></MudTextField>
+        
+        <MudDivider/>
+        <MudText>Tags</MudText>
+        <MudTextField @bind-Value="TextValue" Label="Tags" Variant="Variant.Outlined"></MudTextField>
+    </DialogContent>
+    <DialogActions >
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Update Notes</MudButton>
+    </DialogActions>
+</MudDialog>
 
 @code {
-    
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+    public string TextValue { get; set; }
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+    private void Cancel() => MudDialog.Cancel();
 }

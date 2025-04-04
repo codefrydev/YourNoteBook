@@ -1,5 +1,57 @@
-<h3>FolderComponent</h3>
+@inject IDialogService DialogService
 
-@code {
-    
+<MudPaper MinWidth="400px" MaxWidth="800px" Height="180px" Class="pa-5" @onclick="OpenFolder">
+    <MudStack >
+        <MudItem>
+            <MudStack Row="true">
+                <MudItem>
+                    <MudIcon Icon="@Icons.Material.Filled.Folder"></MudIcon>
+                </MudItem>
+                <MudItem>
+                    <MudText Typo="Typo.h6">Folder Name</MudText>
+                </MudItem>
+            </MudStack>
+        </MudItem>
+        <MudItem>
+            <MudText> @DateTime.Today.Date</MudText>
+        </MudItem>
+        <MudItem>
+            <MudStack Row="true">
+                <MudItem>
+                    <MudIconButton Icon="@Icons.Material.Filled.Note"> Notes</MudIconButton>
+                </MudItem>
+                <MudItem>
+                    <MudIconButton Icon="@Icons.Material.Filled.Shortcut"> Shortcut</MudIconButton>
+                </MudItem>
+                <MudSpacer/>
+                <MudItem>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="Rename"> Edit</MudIconButton>
+                </MudItem>
+                <MudItem>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="Delete"> Delete</MudIconButton>
+                </MudItem>
+            </MudStack>
+        </MudItem>
+    </MudStack>
+</MudPaper>
+
+@code
+{
+    [Inject] NavigationManager NavigationManager { get; set; } = null!;
+    private Task Rename()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        return DialogService.ShowAsync<RenameDialogue>("Simple Dialog", options);
+    }
+    private Task Delete()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        return DialogService.ShowAsync<RenameDialogue>("Simple Dialog", options);
+    } 
+    private void OpenFolder()
+    {
+        NavigationManager.NavigateTo("/folder");
+    }
 }

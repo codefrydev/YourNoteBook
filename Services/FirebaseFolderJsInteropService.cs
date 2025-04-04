@@ -1,9 +1,5 @@
 namespace YourNoteBook.Services;
-
-public class Firebase
-{
-    
-}
+ 
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 

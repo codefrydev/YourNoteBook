@@ -1,16 +1,38 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
+<MudThemeProvider /> 
+<MudPopoverProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+@inject IDialogService DialogService
+<MudLayout>
+    <MudAppBar Color="Color.Surface" Fixed="true">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle"/>
+        <MudTextField  @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" 
+                       AdornmentIcon="@Icons.Material.Filled.Search"  AdornmentColor="Color.Secondary" Style="max-width: 400px"/>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"  OnClick="AddNewFolder" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Color="Color.Default">
         <NavMenu/>
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+    </MudDrawer>
+    <MudMainContent>
+        <MudPaper Class="pa-2 ma-2" Elevation="0">
             @Body
-        </article>
-    </main>
-</div>
+        </MudPaper>
+    </MudMainContent>
+</MudLayout>
+@code {
+    bool _drawerOpen = true; 
+    public string Search { get; set; } = string.Empty;
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private Task AddNewFolder()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        return DialogService.ShowAsync<RenameDialogue>("Simple Dialog", options);
+    }
+}

@@ -1,7 +1,8 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        <RouteView RouteData="@routeData" DefaultLayout="@GetLayout(routeData.PageType)"/>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
@@ -10,3 +11,20 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code
+{
+   private Type GetLayout(Type pageType)
+   {
+       var path = NavigationManager.Uri;
+
+       return path switch
+       {
+           _ when path.Contains("/folder") => typeof(FolderLayout),
+           _ when path.Contains("/admin") => typeof(FolderLayout),
+           _ => typeof(MainLayout)
+       };
+   }
+    
+   [Inject] NavigationManager NavigationManager { get; set; } = null!;
+}

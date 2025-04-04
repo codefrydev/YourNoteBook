@@ -1,6 +1,16 @@
-@page "/Folder"
-<h3>Folder</h3>
-
-@code {
+@page "/folder"
+<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1 gap-4" Elevation="0">
+    <MudTabs Outlined="true" MinimumTabWidth="20px">
+        <MudTabPanel Text="All" Icon="@Icons.Material.Filled.AllInclusive"/>
+        <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes"/>
+        <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut"/>
+    </MudTabs> 
     
-}
+</MudPaper>
+<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1 gap-4" Elevation="0">
+    @for (var i = 0; i < 10; i++)
+    { 
+        <NotesComponent/>
+        <ShortcutComponent/>
+    }
+</MudPaper> 

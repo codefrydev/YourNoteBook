@@ -1,7 +1,13 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<PageTitle>Home</PageTitle> 
+<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
+    @foreach (var card in numbers)
+    {
+        <FolderComponent/>
+    }
+</MudPaper>
+@code
+{
+    List<int> numbers = Enumerable.Range(1, 30).ToList();
+}

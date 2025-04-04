@@ -2,6 +2,6 @@ using Microsoft.AspNetCore.Components;
 
 namespace YourNoteBook.Layout;
 
-public partial class FolderLayout : ComponentBase
+public partial class FolderLayout : LayoutComponentBase
 {
 }
