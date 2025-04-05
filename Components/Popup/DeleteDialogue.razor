@@ -1,21 +1,45 @@
-<MudDialog>
+<MudDialog Style="width:600px; padding:16px;" MaxWidth="MaxWidth.Medium">
     <TitleContent>
-        Dialog Title
+        <MudText Typo="Typo.h6" Class="font-weight-bold text-center sm:text-left">
+            Are you sure?
+        </MudText>
     </TitleContent>
     <DialogContent>
-        Dialog Content
+        <MudText Class="text-center sm:text-left text-sm text-secondary mb-4">
+            This will permanently delete the note "@NoteTitle".
+        </MudText> 
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    <DialogActions >
+        <MudGrid Justify="Justify.FlexEnd" Spacing="4" Class="flex-row sm:flex-row">
+            <MudItem>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Error"
+                           OnClick="ConfirmDelete"
+                           Class="ml-2"
+                           EndIcon="@Icons.Material.Filled.Delete">
+                    Delete
+                </MudButton>
+                <MudButton Variant="Variant.Text"
+                           Color="Color.Default"
+                           OnClick="Cancel"
+                           Class="mr-2"
+                           aria-label="Cancel">
+                    Cancel
+                </MudButton>
+            </MudItem>
+        </MudGrid>
     </DialogActions>
 </MudDialog>
 
-@code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+@code { 
 
-    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; } 
+    [Parameter]
+    public string NoteTitle { get; set; }
+
+    private void ConfirmDelete() => MudDialog.Close(DialogResult.Ok(true)); 
+ 
 
     private void Cancel() => MudDialog.Cancel();
 }

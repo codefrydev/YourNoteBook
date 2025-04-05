@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using YourNoteBook.Data
+@using YourNoteBook.Models
+@inherits LayoutComponentBase
+@inject InMemoryRepo InMemoryRepo
 <MudThemeProvider /> 
 <MudPopoverProvider/>
 <MudDialogProvider/>
@@ -29,10 +32,18 @@
         _drawerOpen = !_drawerOpen;
     }
 
-    private Task AddNewFolder()
+    private async Task AddNewFolder()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
-        return DialogService.ShowAsync<RenameDialogue>("Simple Dialog", options);
+        var dialog = await DialogService.ShowAsync<AddNewFolderDialogue>("Simple Dialog", options);
+        var result = await dialog.Result; 
+        if (result is { Canceled: false, Data: Folder })
+        {
+            var folder = (Folder)result.Data; 
+            folder.Id = Guid.NewGuid().ToString();
+            InMemoryRepo.AddItem<Folder>(folder);
+        }
+        Console.WriteLine($"Folder Count {InMemoryRepo.Folders.Count}"); 
     }
 }

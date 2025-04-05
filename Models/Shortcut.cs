@@ -1,13 +1,12 @@
 namespace YourNoteBook.Models;
-using System;
-using System.Collections.Generic;
 
-public class Note
+public class Shortcut
 {
     public string Id { get; set; } = "";
-    public string Title { get; set; } = "";
-    public string Content { get; set; } = "";
-    public List<Tag> Tags { get; set; } = new List<Tag>();  
+    public string Action { get; set; } = "";
+    public string Keys { get; set; } = "";
+    public string Description { get; set; } = "";
+    public Category Category { get; set; } = new Category();
     public DateTime Created { get; set; } = DateTime.Now;
     public DateTime Modified { get; set; } = DateTime.Now;
     public string FolderId { get; set; } = "";

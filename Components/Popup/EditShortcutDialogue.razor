@@ -1,21 +1,115 @@
-<MudDialog>
+@using YourNoteBook.Models
+
+<MudDialog Style="width:600px; padding:16px;" MaxWidth="MaxWidth.Medium">
     <TitleContent>
-        Dialog Title
+        <div class="d-flex justify-space-between align-center mb-4">
+            <MudText Typo="Typo.h5" Class="font-weight-bold">Add New Shortcut</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Close"
+                           OnClick="Cancel"
+                           Color="Color.Default"
+                           Size="Size.Medium"
+                           aria-label="Close" />
+        </div>
     </TitleContent>
+
     <DialogContent>
-        Dialog Content
+        <MudPaper Class="pa-4" Elevation="1">
+            <MudStack Spacing="4">
+                <!-- Action Input -->
+                <MudTextField @bind-Value="NewShortcut.Action"
+                              Label="Action"
+                              Variant="Variant.Outlined"
+                              Placeholder="e.g., Select All"
+                              Required="true"
+                              Immediate="true"
+                              FullWidth="true" />
+
+                <!-- Keys Input -->
+                <MudTextField @bind-Value="NewShortcut.Keys"
+                              Label="Keys (separate with +)"
+                              Variant="Variant.Outlined"
+                              Placeholder="e.g., Ctrl + A"
+                              Required="true"
+                              FullWidth="true"
+                              AdornmentIcon="@Icons.Material.Filled.Keyboard"
+                              HelperText="Use '+' to separate multiple keys" />
+
+                <!-- Description Textarea -->
+                <MudTextField @bind-Value="NewShortcut.Description"
+                              Label="Description"
+                              Variant="Variant.Outlined"
+                              Rows="3"
+                              Placeholder="Describe what this shortcut does..."
+                              Required="true"
+                              FullWidth="true" />
+
+                <!-- Category Select -->
+                <MudSelect @bind-Value="_selectedCategory"
+                           Label="Category"
+                           Variant="Variant.Outlined"
+                           AnchorOrigin="Origin.BottomCenter"
+                           FullWidth="true">
+                    @foreach (var selection in Categories)
+                    {
+                        <MudSelectItem Value="@selection">@selection</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudStack>
+        </MudPaper>
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+
+    <DialogActions >
+        <MudGrid Justify="Justify.FlexEnd" Spacing="4">
+            <MudItem>
+                <MudButton Variant="Variant.Text"
+                           Color="Color.Default"
+                           OnClick="Cancel"
+                           Class="mr-2">
+                    Cancel
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           ButtonType="ButtonType.Submit"
+                           EndIcon="@Icons.Material.Filled.Add"
+                           OnClick="Submit">
+                    Create Shortcut
+                </MudButton>
+            </MudItem>
+        </MudGrid>
     </DialogActions>
 </MudDialog>
 
 @code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
 
-    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    [Parameter] public Shortcut NewShortcut { get; set; } = new();
+    
+    string _selectedCategory = string.Empty;
+    List<string> Categories { get; } =
+    [
+        "Selection",
+        "Transform",
+        "Modeling",
+        "Editing",
+        "Navigation",
+        "Rendering",
+        "Animation",
+        "Other"
+    ];
+
+    private void Submit()
+    {
+        // Set default category if none selected.
+        if (string.IsNullOrEmpty(_selectedCategory))
+        {
+            _selectedCategory = Categories.Last();
+        }
+        NewShortcut.Category = new Category()
+        {
+            Name = _selectedCategory
+        };
+        MudDialog.Close(DialogResult.Ok(NewShortcut));
+    }
 
     private void Cancel() => MudDialog.Cancel();
 }

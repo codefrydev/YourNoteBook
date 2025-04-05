@@ -1,4 +1,8 @@
+@using YourNoteBook.Data
+@using YourNoteBook.Models
 @inherits LayoutComponentBase
+@inject InMemoryRepo InMemoryRepo
+@inject NavigationManager NavigationManager
 <MudThemeProvider /> 
 <MudPopoverProvider/>
 <MudDialogProvider/>
@@ -29,17 +33,35 @@
     {
         _drawerOpen = !_drawerOpen;
     } 
-    private Task AddNotes(MouseEventArgs arg)
+    private async Task AddNotes(MouseEventArgs arg)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
-        return DialogService.ShowAsync<AddNotesDialogue>("Add Notes", options);
+        var dialog = await DialogService.ShowAsync<AddNotesDialogue>("Add Notes", options);
+        var result = await dialog.Result; 
+        if (result is { Canceled: false, Data: Note })
+        {
+            var note = (Note)result.Data; 
+            note.Id = Guid.NewGuid().ToString();
+            note.FolderId = NavigationManager.Uri.Split('/')[^1];
+            InMemoryRepo.AddItem(note);
+        }
+        StateHasChanged();
     }
 
-    private Task AddShortcut(MouseEventArgs arg)
+    private async Task AddShortcut(MouseEventArgs arg)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
-        return DialogService.ShowAsync<AddShortcutDialogue>("Add Shortcut", options);
+        var dialog = await DialogService.ShowAsync<AddShortcutDialogue>("Add Shortcut", options);
+        var result = await dialog.Result; 
+        if (result is { Canceled: false, Data: Shortcut })
+        {
+            var shortcut = (Shortcut)result.Data; 
+            shortcut.Id = Guid.NewGuid().ToString();
+            shortcut.FolderId = NavigationManager.Uri.Split('/')[^1];
+            InMemoryRepo.AddItem(shortcut);
+        }
+        StateHasChanged();
     } 
 }

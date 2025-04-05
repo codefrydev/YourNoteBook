@@ -1,5 +1,28 @@
-<h3>AddNewFolderDialogue</h3>
+@using YourNoteBook.Models
+<MudDialog Style="width:600px; padding:16px;" MaxWidth="MaxWidth.Medium">
+    <TitleContent>
+        Dialog Title
+    </TitleContent>
+    <DialogContent>
+        <MudTextField T="string" @bind-Value="NewFolder.Name"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
 
 @code {
-    
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+    private Folder NewFolder { get; set; } = new Folder();
+
+    private void Submit()
+    {
+        NewFolder.Created = DateTime.Now;
+        NewFolder.Id = Guid.NewGuid().ToString();
+        MudDialog.Close(DialogResult.Ok(NewFolder)); 
+    } 
+
+    private void Cancel() => MudDialog.Cancel();
 }

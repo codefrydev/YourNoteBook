@@ -38,6 +38,8 @@
 @code
 {
     [Inject] NavigationManager NavigationManager { get; set; } = null!;
+    [Parameter] public string FolderId { get; set; } = string.Empty;
+    
     private Task Rename()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
@@ -52,6 +54,8 @@
     } 
     private void OpenFolder()
     {
-        NavigationManager.NavigateTo("/folder");
+        if (string.IsNullOrEmpty(FolderId))
+            return;
+        NavigationManager.NavigateTo($"/folder/{FolderId}");
     }
 }

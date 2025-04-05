@@ -1,13 +1,22 @@
 ﻿@page "/"
-
+@using YourNoteBook.Data
+@inject InMemoryRepo InMemoryRepo
 <PageTitle>Home</PageTitle> 
 <MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
-    @foreach (var card in numbers)
+    @foreach (var card in InMemoryRepo.Folders)
     {
-        <FolderComponent/>
+        <FolderComponent FolderId="@card.Id"/>
     }
-</MudPaper>
-@code
-{
-    List<int> numbers = Enumerable.Range(1, 30).ToList();
+</MudPaper> 
+
+@code {
+    protected override void OnInitialized()
+    {
+        InMemoryRepo.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        InMemoryRepo.OnChange -= StateHasChanged;
+    }
 }

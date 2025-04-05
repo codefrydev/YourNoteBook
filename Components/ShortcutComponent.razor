@@ -1,5 +1,9 @@
 @inject IDialogService DialogService
-<MudPaper MinWidth="400px" MaxWidth="800px" Height="180px" Class="pa-5" >
+<MudPaper MinWidth="400px" 
+          MaxWidth="800px" 
+          Height="180px" 
+          Class="pa-5"
+          Style="transition: all 0.3s ease; cursor: pointer; transform-origin: center;" >
     <MudStack >
         <MudItem>
             <MudStack Row="true">
@@ -46,5 +50,12 @@
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
         return DialogService.ShowAsync<DeleteDialogue>("Delete Me", options);
+    }
+    private void HandleHover(MouseEventArgs e, bool isHovering)
+    {
+        var paper = new MudPaper
+        {
+            Style = isHovering ? "transform: scale(1.02); z-index: 1;" : "transform: scale(1); z-index: 0;"
+        };
     }
 }

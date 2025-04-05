@@ -1,16 +1,43 @@
-@page "/folder"
-<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1 gap-4" Elevation="0">
-    <MudTabs Outlined="true" MinimumTabWidth="20px">
-        <MudTabPanel Text="All" Icon="@Icons.Material.Filled.AllInclusive"/>
-        <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes"/>
-        <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut"/>
-    </MudTabs> 
-    
+@page "/folder/{folderId}"
+@using YourNoteBook.Data
+@inject InMemoryRepo InMemoryRepo
+<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1" Elevation="0">
+    <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px"> 
+        <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes" OnClick="ToggleList"/>
+        <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut" OnClick="ToggleList"/>
+    </MudTabs>
 </MudPaper>
-<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1 gap-4" Elevation="0">
-    @for (var i = 0; i < 10; i++)
+
+<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
+    @if (isNoteShowing)
     { 
-        <NotesComponent/>
-        <ShortcutComponent/>
+        @foreach (var notes in InMemoryRepo.GetNotesByFolderId(FolderId))
+        {
+            <NotesComponent/>
+        }
     }
-</MudPaper> 
+    else
+    {
+        @foreach (var notes in InMemoryRepo.GetShortcutsByFolderId(FolderId))
+        {
+            <ShortcutComponent/>
+        }
+    }
+</MudPaper>
+
+@code {
+    [Parameter] public string FolderId { get; set; } = string.Empty;
+
+    private bool isNoteShowing = true;
+    
+    void ToggleList() => isNoteShowing=!isNoteShowing;
+    protected override void OnInitialized()
+    {
+        InMemoryRepo.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        InMemoryRepo.OnChange -= StateHasChanged;
+    }
+}
