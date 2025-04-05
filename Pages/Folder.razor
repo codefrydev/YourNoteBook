@@ -1,24 +1,24 @@
-@page "/folder/{folderId}"
-@using YourNoteBook.Data
+@page "/folder"
+
 @inject InMemoryRepo InMemoryRepo
 <MudPaper Class="d-flex justify-start flex-wrap flex-grow-1" Elevation="0">
-    <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px"> 
-        <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes" OnClick="ToggleList"/>
-        <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut" OnClick="ToggleList"/>
+    <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px">
+        <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes" OnClick="ShowNotes"/>
+        <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut" OnClick="ShowShortCut"/>
     </MudTabs>
 </MudPaper>
 
 <MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
-    @if (isNoteShowing)
-    { 
-        @foreach (var notes in InMemoryRepo.GetNotesByFolderId(FolderId))
+    @if (_isNoteShowing)
+    {
+        @foreach (var notes in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
         {
             <NotesComponent/>
         }
     }
     else
     {
-        @foreach (var notes in InMemoryRepo.GetShortcutsByFolderId(FolderId))
+        @foreach (var notes in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
         {
             <ShortcutComponent/>
         }
@@ -26,11 +26,19 @@
 </MudPaper>
 
 @code {
-    [Parameter] public string FolderId { get; set; } = string.Empty;
 
-    private bool isNoteShowing = true;
-    
-    void ToggleList() => isNoteShowing=!isNoteShowing;
+    private bool _isNoteShowing;
+
+    void ShowShortCut()
+    {
+        _isNoteShowing = false;
+    }
+
+    void ShowNotes()
+    {
+        _isNoteShowing = true;
+    }
+
     protected override void OnInitialized()
     {
         InMemoryRepo.OnChange += StateHasChanged;
@@ -40,4 +48,5 @@
     {
         InMemoryRepo.OnChange -= StateHasChanged;
     }
+
 }

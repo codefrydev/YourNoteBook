@@ -1,5 +1,3 @@
-@using YourNoteBook.Data
-@using YourNoteBook.Models
 @inherits LayoutComponentBase
 @inject InMemoryRepo InMemoryRepo
 @inject NavigationManager NavigationManager
@@ -39,11 +37,11 @@
 
         var dialog = await DialogService.ShowAsync<AddNotesDialogue>("Add Notes", options);
         var result = await dialog.Result; 
-        if (result is { Canceled: false, Data: Note })
+        if (result is { Canceled: false, Data: Note } && CurrentContext.CurrentFolderId is not null)
         {
             var note = (Note)result.Data; 
             note.Id = Guid.NewGuid().ToString();
-            note.FolderId = NavigationManager.Uri.Split('/')[^1];
+            note.FolderId = CurrentContext.CurrentFolderId;
             InMemoryRepo.AddItem(note);
         }
         StateHasChanged();
@@ -55,11 +53,11 @@
 
         var dialog = await DialogService.ShowAsync<AddShortcutDialogue>("Add Shortcut", options);
         var result = await dialog.Result; 
-        if (result is { Canceled: false, Data: Shortcut })
+        if (result is { Canceled: false, Data: Shortcut } && CurrentContext.CurrentFolderId is not null)
         {
             var shortcut = (Shortcut)result.Data; 
-            shortcut.Id = Guid.NewGuid().ToString();
-            shortcut.FolderId = NavigationManager.Uri.Split('/')[^1];
+            shortcut.Id = Guid.NewGuid().ToString(); 
+            shortcut.FolderId = CurrentContext.CurrentFolderId;
             InMemoryRepo.AddItem(shortcut);
         }
         StateHasChanged();

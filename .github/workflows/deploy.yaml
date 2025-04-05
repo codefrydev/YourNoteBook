@@ -1,4 +1,4 @@
-name: watchTom
+name: YourNoteBookDeployment
 
 on:
   push:

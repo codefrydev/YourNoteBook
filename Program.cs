@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using YourNoteBook;
 using MudBlazor.Services;
+using YourNoteBook;
 using YourNoteBook.Data;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
