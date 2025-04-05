@@ -11,4 +11,8 @@ public static class Constant
     
     // Document Root Path
     public static readonly string VerifyTest = "verifyingtest"; 
+    public static readonly string FolderParentPath = "folderparentpath"; 
+    public static readonly string NoteParentPath = "noteparentpath"; 
+    public static readonly string ShortCutParentPath = "shortcutparentpath"; 
+    public static readonly string TagsParentPath = "tagsparentpath";  
 }
