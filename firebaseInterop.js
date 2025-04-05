@@ -1,19 +1,4 @@
 // wwwroot/js/firebaseFolderInterop.js
-
-// Global variable to hold the Firestore instance.
-let db;
-
-/**
- * Initializes Firebase and Firestore with the provided config.
- * @param {object} config - Your Firebase configuration object.
- * @returns {boolean} - Returns true when initialization is complete.
- */
-function initializeFirebase(config) {
-    const app = firebase.initializeApp(config);
-    db = firebase.firestore();
-    return true;
-}
-
 // firebaseFolderInterop.js
 
 // Global variable to hold the Firestore instance.

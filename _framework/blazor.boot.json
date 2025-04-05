@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "YourNoteBook",
   "resources": {
-    "hash": "sha256-8Mu9Sw3FCP0Vlk10HjFnD04WpIVgjtEMUwDj4blpzag=",
+    "hash": "sha256-AwbDpmR3GYx/R/IGy8nhcEavgcsweB8K5Ma5LWmBSBk=",
     "fingerprinting": {
       "Faker.Net.6.0.bz2mmab7cl.wasm": "Faker.Net.6.0.wasm",
       "Microsoft.AspNetCore.Components.Forms.pl7ta3gmle.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
@@ -22,7 +22,7 @@
       "Microsoft.Extensions.Primitives.9kx4ehp8td.wasm": "Microsoft.Extensions.Primitives.wasm",
       "Microsoft.JSInterop.uwoko85gn3.wasm": "Microsoft.JSInterop.wasm",
       "Microsoft.JSInterop.WebAssembly.s0bw0921jm.wasm": "Microsoft.JSInterop.WebAssembly.wasm",
-      "MudBlazor.35jiereurx.wasm": "MudBlazor.wasm",
+      "MudBlazor.p51m1aiw8h.wasm": "MudBlazor.wasm",
       "System.Collections.Concurrent.a5p27xsv4n.wasm": "System.Collections.Concurrent.wasm",
       "System.Collections.Immutable.qkselzef5f.wasm": "System.Collections.Immutable.wasm",
       "System.Collections.rg5s04mpa3.wasm": "System.Collections.wasm",
@@ -51,7 +51,7 @@
       "System.Threading.Thread.i7xzhuyhmv.wasm": "System.Threading.Thread.wasm",
       "System.Threading.u9nh6upk0z.wasm": "System.Threading.wasm",
       "System.icunsnzrqy.wasm": "System.wasm",
-      "YourNoteBook.rroqktx1aw.wasm": "YourNoteBook.wasm",
+      "YourNoteBook.ei90rgenyu.wasm": "YourNoteBook.wasm",
       "Faker.Net.6.0.resources.joonkpof6v.wasm": "Faker.Net.6.0.resources.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.1p93gcv9fh.js": "dotnet.native.js",
@@ -99,7 +99,7 @@
       "Microsoft.Extensions.Primitives.9kx4ehp8td.wasm": "sha256-6cQKFBXogCgICQbWptUlzgW+xOHIWbUMRjFxztqytdA=",
       "Microsoft.JSInterop.uwoko85gn3.wasm": "sha256-4rxychFs1Q/C9kFtAVsOE7Bu/9HaV90BoOULfaYk/e8=",
       "Microsoft.JSInterop.WebAssembly.s0bw0921jm.wasm": "sha256-NNwR0xu2wKvvEIZnSUwKht+/0RJ9ziHW01M66VViIkI=",
-      "MudBlazor.35jiereurx.wasm": "sha256-Z6tALkaKEcw2OCrMwC984oB/I96fX2M7K0Q4+dupBbo=",
+      "MudBlazor.p51m1aiw8h.wasm": "sha256-oyepUytINeGzANr/0SSIPwS7TZ/gS70l3MQ4ryotWN8=",
       "System.Collections.Concurrent.a5p27xsv4n.wasm": "sha256-MgksW+NJadyiyI8emvLmH7ivFU8rFPhDRNiQabH01zg=",
       "System.Collections.Immutable.qkselzef5f.wasm": "sha256-KsniSxDPm65nnbHgIPvfnnmvqbQwfmIdLx1J+rpN9rc=",
       "System.Collections.rg5s04mpa3.wasm": "sha256-qzo0UW+8IRcnjoHqDhukS3u7FP4q8J4EZLS2j4w6Rvo=",
@@ -126,7 +126,7 @@
       "System.Threading.Thread.i7xzhuyhmv.wasm": "sha256-3tvw5V4OaXA3y9LZW1xG97I0B9HMcp+YXhk5XFw4b1Y=",
       "System.Threading.u9nh6upk0z.wasm": "sha256-7uH4n8suBUC+Rg/WIY3k8mV7e4cs6q7bPsO1VRJqZrI=",
       "System.icunsnzrqy.wasm": "sha256-YkFFFBkhWPJ9NX+mNSyGmlb6hmjtja4JNTnNi66JSGU=",
-      "YourNoteBook.rroqktx1aw.wasm": "sha256-53dRhKFgrcM8wQs30NyPQyrc5g4WrG9j41B7Z5H1m20="
+      "YourNoteBook.ei90rgenyu.wasm": "sha256-2vT84qtSPsL4RKNDie+IVa0394IsEDqolb9H3+OsASo="
     },
     "satelliteResources": {
       "de-DE": {

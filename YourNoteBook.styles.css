@@ -6,6 +6,7 @@
 /* /Components/Popup/DeleteDialogue.razor.rz.scp.css */
 /* /Components/Popup/EditNotesDialogue.razor.rz.scp.css */
 /* /Components/Popup/EditShortcutDialogue.razor.rz.scp.css */
+/* /Components/Popup/FireabseDialogue.razor.rz.scp.css */
 /* /Components/Popup/RenameDialogue.razor.rz.scp.css */
 /* /Components/ShortcutComponent.razor.rz.scp.css */
 .transition-elevation[b-b34p4ydmm5] {
@@ -16,6 +17,9 @@
     transition-delay: 0.05s;
 }
 /* /Layout/FolderLayout.razor.rz.scp.css */
+.my-custom-class[b-12jh3pzi2k] {
+    backdrop-filter: blur(10px);
+} 
 /* /Layout/FolderNavMenu.razor.rz.scp.css */
 /* /Layout/MainLayout.razor.rz.scp.css */
 .page[b-lys8dglik0] {
@@ -95,6 +99,9 @@ main[b-lys8dglik0] {
         padding-right: 1.5rem !important;
     }
 }
+.my-custom-class[b-lys8dglik0] {
+    backdrop-filter: blur(10px);
+} 
 /* /Layout/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-pwy4hedmm9] {
     background-color: rgba(255, 255, 255, 0.1);
