@@ -33,7 +33,11 @@
     } 
     private async Task AddNotes(MouseEventArgs arg)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var options = new DialogOptions { 
+            CloseOnEscapeKey = true ,
+            BackgroundClass = "my-custom-class" ,
+            CloseButton = true, 
+        };
 
         var dialog = await DialogService.ShowAsync<AddNotesDialogue>("Add Notes", options);
         var result = await dialog.Result; 
@@ -49,7 +53,11 @@
 
     private async Task AddShortcut(MouseEventArgs arg)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var options = new DialogOptions { 
+            CloseOnEscapeKey = true ,
+            BackgroundClass = "my-custom-class" ,
+            CloseButton = true, 
+        };
 
         var dialog = await DialogService.ShowAsync<AddShortcutDialogue>("Add Shortcut", options);
         var result = await dialog.Result; 
