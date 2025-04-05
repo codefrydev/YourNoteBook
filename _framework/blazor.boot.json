@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "YourNoteBook",
   "resources": {
-    "hash": "sha256-QYaQtkL6B2C9rrzmOFZagi03SAn0dWzl2KRqt8doCBY=",
+    "hash": "sha256-8Mu9Sw3FCP0Vlk10HjFnD04WpIVgjtEMUwDj4blpzag=",
     "fingerprinting": {
       "Faker.Net.6.0.bz2mmab7cl.wasm": "Faker.Net.6.0.wasm",
       "Microsoft.AspNetCore.Components.Forms.pl7ta3gmle.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
@@ -51,7 +51,7 @@
       "System.Threading.Thread.i7xzhuyhmv.wasm": "System.Threading.Thread.wasm",
       "System.Threading.u9nh6upk0z.wasm": "System.Threading.wasm",
       "System.icunsnzrqy.wasm": "System.wasm",
-      "YourNoteBook.jbd10p44k5.wasm": "YourNoteBook.wasm",
+      "YourNoteBook.rroqktx1aw.wasm": "YourNoteBook.wasm",
       "Faker.Net.6.0.resources.joonkpof6v.wasm": "Faker.Net.6.0.resources.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.1p93gcv9fh.js": "dotnet.native.js",
@@ -126,7 +126,7 @@
       "System.Threading.Thread.i7xzhuyhmv.wasm": "sha256-3tvw5V4OaXA3y9LZW1xG97I0B9HMcp+YXhk5XFw4b1Y=",
       "System.Threading.u9nh6upk0z.wasm": "sha256-7uH4n8suBUC+Rg/WIY3k8mV7e4cs6q7bPsO1VRJqZrI=",
       "System.icunsnzrqy.wasm": "sha256-YkFFFBkhWPJ9NX+mNSyGmlb6hmjtja4JNTnNi66JSGU=",
-      "YourNoteBook.jbd10p44k5.wasm": "sha256-UcI3N3dLiq3EGdZdOtZE6zCkvwdL8MZEx7rTpcqiZq4="
+      "YourNoteBook.rroqktx1aw.wasm": "sha256-53dRhKFgrcM8wQs30NyPQyrc5g4WrG9j41B7Z5H1m20="
     },
     "satelliteResources": {
       "de-DE": {
