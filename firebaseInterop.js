@@ -21,8 +21,7 @@ function initializeFirebase(config) {
 async function saveDocument(parent, document) {
     try {
         const ref = await db.collection(parent).add({
-            ...document,
-            created: firebase.firestore.FieldValue.serverTimestamp()
+            ...document
         });
         return {success: true, id: ref.id};
     } catch (error) {
@@ -41,8 +40,7 @@ async function getDocument(parent, documentId) {
         const doc = await db.collection(parent).doc(documentId).get();
         if (doc.exists) {
             const data = doc.data();
-            // Convert Firestore timestamp to milliseconds if available.
-            data.created = data.created ? data.created.toMillis() : Date.now();
+            // Convert Firestore timestamp to milliseconds if available. 
             data.id = doc.id;
             return data;
         } else {
@@ -65,8 +63,7 @@ async function getAllDocuments(parent) {
         const documents = [];
 
         snapshot.forEach(doc => {
-            const data = doc.data();
-            data.created = data.created ? data.created.toMillis() : Date.now();
+            const data = doc.data(); 
             data.id = doc.id;
             documents.push(data);
         });
@@ -127,8 +124,7 @@ async function getFolderWithDetails(parentPath, folderId,collectionOne,collectio
             return null;
         }
         let folder = folderDoc.data();
-        folder.id = folderDoc.id;
-        folder.created = folder.created ? folder.created.toMillis() : Date.now();
+        folder.id = folderDoc.id; 
 
         // Retrieve the subcollection "collectionOne"
         const shortcutsSnapshot = await db.collection(parentPath)
@@ -151,10 +147,7 @@ async function getFolderWithDetails(parentPath, folderId,collectionOne,collectio
         const notes = [];
         notesSnapshot.forEach(doc => {
             let data = doc.data();
-            data.id = doc.id;
-            // Convert timestamp if needed
-            data.created = data.created ? data.created.toMillis() : Date.now();
-            data.modified = data.modified ? data.modified.toMillis() : Date.now();
+            data.id = doc.id; 
             notes.push(data);
         });
         folder.notes = notes;
