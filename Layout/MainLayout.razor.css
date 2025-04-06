@@ -75,6 +75,3 @@ main {
         padding-right: 1.5rem !important;
     }
 }
-.my-custom-class {
-    backdrop-filter: blur(10px);
-} 

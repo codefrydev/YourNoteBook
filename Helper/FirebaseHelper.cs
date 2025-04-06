@@ -1,5 +1,8 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Blazored.LocalStorage;
+using Microsoft.JSInterop;
+using MudBlazor;
 using YourNoteBook.Components.Popup;
 using YourNoteBook.Models;
 using YourNoteBook.Utils;
@@ -47,6 +50,52 @@ public class FirebaseHelper
         {
             response.Message = e.Message;
         } 
+        return response;
+    }
+    
+    public static async Task<FirebaseHelperResponseModel> ActivateFireBaseDb(IJSRuntime jsRuntime, ILocalStorageService localStorage)
+    {
+        var response = new FirebaseHelperResponseModel();
+        var config = new
+        {
+            apiKey = FirebaseConfig.ApiKey,
+            authDomain = FirebaseConfig.AuthDomain,
+            projectId = FirebaseConfig.ProjectId,
+            storageBucket = FirebaseConfig.StorageBucket,
+            messagingSenderId = FirebaseConfig.MessagingSenderId,
+            appId = FirebaseConfig.AppId
+        };
+        if (!CurrentContext.IsAuthenticated)
+        {
+            var res= await jsRuntime.InvokeAsync<bool>(Constant.InitializeFirebase, config);
+            response.Message = res ? Constant.FirebaseConfigInitiationSuccess
+                : Constant.FirebaseConfigInitiationFailed;
+        }
+             
+        var document = new 
+        {
+            name = "Test Document",
+            description = "This is a test document"
+        }; 
+        var result = await jsRuntime.InvokeAsync<SaveDocumentResult>(Constant.SaveDocument, [Constant.VerifyTest, document]);
+
+        if (result.success)
+        {
+            response.Success = true;
+            CurrentContext.IsAuthenticated = true; 
+            response.Icon.Color = Color.Success;
+            response.Icon.Icon = Icons.Material.Filled.Check;
+            response.Message = Constant.FirebaseConfigTestAgain;
+            await jsRuntime.InvokeAsync<SaveDocumentResult>(Constant.DeleteDocument, [Constant.VerifyTest, result.id]);
+            await BlazoredLocalStorageHelper.StoreInLocalStorage(localStorage, null);
+        }
+        else
+        {
+            CurrentContext.IsAuthenticated = false; 
+            response.Icon.Color = Color.Warning;
+            response.Icon.Icon = Icons.Material.Filled.Error;
+            response.Message = Constant.FirebaseConfigTestFailed;
+        }
         return response;
     }
 }

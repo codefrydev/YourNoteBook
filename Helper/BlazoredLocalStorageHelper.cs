@@ -7,12 +7,12 @@ namespace YourNoteBook.Helper;
 
 public class BlazoredLocalStorageHelper
 { 
-    public static async Task RetriveFromLocalStorage(ILocalStorageService localStorage)
+    public static async Task<bool> RetrieveFromLocalStorage(ILocalStorageService localStorage)
     { 
         var base64 = await localStorage.GetItemAsync<string>(Constant.BlazorLocalStorageFirebaseConfigName);
         if (string.IsNullOrEmpty(base64))
         {
-            return;
+            return false;
         }
         var json = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64));
         var myDeserializedClass = JsonSerializer.Deserialize<FirebaseConfigFromJson>(json);
@@ -24,11 +24,13 @@ public class BlazoredLocalStorageHelper
             FirebaseConfig.StorageBucket = myDeserializedClass.storageBucket; 
             FirebaseConfig.MessagingSenderId = myDeserializedClass.messagingSenderId;
             FirebaseConfig.AppId = myDeserializedClass.appId;
+            return true;
         }
         else
         {
             await localStorage.RemoveItemAsync(Constant.BlazorLocalStorageFirebaseConfigName);
         }
+        return false;
     } 
     
     public static async Task StoreInLocalStorage(ILocalStorageService localStorage,FirebaseConfigFromJson? myDeserializedClass)

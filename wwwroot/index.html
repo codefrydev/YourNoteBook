@@ -4,34 +4,60 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YourNoteBook</title>
+    <title>Note Book</title>
     <base href="/" /> 
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-    <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet"> 
-    
+    <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="global.css"> 
 </head>
 
 <body>  
 
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-    
-    <div id="app"> 
-        <div class="loading-progress-text"></div>
-    </div>
+     
+    <div id="app" >
+        <div class="loading">
+            <div class="loadingBaba">
+                <svg width="300" height="300" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <text x="4" y="29" font-size="8" fill="black" font-family="Ubuntu">CFD</text>
+                    <style>
+                        .spinner {
+                            animation: move 2.4s linear infinite;
+                        }
 
+                        .delay1 { animation-delay: -2.4s; fill: black; }
+                        .delay2 { animation-delay: -1.6s; fill: black; }
+                        .delay3 { animation-delay: -0.8s; fill: black; }
+
+                        @keyframes move {
+                            0%, 8.33%   { x: 2px; y: 2px; }
+                            25%         { x: 13px; y: 2px; }
+                            33.3%, 50%  { x: 13px; y: 13px; }
+                            58.33%, 75% { x: 2px; y: 13px; }
+                            83.33%, 100%{ x: 2px; y: 2px; }
+                        }
+                    </style>
+
+                    <rect class="spinner delay1" x="2" y="2" rx="2" width="10" height="10"/>
+                    <rect class="spinner delay2" x="2" y="2" rx="2" width="10" height="10"/>
+                    <rect class="spinner delay3" x="2" y="2" rx="2" width="10" height="10"/>
+                </svg> 
+            </div>
+        </div>
+    </div>
+    
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="." class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
-    <script src="firebaseInterop.js"></script>
-   
+    <script src="firebaseInterop.js"></script> 
+    <script src="_content/Blazored.LocalStorage/Blazored.LocalStorage.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-    <script src="_content/Blazored.LocalStorage/Blazored.LocalStorage.js"></script>
 </body>
 
 </html>
