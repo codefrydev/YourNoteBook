@@ -1,19 +1,21 @@
 ﻿@inherits LayoutComponentBase
 @inject InMemoryRepo InMemoryRepo
-<MudThemeProvider /> 
+<MudThemeProvider/>
 <MudPopoverProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 @inject IDialogService DialogService
 <MudLayout>
     <MudAppBar Color="Color.Surface" Fixed="true">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="DrawerToggle"/>
-        <MudTextField  @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" 
-                       AdornmentIcon="@Icons.Material.Filled.Search"  AdornmentColor="Color.Secondary" Style="max-width: 400px"/>
-        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+                       OnClick="DrawerToggle"/>
+        <MudTextField @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End"
+                      AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary"
+                      Style="max-width: 400px"/>
+        <MudSpacer/>
         @if (CurrentContext.IsAuthenticated)
         {
-            <MudIconButton Icon="@Icons.Material.Filled.Folder" Color="Color.Inherit"  OnClick="AddNewFolder" />
+            <MudIconButton Icon="@Icons.Material.Filled.Folder" Color="Color.Inherit" OnClick="AddNewFolder"/>
         }
         else
         {

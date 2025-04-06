@@ -11,16 +11,16 @@
 <MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
     @if (_isNoteShowing)
     {
-        @foreach (var notes in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
+        @foreach (var model in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
         {
-            <NotesComponent/>
+            <NotesComponent Model="model"/>
         }
     }
     else
     {
-        @foreach (var notes in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
+        @foreach (var model in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
         {
-            <ShortcutComponent/>
+            <ShortcutComponent Model="model"/>
         }
     }
 </MudPaper> 

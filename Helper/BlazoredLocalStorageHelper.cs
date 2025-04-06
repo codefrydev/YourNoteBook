@@ -5,31 +5,39 @@ using YourNoteBook.Utils;
 
 namespace YourNoteBook.Helper;
 
-public class BlazoredLocalStorageHelper
+public static class BlazoredLocalStorageHelper
 { 
     public static async Task<bool> RetrieveFromLocalStorage(ILocalStorageService localStorage)
-    { 
-        var base64 = await localStorage.GetItemAsync<string>(Constant.BlazorLocalStorageFirebaseConfigName);
-        if (string.IsNullOrEmpty(base64))
+    {
+        try
         {
-            return false;
+            var base64 = await localStorage.GetItemAsync<string>(Constant.BlazorLocalStorageFirebaseConfigName);
+            if (string.IsNullOrEmpty(base64))
+            {
+                return false;
+            }
+            var json = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+            var myDeserializedClass = JsonSerializer.Deserialize<FirebaseConfigFromJson>(json);
+            if (myDeserializedClass != null)
+            {
+                FirebaseConfig.ApiKey = myDeserializedClass.apiKey;
+                FirebaseConfig.AuthDomain = myDeserializedClass.authDomain;
+                FirebaseConfig.ProjectId = myDeserializedClass.projectId;
+                FirebaseConfig.StorageBucket = myDeserializedClass.storageBucket; 
+                FirebaseConfig.MessagingSenderId = myDeserializedClass.messagingSenderId;
+                FirebaseConfig.AppId = myDeserializedClass.appId;
+                return true;
+            }
+            else
+            {
+                await localStorage.RemoveItemAsync(Constant.BlazorLocalStorageFirebaseConfigName);
+            }
         }
-        var json = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64));
-        var myDeserializedClass = JsonSerializer.Deserialize<FirebaseConfigFromJson>(json);
-        if (myDeserializedClass != null)
+        catch (Exception e)
         {
-            FirebaseConfig.ApiKey = myDeserializedClass.apiKey;
-            FirebaseConfig.AuthDomain = myDeserializedClass.authDomain;
-            FirebaseConfig.ProjectId = myDeserializedClass.projectId;
-            FirebaseConfig.StorageBucket = myDeserializedClass.storageBucket; 
-            FirebaseConfig.MessagingSenderId = myDeserializedClass.messagingSenderId;
-            FirebaseConfig.AppId = myDeserializedClass.appId;
-            return true;
+            Console.WriteLine(e); 
         }
-        else
-        {
-            await localStorage.RemoveItemAsync(Constant.BlazorLocalStorageFirebaseConfigName);
-        }
+        
         return false;
     } 
     

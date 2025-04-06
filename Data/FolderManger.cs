@@ -7,50 +7,48 @@ using YourNoteBook.Utils;
 
 namespace YourNoteBook.Data;
 
-public class FolderManger(IFirebaseJsInteropService firebaseJsInteropService,IJSRuntime jsRuntime): IManager<FolderModel>
+public class FolderManger(IFirebaseJsInteropService firebaseJsInteropService): IManager<FolderModel>
 {
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
     public async Task<List<FolderModel>> GetAllSync()
     {
-        var result = await firebaseJsInteropService.GetAllAsync<JsonElement>(Constant.FolderParentPath); 
-        var list = new List<FolderModel>();  
-        foreach (var contactElement in result.EnumerateArray())
-        {
-            var folder = new FolderModel()
-            {
-                Id = contactElement.GetProperty("id").GetString()!,
-                Name = contactElement.GetProperty("name").GetString()!
-            };
-            list.Add(folder);
-        }
-
-        return list;
+        var result = await firebaseJsInteropService.GetAllAsync<JsonElement>(Constant.FolderParentPath);
+       
+        return result.EnumerateArray()
+            .Select(contactElement => JsonSerializer.Deserialize<FolderModel>(contactElement.GetRawText(), _jsonSerializerOptions))
+            .OfType<FolderModel>().ToList();
     }
     
-
-    public Task<FolderModel> GetByIdSync(string id)
+    public async Task<FolderModel> GetByIdSync(string id)
     {
-        throw new NotImplementedException();
+        var result = await firebaseJsInteropService.GetAsync<JsonElement>(Constant.FolderParentPath, id);
+
+        if (result.ValueKind != JsonValueKind.Object)
+            return null!;
+
+        return JsonSerializer.Deserialize<FolderModel>(result.GetRawText(), _jsonSerializerOptions)??null!;
     }
+
 
     public async  Task<T> AddSync<T>(FolderModel item)
     {
-        var formData = new
-        {
-            id = item.Id,
-            name = item.Name, 
-            createdDate = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
-            updatedDate = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")
-        };
+        item.Created = DateTime.Now; 
+        var formData = Mapper.GetFolderModelLocalObject(item);
         return await firebaseJsInteropService.SaveAsync<T>(Constant.FolderParentPath, formData);
     }
 
-    public Task<T> UpdateSync<T>(FolderModel item)
+    public async Task<T> UpdateSync<T>(FolderModel item)
     {
-        throw new NotImplementedException();
+        item.UpdatedAt = DateTime.Now;
+        var formData = Mapper.GetFolderModelLocalObject(item);Mapper.GetFolderModelLocalObject(item);
+        return await firebaseJsInteropService.UpdateAsync<T>(Constant.FolderParentPath, item.Id, formData);
     }
 
-    public Task<T> DeleteSync<T>(string id)
+    public async Task<T> DeleteSync<T>(string id)
     {
-        throw new NotImplementedException();
+        return await firebaseJsInteropService.DeleteAsync<T>(Constant.FolderParentPath, id);
     }
 }

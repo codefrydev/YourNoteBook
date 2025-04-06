@@ -1,12 +1,64 @@
 <MudDialog Style="width:600px; padding:16px;" MaxWidth="MaxWidth.Medium">
     <TitleContent>
-        Dialog Title
+        <div class="d-flex align-center" style="padding:8px; color:#3f51b5;">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-2" Size="Size.Medium" />
+            <MudText Typo="Typo.h5" Class="font-weight-bold">Edit Note</MudText>
+        </div>
     </TitleContent>
+
     <DialogContent>
-        Dialog Content
+        <MudPaper Class="pa-4" Elevation="1">
+            <MudStack Spacing="4">
+                <!-- Title Section -->
+                <div>
+                    <MudInputLabel Text="Title" Class="mb-2 font-weight-bold" />
+                    <MudTextField @bind-Value="@NewNote.Title"
+                                  Variant="Variant.Outlined"
+                                  Immediate="true"
+                                  Clearable="true"
+                                  FullWidth="true" />
+                </div>
+
+                <!-- Content Section -->
+                <div>
+                    <MudInputLabel Text="Content" Class="mb-2 font-weight-bold" />
+                    <MudTextField @bind-Value="@NewNote.Content"
+                                  Variant="Variant.Outlined"
+                                  Rows="5"
+                                  AutoGrow="true"
+                                  FullWidth="true" />
+                </div>
+
+                <!-- Tags Section -->
+                <div>
+                    <MudInputLabel Text="Tags" Class="mb-2 font-weight-bold" />
+                    <MudTextField @bind-Value="_tags"
+                                  Variant="Variant.Outlined"
+                                  FullWidth="true"
+                                  AdornmentIcon="@Icons.Material.Filled.Tag"
+                                  AdornmentAriaLabel="Add tags"
+                                  HelperText="Separate tags with commas" />
+                </div>
+            </MudStack>
+        </MudPaper>
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
-    </DialogActions>
+
+    <DialogActions >
+        <MudGrid Justify="Justify.FlexEnd" Spacing="4">
+            <MudItem>
+                <MudButton Variant="Variant.Text"
+                           Color="Color.Secondary"
+                           OnClick="Cancel"
+                           Class="mr-2">
+                    Cancel
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           EndIcon="@Icons.Material.Filled.Save"
+                           OnClick="Submit">
+                    Update Note
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </DialogActions> 
 </MudDialog>

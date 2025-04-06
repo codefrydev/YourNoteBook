@@ -17,6 +17,7 @@ public partial class AddNotesDialogue : ComponentBase
         NewNote.Tags = _tags.Split([',','.',':'], StringSplitOptions.RemoveEmptyEntries)
             .Select(tag => new Tag
             { 
+                Id = Guid.NewGuid().ToString(),
                 Name = tag.Trim()
             })
             .ToList();

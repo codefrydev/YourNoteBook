@@ -1,32 +1,49 @@
+using System.Text.Json;
 using YourNoteBook.Models;
 using YourNoteBook.Services;
+using YourNoteBook.Utils;
 
 namespace YourNoteBook.Data;
 
 public class NotesManager(IFirebaseJsInteropService firebaseJsInteropService) :IManager<Note>
 {   
-    public Task<List<Note>> GetAllSync()
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
-        throw new NotImplementedException();
+        PropertyNameCaseInsensitive = true
+    };
+    public async Task<List<Note>> GetAllSync()
+    {
+        var result = await firebaseJsInteropService.GetAllAsync<JsonElement>(Constant.NoteParentPath);   
+        return result.EnumerateArray()
+            .Select(contactElement => JsonSerializer.Deserialize<Note>(contactElement.GetRawText(), _jsonSerializerOptions))
+            .OfType<Note>().ToList();
+    }
+    
+    public async Task<Note> GetByIdSync(string id)
+    {
+        var result = await firebaseJsInteropService.GetAsync<JsonElement>(Constant.NoteParentPath, id);
+
+        if (result.ValueKind != JsonValueKind.Object)
+            return null!;
+
+        return JsonSerializer.Deserialize<Note>(result.GetRawText(), _jsonSerializerOptions)??null!;
     }
 
-    public Task<Note> GetByIdSync(string id)
+
+    public async  Task<T> AddSync<T>(Note item)
     {
-        throw new NotImplementedException();
+        var formData = Mapper.GetNoteLocalObject(item);
+        return await firebaseJsInteropService.SaveAsync<T>(Constant.NoteParentPath, formData);
     }
 
-    public Task<T> AddSync<T>(Note item)
+    public async Task<T> UpdateSync<T>(Note item)
     {
-        throw new NotImplementedException();
+        var formData = Mapper.GetNoteLocalObject(item);
+        return await firebaseJsInteropService.UpdateAsync<T>(Constant.NoteParentPath, item.Id, formData);
     }
 
-    public Task<T> UpdateSync<T>(Note item)
+    public async Task<T> DeleteSync<T>(string id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<T> DeleteSync<T>(string id)
-    {
-        throw new NotImplementedException();
+        return await firebaseJsInteropService.DeleteAsync<T>(Constant.NoteParentPath, id);
     }
 }

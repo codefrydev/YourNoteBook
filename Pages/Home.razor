@@ -11,15 +11,24 @@
         }
         else
         {
-            foreach (var card in InMemoryRepo.Folders)
+            foreach (var model in InMemoryRepo.Folders)
             {
-                <FolderComponent FolderId="@card.Id"/>
+                <FolderComponent Model="model"/>
             }
         }
         
     }
     else
     {
-        <MudText Typo="Typo.h5" Class="text-center">Please connect with you database first</MudText>
+        <div class="loading">
+            <div class="loadingBaba"> 
+                <MudFab
+                    Icon="@Icons.Material.Filled.Settings" 
+                    @onclick="AddFirebaseCode" 
+                    Color="Color.Warning"
+                    Style="text-decoration-color: black"
+                    Label="Please connect with you database first.  Click me To Fill Data"/>
+            </div>
+        </div>
     }
 </MudPaper>  

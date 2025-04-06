@@ -11,27 +11,21 @@
                     <MudIcon Icon="@Icons.Material.Filled.Folder"></MudIcon>
                 </MudItem>
                 <MudItem>
-                    <MudText Typo="Typo.h6">Notes Name</MudText>
+                    <MudText Typo="Typo.h6">Shortcut Id : @Model.Id</MudText>
                 </MudItem>
             </MudStack>
         </MudItem>
         <MudItem>
-            <MudText> @DateTime.Today.Date</MudText>
+            <MudText> Modified At : @Model.Modified</MudText>
         </MudItem>
         <MudItem>
-            <MudStack Row="true">
-                <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Note"> Notes</MudIconButton>
-                </MudItem>
-                <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Shortcut"> Shortcut</MudIconButton>
-                </MudItem>
+            <MudStack Row="true"> 
                 <MudSpacer/>
                 <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="Rename"> Edit</MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="EditShortCut"/>
                 </MudItem>
                 <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="Delete"> Delete</MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="Delete" />
                 </MudItem>
             </MudStack>
         </MudItem>

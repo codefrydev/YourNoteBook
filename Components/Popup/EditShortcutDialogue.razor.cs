@@ -8,7 +8,7 @@ public partial class EditShortcutDialogue : ComponentBase
 {
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
 
-    [Parameter] public Shortcut NewShortcut { get; set; } = new();
+    [Parameter] public Shortcut NewShortcut { get; set; } = null!;
     
     string _selectedCategory = string.Empty;
     List<string> Categories { get; } =

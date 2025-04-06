@@ -1,4 +1,5 @@
-namespace YourNoteBook.Models;
+using System.Text.Json;
+using YourNoteBook.Utils;
 
 public class FolderModel
 {
@@ -6,4 +7,5 @@ public class FolderModel
     public string Name { get; set; } = "";
     public DateTime Created { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
 }
