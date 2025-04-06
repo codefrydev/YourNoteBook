@@ -15,7 +15,7 @@ public interface IFirebaseHelper
     FirebaseHelperResponseModel ValidateJson(string configJson);
     Task<FirebaseHelperResponseModel> ActivateFireBaseDb();
 }
-public class FirebaseHelper(IJSRuntime jsRuntime, ILocalStorageService localStorage,IFirebaseJsInteropService firebaseJsInteropService) : IFirebaseHelper
+public class FirebaseHelper(ILocalStorageService localStorage,IFirebaseJsInteropService firebaseJsInteropService) : IFirebaseHelper
 { 
     public FirebaseHelperResponseModel ValidateJson(string configJson)
     {

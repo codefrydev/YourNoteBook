@@ -8,15 +8,15 @@ public class InMemoryRepo
     public event Action? OnChange;
 
     private void NotifyStateChanged() => OnChange?.Invoke();
-    public List<Note> Notes { get; } = [];
-    public List<Folder> Folders { get; } = [];
-    public List<Shortcut> Shortcuts { get; } = [];
-    public List<Tag> Tags { get; } = [];
-    public List<Category> Categories { get; } = [];
+    public List<Note> Notes { get; set; } = [];
+    public List<FolderModel> Folders { get; set; } = [];
+    public List<Shortcut> Shortcuts { get; set; } = [];
+    public List<Tag> Tags { get; set; } = [];
+    public List<Category> Categories { get; set; } = [];
 
     public Note? GetNoteById(string id) => Notes.Single(x => x.Id == id);
 
-    public Folder? GetFolderById(string id) => Folders.Single(x => x.Id == id);
+    public FolderModel? GetFolderById(string id) => Folders.Single(x => x.Id == id);
     public Shortcut? GetShortcutById(string id) => Shortcuts.Single(x => x.Id == id);
     public Tag? GetTagById(string id) => Tags.Single(x => x.Id == id);
     public Category? GetCategoryById(string id) => Categories.Single(x => x.Id == id);
@@ -35,7 +35,7 @@ public class InMemoryRepo
             case Note note:
                 Notes.Add(note);
                 break;
-            case Folder folder:
+            case FolderModel folder:
                 Folders.Add(folder);
                 break;
             case Shortcut shortcut:

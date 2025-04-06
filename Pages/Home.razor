@@ -2,8 +2,24 @@
 @inject InMemoryRepo InMemoryRepo
 <PageTitle>Home</PageTitle> 
 <MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
-    @foreach (var card in InMemoryRepo.Folders)
+    @if (CurrentContext.IsAuthenticated)
     {
-        <FolderComponent FolderId="@card.Id"/>
+        if (InMemoryRepo.Folders.Count == 0)
+        {
+            @* @(async () => await LoadAllData()) *@
+            <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Primary" Size="Size.Medium" OnClick="LoadAllData" />
+        }
+        else
+        {
+            foreach (var card in InMemoryRepo.Folders)
+            {
+                <FolderComponent FolderId="@card.Id"/>
+            }
+        }
+        
+    }
+    else
+    {
+        <MudText Typo="Typo.h5" Class="text-center">Please connect with you database first</MudText>
     }
 </MudPaper>  

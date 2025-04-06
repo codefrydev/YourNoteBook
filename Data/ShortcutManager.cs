@@ -1,30 +1,31 @@
 using YourNoteBook.Models;
+using YourNoteBook.Services;
 
 namespace YourNoteBook.Data;
 
-public class ShortcutManager:IManager<Shortcut>
+public class ShortcutManager(IFirebaseJsInteropService firebaseJsInteropService):IManager<Shortcut>
 {
-    public Task<List<Shortcut>> GetAll()
+    public Task<List<Shortcut>> GetAllSync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<Shortcut> GetById(string id)
+    public Task<Shortcut> GetByIdSync(string id)
     {
         throw new NotImplementedException();
     }
 
-    public Task Add(Shortcut item)
+    public Task<T> AddSync<T>(Shortcut item)
     {
         throw new NotImplementedException();
     }
 
-    public Task Update(Shortcut item)
+    public Task<T> UpdateSync<T>(Shortcut item)
     {
         throw new NotImplementedException();
     }
 
-    public Task Delete(string id)
+    public Task<T> DeleteSync<T>(string id)
     {
         throw new NotImplementedException();
     }

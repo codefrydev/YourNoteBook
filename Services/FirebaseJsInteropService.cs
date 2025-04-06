@@ -10,6 +10,7 @@ public interface IFirebaseJsInteropService
     Task<T> GetAsync<T>(string parentPath,object itemIdToBeRetrieved);
     Task<T> UpdateAsync<T>(string parentpath, string folderId, object folder);
     Task<T> DeleteAsync<T>(string parentPath,object itemIdToBeDeleted);
+    Task<T> GetAllAsync<T>(string parentPath);
 }
 
 public class FirebaseJsInteropService(IJSRuntime jsRuntime) : IFirebaseJsInteropService
@@ -31,7 +32,11 @@ public class FirebaseJsInteropService(IJSRuntime jsRuntime) : IFirebaseJsInterop
     {
         return await jsRuntime.InvokeAsync<T>(Constant.GetDocument, [parentPath,itemIdToBeRetrieved]);
     }
-
+// Retrieve a Folder by its ID.
+    public async Task<T> GetAllAsync<T>(string parentPath)
+    {
+        return await jsRuntime.InvokeAsync<T>(Constant.GetAllDocument, [parentPath]);
+    }
     // Update an existing Folder.
     public async Task<T> UpdateAsync<T>(string parentpath, string folderId, object folder)
     {

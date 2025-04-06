@@ -5,6 +5,7 @@ public static class Constant
     public const string InitializeFirebase = "initializeFirebase"; 
     public const string SaveDocument = "saveDocument"; 
     public const string GetDocument = "getDocument"; 
+    public const string GetAllDocument = "getAllDocuments"; 
     public const string UpdateDocument = "updateDocument"; 
     public const string DeleteDocument = "deleteDocument"; 
     public const string GetFolderWithDetails = "getFolderWithDetails"; 

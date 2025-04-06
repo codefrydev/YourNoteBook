@@ -1,8 +1,10 @@
+using System.Text.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 using YourNoteBook.Components.Popup;
+using YourNoteBook.Data;
 using YourNoteBook.Helper;
 using YourNoteBook.Models;
 using YourNoteBook.Utils;
@@ -15,7 +17,9 @@ public partial class MainLayout : LayoutComponentBase
     public string Search { get; set; } = string.Empty;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
-    [Inject] private IFirebaseHelper IFirebaseHelper { get; set; } = null!;
+    [Inject] private IFirebaseHelper FirebaseHelper { get; set; } = null!;
+    [Inject] private ISnackbar Snackbar { get; set; } = null!;
+    [Inject] private IManager<FolderModel> FolderManager { get; set; } = null!;  
 
     private void DrawerToggle()
     {
@@ -27,7 +31,25 @@ public partial class MainLayout : LayoutComponentBase
         var wasSuccess = await BlazoredLocalStorageHelper.RetrieveFromLocalStorage(LocalStorage);
         if (wasSuccess)
         {
-            await IFirebaseHelper.ActivateFireBaseDb();
+            var firebaseModerResponse =  await FirebaseHelper.ActivateFireBaseDb();
+            if (firebaseModerResponse?.Success == true)
+            {
+                var result = await JsRuntime.InvokeAsync<JsonElement>(Constant.GetAllDocument, args: [Constant.FolderParentPath]); 
+                InMemoryRepo.Folders = [];
+                foreach (var contactElement in result.EnumerateArray())
+                {
+                    var folder = new FolderModel()
+                    {
+                        Id = contactElement.GetProperty("id").GetString()!,
+                        Name = contactElement.GetProperty("name").GetString()!
+                    };
+                    InMemoryRepo.AddItem(folder);
+                }
+            }
+            else
+            {
+                Snackbar.Add(firebaseModerResponse?.Message ?? "Failed to sync data", Severity.Error);
+            }  
         }
     }
     private async Task AddNewFolder()
@@ -36,13 +58,19 @@ public partial class MainLayout : LayoutComponentBase
 
         var dialog = await DialogService.ShowAsync<AddNewFolderDialogue>(options.Title, options.Options);
         var result = await dialog.Result; 
-        if (result is { Canceled: false, Data: Folder })
+        if (result is { Canceled: false, Data: FolderModel })
         {
-            var folder = (Folder)result.Data; 
-            folder.Id = Guid.NewGuid().ToString();
-            InMemoryRepo.AddItem(folder);
-        }
-        Console.WriteLine($"Folder Count {InMemoryRepo.Folders.Count}"); 
+            if (CurrentContext.IsAuthenticated)
+            {
+                var folder = (FolderModel)result.Data;
+                var response = await FolderManager.AddSync<SaveDocumentResult>(folder);
+                if (response.success)
+                {
+                    folder.Id = response.id;
+                    InMemoryRepo.AddItem(folder);
+                } 
+            }
+        }  
     }
 
     private async Task AddFirebaseCode()

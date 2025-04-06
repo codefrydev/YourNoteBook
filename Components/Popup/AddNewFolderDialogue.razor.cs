@@ -8,14 +8,12 @@ public partial class AddNewFolderDialogue : ComponentBase
 {
     [CascadingParameter]
     private IMudDialogInstance MudDialog { get; set; }
-    private Folder NewFolder { get; set; } = new Folder();
+    private FolderModel NewFolder { get; set; } = new();
 
     private void Submit()
     {
-        NewFolder.Created = DateTime.Now;
-        NewFolder.Id = Guid.NewGuid().ToString();
+        NewFolder.Created = DateTime.Now; 
         MudDialog.Close(DialogResult.Ok(NewFolder)); 
     } 
-
     private void Cancel() => MudDialog.Cancel();
 }

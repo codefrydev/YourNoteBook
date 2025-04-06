@@ -11,8 +11,14 @@
         <MudTextField  @bind-Value="Search" Label="Search" Variant="Variant.Outlined" Adornment="Adornment.End" 
                        AdornmentIcon="@Icons.Material.Filled.Search"  AdornmentColor="Color.Secondary" Style="max-width: 400px"/>
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"  OnClick="AddNewFolder" />
-        <MudIconButton Icon="@Icons.Material.Filled.Sync" OnClick="SyncFromLocalStorage">Sync</MudIconButton>
+        @if (CurrentContext.IsAuthenticated)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Folder" Color="Color.Inherit"  OnClick="AddNewFolder" />
+        }
+        else
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Sync" OnClick="SyncFromLocalStorage">Sync</MudIconButton>
+        }
         <MudIcon Icon="@Icons.Material.Filled.Settings" @onclick="AddFirebaseCode"></MudIcon>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Color="Color.Default">
