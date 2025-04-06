@@ -12,6 +12,7 @@
                        AdornmentIcon="@Icons.Material.Filled.Search"  AdornmentColor="Color.Secondary" Style="max-width: 400px"/>
         <MudSpacer />
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"  OnClick="AddNewFolder" />
+        <MudIconButton Icon="@Icons.Material.Filled.Sync" OnClick="SyncFromLocalStorage">Sync</MudIconButton>
         <MudIcon Icon="@Icons.Material.Filled.Settings" @onclick="AddFirebaseCode"></MudIcon>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Color="Color.Default">
@@ -22,47 +23,4 @@
             @Body
         </MudPaper>
     </MudMainContent>
-</MudLayout>
-@code {
-    bool _drawerOpen = true; 
-    public string Search { get; set; } = string.Empty;
-    void DrawerToggle()
-    {
-        _drawerOpen = !_drawerOpen;
-    }
-
-    private async Task AddNewFolder()
-    {
-        var options = new DialogOptions { 
-            CloseOnEscapeKey = true ,
-            BackgroundClass = "my-custom-class" ,
-            CloseButton = true, 
-        };
-
-        var dialog = await DialogService.ShowAsync<AddNewFolderDialogue>("Simple Dialog", options);
-        var result = await dialog.Result; 
-        if (result is { Canceled: false, Data: Folder })
-        {
-            var folder = (Folder)result.Data; 
-            folder.Id = Guid.NewGuid().ToString();
-            InMemoryRepo.AddItem<Folder>(folder);
-        }
-        Console.WriteLine($"Folder Count {InMemoryRepo.Folders.Count}"); 
-    }
-
-    private async Task AddFirebaseCode()
-    {
-        var options = new DialogOptions { 
-            CloseOnEscapeKey = true ,
-            BackgroundClass = "my-custom-class" ,
-            CloseButton = true, 
-        };
-
-        var dialog = await DialogService.ShowAsync<FireabseDialogue>("Simple Dialog", options);
-        var result = await dialog.Result; 
-        if(result is { Canceled: false, Data: bool })
-        {
-            CurrentContext.IsAuthenticated = (bool)result.Data;
-        }
-    }
-}
+</MudLayout> 

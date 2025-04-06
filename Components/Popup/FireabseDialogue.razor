@@ -1,19 +1,27 @@
 <MudDialog Style="width:600px; padding:16px;" MaxWidth="MaxWidth.Medium">
     <TitleContent>
         <MudText Typo="Typo.h5" Class="font-weight-bold text-center sm:text-left">
-            Firebase Config Tester
+            Firebase Config Setup
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField @bind-Value="FirebaseConfig.ApiKey" Label="API Key" Variant="Variant.Filled" Class="mb-3"/>
-        <MudTextField @bind-Value="FirebaseConfig.AuthDomain" Label="Auth Domain" Variant="Variant.Filled"
-                      Class="mb-3"/>
-        <MudTextField @bind-Value="FirebaseConfig.ProjectId" Label="Project ID" Variant="Variant.Filled" Class="mb-3"/>
-        <MudTextField @bind-Value="FirebaseConfig.StorageBucket" Label="Storage Bucket" Variant="Variant.Filled"
-                      Class="mb-3"/>
-        <MudTextField @bind-Value="FirebaseConfig.MessagingSenderId" Label="Messaging Sender ID"
-                      Variant="Variant.Filled" Class="mb-3"/>
-        <MudTextField @bind-Value="FirebaseConfig.AppId" Label="App ID" Variant="Variant.Filled" Class="mb-3"/>
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6" MinimumTabWidth="20px" Centered="true">
+            <MudTabPanel Text="Paste JSON Config">
+                <MudTextField AutoGrow="true" @bind-Value="@_configJson" Label="Firebase config" Variant="Variant.Outlined" ></MudTextField> 
+            </MudTabPanel>
+            <MudTabPanel Text="Populate Each Field">
+                <MudTextField @bind-Value="FirebaseConfig.ApiKey" Label="API Key" Variant="Variant.Filled" Class="mb-3"/>
+                <MudTextField @bind-Value="FirebaseConfig.AuthDomain" Label="Auth Domain" Variant="Variant.Filled"
+                              Class="mb-3"/>
+                <MudTextField @bind-Value="FirebaseConfig.ProjectId" Label="Project ID" Variant="Variant.Filled" Class="mb-3"/>
+                <MudTextField @bind-Value="FirebaseConfig.StorageBucket" Label="Storage Bucket" Variant="Variant.Filled"
+                              Class="mb-3"/>
+                <MudTextField @bind-Value="FirebaseConfig.MessagingSenderId" Label="Messaging Sender ID"
+                              Variant="Variant.Filled" Class="mb-3"/>
+                <MudTextField @bind-Value="FirebaseConfig.AppId" Label="App ID" Variant="Variant.Filled" Class="mb-3"/>
+            </MudTabPanel> 
+        </MudTabs>
+        
 
         @if (!string.IsNullOrEmpty(_testResult))
         {
