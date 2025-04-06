@@ -1,6 +1,3 @@
-// wwwroot/js/firebaseFolderInterop.js
-// firebaseFolderInterop.js
-
 // Global variable to hold the Firestore instance.
 let db;
 
@@ -58,6 +55,29 @@ async function getDocument(parent, documentId) {
 }
 
 /**
+ * Retrieves all documents from the specified collection.
+ * @param {string} parent - The name of the collection.
+ * @returns {object|null} - The document data (with its ID) or null if not found.
+ */
+async function getAllDocuments(parent) {
+    try {
+        const snapshot = await db.collection(parent).get();
+        const documents = [];
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            data.created = data.created ? data.created.toMillis() : Date.now();
+            data.id = doc.id;
+            documents.push(data);
+        });
+
+        return documents;
+    } catch (error) {
+        console.error('Error retrieving documents:', error);
+        return [];
+    }
+}
+/**
  * Updates an existing document in the specified collection.
  * @param {string} parent - The name of the collection.
  * @param {string} documentId - The document ID to update.
@@ -93,13 +113,16 @@ async function deleteDocument(parent, documentId) {
 /**
  * Retrieves a folder document along with its subcollections ("notes" and "shortcuts")
  * from the "folders" collection.
+ * @param parentPath
  * @param {string} folderId - The document ID of the folder.
+ * @param collectionOne
+ * @param collectionTwo
  * @returns {object|null} - The folder data including subcollections, or null if not found.
  */
-async function getFolderWithDetails(folderId) {
+async function getFolderWithDetails(parentPath, folderId,collectionOne,collectionTwo) {
     try {
         // Retrieve the folder document
-        const folderDoc = await db.collection("folders").doc(folderId).get();
+        const folderDoc = await db.collection(parentPath).doc(folderId).get();
         if (!folderDoc.exists) {
             return null;
         }
@@ -107,10 +130,10 @@ async function getFolderWithDetails(folderId) {
         folder.id = folderDoc.id;
         folder.created = folder.created ? folder.created.toMillis() : Date.now();
 
-        // Retrieve the subcollection "shortcuts"
-        const shortcutsSnapshot = await db.collection("folders")
+        // Retrieve the subcollection "collectionOne"
+        const shortcutsSnapshot = await db.collection(parentPath)
             .doc(folderId)
-            .collection("shortcuts")
+            .collection(collectionOne)
             .get();
         const shortcuts = [];
         shortcutsSnapshot.forEach(doc => {
@@ -120,10 +143,10 @@ async function getFolderWithDetails(folderId) {
         });
         folder.shortcuts = shortcuts;
 
-        // Retrieve the subcollection "notes"
-        const notesSnapshot = await db.collection("folders")
+        // Retrieve the subcollection "collecctioTwo"
+        const notesSnapshot = await db.collection(parentPath)
             .doc(folderId)
-            .collection("notes")
+            .collection(collecctioTwo)
             .get();
         const notes = [];
         notesSnapshot.forEach(doc => {
@@ -147,6 +170,7 @@ async function getFolderWithDetails(folderId) {
 window.initializeFirebase = initializeFirebase;
 window.saveDocument = saveDocument;
 window.getDocument = getDocument;
+window.getAllDocuments = getAllDocuments; 
 window.updateDocument = updateDocument;
 window.deleteDocument = deleteDocument;
 window.getFolderWithDetails = getFolderWithDetails; 

@@ -6,16 +6,4 @@
     {
         <FolderComponent FolderId="@card.Id"/>
     }
-</MudPaper> 
-
-@code {
-    protected override void OnInitialized()
-    {
-        InMemoryRepo.OnChange += StateHasChanged;
-    }
-
-    public void Dispose()
-    {
-        InMemoryRepo.OnChange -= StateHasChanged;
-    }
-}
+</MudPaper>  

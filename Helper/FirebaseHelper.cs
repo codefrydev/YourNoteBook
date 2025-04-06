@@ -5,13 +5,19 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using YourNoteBook.Components.Popup;
 using YourNoteBook.Models;
+using YourNoteBook.Services;
 using YourNoteBook.Utils;
 
 namespace YourNoteBook.Helper;
 
-public class FirebaseHelper
+public interface IFirebaseHelper 
+{
+    FirebaseHelperResponseModel ValidateJson(string configJson);
+    Task<FirebaseHelperResponseModel> ActivateFireBaseDb();
+}
+public class FirebaseHelper(IJSRuntime jsRuntime, ILocalStorageService localStorage,IFirebaseJsInteropService firebaseJsInteropService) : IFirebaseHelper
 { 
-    public static FirebaseHelperResponseModel ValidateJson(string configJson)
+    public FirebaseHelperResponseModel ValidateJson(string configJson)
     {
         var response = new FirebaseHelperResponseModel();
         if (string.IsNullOrWhiteSpace(configJson))
@@ -53,7 +59,7 @@ public class FirebaseHelper
         return response;
     }
     
-    public static async Task<FirebaseHelperResponseModel> ActivateFireBaseDb(IJSRuntime jsRuntime, ILocalStorageService localStorage)
+    public async Task<FirebaseHelperResponseModel> ActivateFireBaseDb()
     {
         var response = new FirebaseHelperResponseModel();
         var config = new
@@ -67,7 +73,7 @@ public class FirebaseHelper
         };
         if (!CurrentContext.IsAuthenticated)
         {
-            var res= await jsRuntime.InvokeAsync<bool>(Constant.InitializeFirebase, config);
+            var res= await firebaseJsInteropService.InitializeFirebaseAsync(config);
             response.Message = res ? Constant.FirebaseConfigInitiationSuccess
                 : Constant.FirebaseConfigInitiationFailed;
         }
@@ -77,7 +83,7 @@ public class FirebaseHelper
             name = "Test Document",
             description = "This is a test document"
         }; 
-        var result = await jsRuntime.InvokeAsync<SaveDocumentResult>(Constant.SaveDocument, [Constant.VerifyTest, document]);
+        var result = await firebaseJsInteropService.SaveAsync<SaveDocumentResult>(Constant.VerifyTest, document);
 
         if (result.success)
         {
@@ -86,7 +92,7 @@ public class FirebaseHelper
             response.Icon.Color = Color.Success;
             response.Icon.Icon = Icons.Material.Filled.Check;
             response.Message = Constant.FirebaseConfigTestAgain;
-            await jsRuntime.InvokeAsync<SaveDocumentResult>(Constant.DeleteDocument, [Constant.VerifyTest, result.id]);
+            await firebaseJsInteropService.DeleteAsync<SaveDocumentResult>(Constant.VerifyTest, result.id);
             await BlazoredLocalStorageHelper.StoreInLocalStorage(localStorage, null);
         }
         else

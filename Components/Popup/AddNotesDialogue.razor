@@ -1,4 +1,3 @@
-@using YourNoteBook.Models
 <MudDialog Style="width:600px; padding:16px;" MaxWidth="MaxWidth.Medium">
     <TitleContent>
         <div class="d-flex align-center" style="padding:8px; color:#3f51b5;">
@@ -63,23 +62,3 @@
         </MudGrid>
     </DialogActions> 
 </MudDialog>
-
-@code {
-    [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
-
-    public Note NewNote { get; set; } = new();
-    private string _tags = string.Empty;
-
-    private void Submit()
-    {
-        NewNote.Tags = _tags.Split([',','.',':'], StringSplitOptions.RemoveEmptyEntries)
-                           .Select(tag => new Tag
-                           { 
-                               Name = tag.Trim()
-                           })
-                           .ToList();
-        MudDialog.Close(DialogResult.Ok(NewNote));
-    }
-    private void Cancel() => MudDialog.Cancel();
-}

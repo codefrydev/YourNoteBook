@@ -23,30 +23,4 @@
             <ShortcutComponent/>
         }
     }
-</MudPaper>
-
-@code {
-
-    private bool _isNoteShowing;
-
-    void ShowShortCut()
-    {
-        _isNoteShowing = false;
-    }
-
-    void ShowNotes()
-    {
-        _isNoteShowing = true;
-    }
-
-    protected override void OnInitialized()
-    {
-        InMemoryRepo.OnChange += StateHasChanged;
-    }
-
-    public void Dispose()
-    {
-        InMemoryRepo.OnChange -= StateHasChanged;
-    }
-
-}
+</MudPaper> 

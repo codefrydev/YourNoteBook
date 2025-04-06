@@ -33,18 +33,3 @@
         </MudItem>
     </MudStack>
 </MudPaper>
-
-@code { 
-    private Task Rename()
-    {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        return DialogService.ShowAsync<EditNotesDialogue>("Simple Dialog", options);
-    } 
-    private Task Delete()
-    {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-
-        return DialogService.ShowAsync<DeleteDialogue>("Delete Me", options);
-    } 
-}

@@ -10,8 +10,10 @@ namespace YourNoteBook.Components.Popup;
 
 public partial class FireBaseDialogue : ComponentBase
 { 
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
+    [Inject] private IFirebaseHelper FirebaseHelper { get; set; } = null!;
     private string _testResult=string.Empty;
 
     private string _configJson = string.Empty;
@@ -54,7 +56,7 @@ public partial class FireBaseDialogue : ComponentBase
                     throw new Exception(validate.Message);
                 }
             }
-            var response = await FirebaseHelper.ActivateFireBaseDb(JsRuntime, LocalStorage);
+            var response = await FirebaseHelper.ActivateFireBaseDb();
             if (!response.Success)
             {
                 throw new Exception(response.Message);
@@ -67,8 +69,6 @@ public partial class FireBaseDialogue : ComponentBase
             _testResult = $"Error invoking test: {ex.Message}";
         }
         _testing = false;
-    }
-
-    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
+    } 
      private void CloseDialogue() => MudDialog.Close(DialogResult.Ok(true));   
 }

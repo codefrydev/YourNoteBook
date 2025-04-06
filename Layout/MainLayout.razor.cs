@@ -15,6 +15,7 @@ public partial class MainLayout : LayoutComponentBase
     public string Search { get; set; } = string.Empty;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] private IFirebaseHelper IFirebaseHelper { get; set; } = null!;
 
     private void DrawerToggle()
     {
@@ -26,7 +27,7 @@ public partial class MainLayout : LayoutComponentBase
         var wasSuccess = await BlazoredLocalStorageHelper.RetrieveFromLocalStorage(LocalStorage);
         if (wasSuccess)
         {
-            await FirebaseHelper.ActivateFireBaseDb(JsRuntime,LocalStorage);
+            await IFirebaseHelper.ActivateFireBaseDb();
         }
     }
     private async Task AddNewFolder()
