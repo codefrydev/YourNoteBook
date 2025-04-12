@@ -1,4 +1,8 @@
 /* /Components/FolderComponent.razor.rz.scp.css */
+.hover-elevation:hover[b-j8efw9ppn5] {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+} 
 /* /Components/NotesComponent.razor.rz.scp.css */
 /* /Components/Popup/AddNewFolderDialogue.razor.rz.scp.css */
 /* /Components/Popup/AddNotesDialogue.razor.rz.scp.css */
