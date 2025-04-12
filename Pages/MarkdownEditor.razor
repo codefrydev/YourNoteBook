@@ -1,0 +1,75 @@
+@page "/markdown-editor"
+@using Markdig
+@inject IJSRuntime JsRuntime
+@implements IDisposable
+
+<MudContainer MaxWidth="MaxWidth.False">
+    <MudAppBar Elevation="4">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@DownloadMarkdown">Download</MudButton>
+    </MudAppBar>
+
+    <MudGrid Class="mt-4">
+        <MudItem xs="12">
+            <MudPaper Class="p-4">
+                <MudText Typo="Typo.h6">Editor</MudText>
+                <MudTextField @bind-Value="MarkdownContent"
+                              Placeholder="Start writing your markdown here..."
+                              Lines="20"
+                              FullWidth="true"
+                              Immediate="true"/>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudPaper Class="p-4">
+                <MudText Typo="Typo.h6">Preview</MudText>
+                <div class="mud-markdown-preview" @ref="_previewElement">
+                    @((MarkupString)RenderedHtml)
+                </div>
+            </MudPaper>
+        </MudItem>
+    </MudGrid> 
+</MudContainer>
+
+@code {
+    private ElementReference _previewElement;
+    private string MarkdownContent { get; set; } = "";
+    private string RenderedHtml => Markdown.ToHtml(MarkdownContent ?? "");
+    private DotNetObjectReference<MarkdownEditor>? _objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await LoadSavedContent();
+        }
+        await HighlightCode();
+    }
+
+    private async Task LoadSavedContent()
+    {
+        var content = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "markdownContent");
+        if (!string.IsNullOrEmpty(content))
+        {
+            MarkdownContent = content;
+            StateHasChanged();
+        }
+    }
+
+    private async Task HighlightCode()
+    {
+        await JsRuntime.InvokeVoidAsync("hljs.highlightAll");
+    } 
+    private async Task DownloadMarkdown()
+    {
+        const string fileName = "document.md";
+        var fileContent = MarkdownContent;
+        await JsRuntime.InvokeVoidAsync("downloadFile", fileName, fileContent);
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}
