@@ -4,6 +4,7 @@ namespace YourNoteBook.Pages;
 
 public partial class Folder : ComponentBase
 {
+    [Parameter] public string FolderId { get; set; } = string.Empty;
     private bool _isNoteShowing;
 
     void ShowShortCut()

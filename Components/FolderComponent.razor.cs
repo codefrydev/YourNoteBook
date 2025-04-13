@@ -62,6 +62,6 @@ public partial class FolderComponent : ComponentBase
         if (string.IsNullOrEmpty(Model.Id))
             return;
         CurrentContext.CurrentFolderId = Model.Id;
-        NavigationManager.NavigateTo($"folder");
+        NavigationManager.NavigateTo($"folder/{Model.Id}");
     }
 }

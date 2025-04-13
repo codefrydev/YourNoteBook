@@ -1,26 +1,36 @@
-@page "/folder"
+@page "/folder/{folderId}"
 
 @inject InMemoryRepo InMemoryRepo
+
+<div class="fab" id="addNoteBtn">
+    <span class="material-icons">add</span>
+</div>
+
+
+
 <MudPaper Class="d-flex justify-start flex-wrap flex-grow-1" Elevation="0">
     <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px">
         <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes" OnClick="ShowNotes"/>
         <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut" OnClick="ShowShortCut"/>
     </MudTabs>
 </MudPaper>
+<main class="content">
+    <div class="notes-grid" id="notesContainer">
+        @if (_isNoteShowing)
+        {
+            @foreach (var model in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
+            {
+                <NoteCardComponent Model="model"/>
 
-<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
-    @if (_isNoteShowing)
-    {
-        @foreach (var model in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
-        {
-            <NotesComponent Model="model"/>
+                //<NotesComponent Model="model"/>
+            }
         }
-    }
-    else
-    {
-        @foreach (var model in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
+        else
         {
-            <ShortcutComponent Model="model"/>
-        }
-    }
-</MudPaper> 
+            @foreach (var model in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
+            { 
+                <ShortcutComponent Model="model"/>
+            }
+        } 
+    </div>
+</main>

@@ -1,6 +1,6 @@
 namespace YourNoteBook.Models;
 
-public class Shortcut
+public class Shortcut : BaseModel
 {
     public string Id { get; set; } = "";
     public string Action { get; set; } = "";

@@ -12,7 +12,11 @@ public static class Mapper
             id = item.Id,  
             created =  item.Created,
             updatedAt =   item.UpdatedAt,
-            name =  item.Name, 
+            name =  item.Name,
+            icon = item.Icon ,
+            iconColor = item.IconColor,
+            backGroundColor = item.BackGroundColor,
+            isPinned = item.IsPinned,
         };
     }
     public static object GetNoteLocalObject(Note item)
@@ -26,6 +30,10 @@ public static class Mapper
             folderId =  item.FolderId,
             title =   item.Title,
             tags =  item.Tags,
+            icon = item.Icon ,
+            iconColor = item.IconColor,
+            backGroundColor = item.BackGroundColor,
+            isPinned = item.IsPinned,
         };
     }
     public static object GetShortCutLocalObject(Shortcut item)
@@ -40,6 +48,10 @@ public static class Mapper
             action =   item.Action,
             keys =   item.Keys,
             description =   item.Description,
+            icon = item.Icon ,
+            iconColor = item.IconColor,
+            backGroundColor = item.BackGroundColor,
+            isPinned = item.IsPinned,
         };
     }
 } 

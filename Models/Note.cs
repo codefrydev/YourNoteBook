@@ -5,7 +5,7 @@ namespace YourNoteBook.Models;
 using System;
 using System.Collections.Generic;
 
-public class Note
+public class Note : BaseModel
 {
     public string Id { get; set; } = "";
     public string Title { get; set; } = "";

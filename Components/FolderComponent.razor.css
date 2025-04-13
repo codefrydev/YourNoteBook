@@ -1,4 +1,16 @@
 .hover-elevation:hover {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease;
-} 
+}
+.hover-elevation:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+.folder-card {
+    background-color: #f8f9fa; /* light gray background */
+    color: #333;               /* dark text for contrast */
+}
+
+.text-primary {
+    color: #1976d2; /* Material blue */
+}

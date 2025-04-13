@@ -1,61 +1,21 @@
-<MudPaper Width="250px" Class="d-inline-flex py-2 navpaper-custom">
+<MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
     <MudNavMenu Class="mud-width-full">
-        <!-- Folder Title -->
-        <MudText Typo="Typo.h6" Class="px-4 folder-title">Folder Name</MudText>
-
-        <!-- Icons Subtitle -->
-        <MudText Typo="Typo.body2" Class="px-4 icons-subtitle mud-text-secondary">Icons</MudText>
-
-        <!-- Divider -->
+        <MudText Typo="Typo.h6" Class="px-4" @onclick="GoToHomePage" >YourNoteBook</MudText>
+        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Icons</MudText>
         <MudDivider Class="my-2" />
-
-        <!-- Menu Items -->
-        <MudNavLink Href="#" Class="nav-item">
-            <MudIcon Icon="@Icons.Material.Filled.Folder" Color="Color.Primary" />
-            <MudText Class="nav-text">Documents</MudText>
-        </MudNavLink>
-        <MudNavLink Href="#" Class="nav-item">
-            <MudIcon Icon="@Icons.Material.Filled.Photo" Color="Color.Primary" />
-            <MudText Class="nav-text">Photos</MudText>
-        </MudNavLink>
-        <MudNavLink Href="#" Class="nav-item">
-            <MudIcon Icon="@Icons.Material.Filled.MusicNote" Color="Color.Primary" />
-            <MudText Class="nav-text">Music</MudText>
-        </MudNavLink>
+        @if (CurrentContext.IsAuthenticated)
+        {
+            if (InMemoryRepo.Folders.Count != 0)
+            {
+                foreach (var model in InMemoryRepo.Folders)
+                {  
+                    <MudNavLink
+                        Icon="@Icons.Material.Filled.Storage"
+                        OnClick="@(() => OpenFolder(model.Id))">
+                        @model.Name
+                    </MudNavLink>
+                }
+            } 
+        }
     </MudNavMenu>
 </MudPaper>
-
-<style>
-    .navpaper-custom {
-        background-color: #f0f2f5; /* Soft background for a clean look */
-        color: #333; /* Dark text for contrast */
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-    }
-
-    .folder-title {
-        color: #1976d2; /* Primary blue for folder name */
-        font-weight: bold;
-    }
-
-    .icons-subtitle {
-        font-size: 0.875rem; /* Smaller subtitle size */
-    }
-
-    .nav-item {
-        display: flex;
-        align-items: center;
-        padding: 8px 16px;
-        transition: background-color 0.3s ease;
-        border-radius: 8px;
-    }
-
-    .nav-item:hover {
-        background-color: rgba(25, 118, 210, 0.1); /* Light hover effect */
-    }
-
-    .nav-text {
-        margin-left: 10px;
-        font-weight: normal;
-    }
-</style>
