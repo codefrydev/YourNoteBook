@@ -32,4 +32,15 @@ public static class Constant
     public const string FirebaseConfigInitiationFailed = "Failed to initialize Firebase.";
     public const string FirebaseConfigTestAgain = "Test Again";
     public const string FirebaseConfigTestFailed = "Test Failed";
+    
+    // style for UI
+    public const string DialogueUiStyle =
+        """width:600px; padding:16px; background-color:#ffffffd6;border:4px solid #ffffffb3; border-radius:30px;box-shadow: inset  0 0 10px rgba(0, 0, 0, 0.1);""";
+    public static readonly List<string> IconsList =
+    [
+        "fas fa-atom",
+        "fas fa-folder-open",
+        "fas fa-folder-plus",
+        "fas fa-folder-minus",
+    ]; 
 }

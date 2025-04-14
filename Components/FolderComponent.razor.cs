@@ -14,8 +14,20 @@ public partial class FolderComponent : ComponentBase
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
     [Inject] private IManager<FolderModel> FolderManager { get; set; } = null!;
     [EditorRequired][Parameter] public FolderModel Model { get; set; } = null!;
-    
-    private async Task Rename()
+
+    private async Task MakeChangesToPinning()
+    {
+        Model.IsPinned = !Model.IsPinned;
+        var resp = await FolderManager.UpdateSync<SaveDocumentResult>(Model);
+        if (resp.success)   
+        {
+            InMemoryRepo.Folders = InMemoryRepo.Folders.Where(x=>x.Id != Model.Id).ToList();
+            InMemoryRepo.Folders.Add(Model);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Folder Pinned Clicked", Severity.Success);
+        }
+    }
+    private async Task UpdateItem()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
         var parameters = new DialogParameters<RenameDialogue>
@@ -26,13 +38,18 @@ public partial class FolderComponent : ComponentBase
         var result = await response.Result;
         if(result is { Canceled: false, Data: FolderModel })
         {
+            Model = (FolderModel)result.Data;
             var resp = await FolderManager.UpdateSync<SaveDocumentResult>(Model);
-            if (resp.success)   
+            if (resp.success)
             {
                 InMemoryRepo.Folders = InMemoryRepo.Folders.Where(x=>x.Id != Model.Id).ToList();
                 InMemoryRepo.Folders.Add(Model);
-                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                 Snackbar.Add("Folder Renamed", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add(resp.error, Severity.Error);
             }
         }
     }
@@ -51,7 +68,7 @@ public partial class FolderComponent : ComponentBase
             if (resp.success)
             {
                 InMemoryRepo.Folders = InMemoryRepo.Folders.Where(x => x.Id != Model.Id).ToList();
-                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
                 Snackbar.Add("Folder deleted", Severity.Warning);
                 StateHasChanged();
             }

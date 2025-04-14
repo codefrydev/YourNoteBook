@@ -1,0 +1,81 @@
+@page "/landing"
+<main>
+
+    <!-- Hero / About Me -->
+    <MudPaper Class="py-20" Style="background: linear-gradient(135deg, #2196F3, #21CBF3); color: white;">
+        <MudContainer MaxWidth="MaxWidth.Medium" Class="text-center">
+            <MudText Typo="Typo.h3" Class="mb-2 font-weight-bold">Welcome to Your Notebook App 📓</MudText>
+            <MudText Typo="Typo.subtitle1" Class="mb-4">
+                Manage your notes and organize them effortlessly. Connect to your database, start creating notes, and store them in folders.
+            </MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" OnClick="AddFirebaseCode">Get Started</MudButton>
+        </MudContainer>
+    </MudPaper>
+ 
+    <!-- Features -->
+    <MudContainer MaxWidth="MaxWidth.Large" Class="my-12">
+        <MudGrid Spacing="3">
+            @foreach (var feature in Features)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="rounded-xl hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        <MudCard Elevation="2" Class="h-100 flex flex-column items-center justify-center p-6">
+                            <MudAvatar Icon="@feature.Icon" Color="Color.Primary" Size="Size.Large" Class="mb-4" />
+                            <MudText Typo="Typo.h6" Class="mb-2 text-center font-semibold text-lg text-gray-800">@feature.Title</MudText>
+                            <MudText Typo="Typo.body2" Class="text-center text-gray-600">@feature.Description</MudText>
+                        </MudCard>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudContainer>
+    <!-- Call to Action -->
+    <MudPaper Class="py-14 bg-grey-lighten-4 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+        <MudContainer>
+            <MudStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Spacing="2">
+                <MudText Typo="Typo.h4" Class="mb-4 text-center font-semibold text-gray-800">Ready to Start Organizing?</MudText>
+                <MudButton Variant="Variant.Outlined" 
+                           Color="Color.Primary" 
+                           Size="Size.Large" 
+                           Class="transition-all duration-300 hover:bg-primary hover:text-white"
+                           OnClick="AddFirebaseCode"
+                           >Connect to Database</MudButton>
+            </MudStack>
+        </MudContainer>
+    </MudPaper>
+
+    <!-- Special Features -->
+    <MudContainer Class="my-12">
+        <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-8 font-weight-bold text-gray-800">🌟 Special Features</MudText>
+        <MudGrid Spacing="3">
+            @foreach (var feature in _specialFeatures)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="rounded-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                        <MudCard Elevation="2" Class="flex flex-column items-center justify-center p-6 h-100">
+                            <MudAvatar Icon="@feature.Icon" Color="Color.Primary" Size="Size.Large" Class="mb-4" />
+                            <MudText Typo="Typo.h6" Class="mb-2 text-center font-semibold text-lg text-gray-800 transition-all duration-300 hover:text-primary">@feature.Title</MudText>
+                            <MudText Typo="Typo.body2" Class="text-center text-gray-600 transition-all duration-300 hover:text-gray-700">@feature.Description</MudText>
+                        </MudCard>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudContainer>
+
+</main>
+
+@code { 
+    private readonly List<(string Title, string Description, string Icon)> Features =
+    [
+        ("Database Connectivity", "Seamlessly connect to your database and manage your notes.", Icons.Material.Filled.DataObject),
+        ("Folder Organization", "Store your notes in easily accessible folders.", Icons.Material.Filled.Folder),
+        ("Search & Filter", "Find your notes quickly with search and filtering options.", Icons.Material.Filled.Search)
+    ];
+
+    private readonly List<(string Title, string Description, string Icon)> _specialFeatures =
+    [
+        ("Multi-User Support", "Collaborate and share notes with multiple users.", Icons.Material.Filled.People),
+        ("Offline Access", "Access your notes even without an internet connection.", Icons.Material.Filled.CloudOff)
+    ];
+}

@@ -17,6 +17,7 @@ public static class Mapper
             iconColor = item.IconColor,
             backGroundColor = item.BackGroundColor,
             isPinned = item.IsPinned,
+            description =   item.Description,
         };
     }
     public static object GetNoteLocalObject(Note item)

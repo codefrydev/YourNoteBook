@@ -1,13 +1,5 @@
 @page "/folder/{folderId}"
-
 @inject InMemoryRepo InMemoryRepo
-
-<div class="fab" id="addNoteBtn">
-    <span class="material-icons">add</span>
-</div>
-
-
-
 <MudPaper Class="d-flex justify-start flex-wrap flex-grow-1" Elevation="0">
     <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px">
         <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes" OnClick="ShowNotes"/>

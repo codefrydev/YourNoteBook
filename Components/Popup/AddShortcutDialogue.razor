@@ -1,12 +1,7 @@
-<MudDialog Style="width:600px; padding:16px;" MaxWidth="MaxWidth.Medium">
+<MudDialog Style="@Constant.DialogueUiStyle" MaxWidth="MaxWidth.Medium">
     <TitleContent>
         <div class="d-flex justify-space-between align-center mb-4">
             <MudText Typo="Typo.h5" Class="font-weight-bold">Add New Shortcut</MudText>
-            <MudIconButton Icon="@Icons.Material.Filled.Close"
-                           OnClick="Cancel"
-                           Color="Color.Default"
-                           Size="Size.Medium"
-                           aria-label="Close" />
         </div>
     </TitleContent>
 
@@ -44,8 +39,7 @@
                 <!-- Category Select -->
                 <MudSelect @bind-Value="_selectedCategory"
                            Label="Category"
-                           Variant="Variant.Outlined"
-                           AnchorOrigin="Origin.BottomCenter"
+                           Variant="Variant.Outlined" 
                            FullWidth="true">
                     @foreach (var selection in Categories)
                     {

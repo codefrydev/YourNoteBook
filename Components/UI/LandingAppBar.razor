@@ -1,0 +1,57 @@
+<MudAppBar Elevation="4" Color="Color.Primary" Class="mud-theme-dark px-4 py-2">
+    <MudContainer MaxWidth="MaxWidth.Large" Class="d-flex justify-space-between align-center">
+
+        <!-- Brand -->
+        <MudText Typo="Typo.h5" Class="mud-text-white font-weight-bold">🚀 MyPortfolio</MudText>
+
+        <!-- Mobile Menu Button -->
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="Color.Inherit"
+                       Edge="Edge.End"
+                       OnClick="ToggleDrawer"
+                       Class="d-lg-none" />
+
+        <!-- Desktop Tabs -->
+        <MudHidden Breakpoint="Breakpoint.LgAndDown">
+            <MudTabs Class="ml-auto" TabPanelClass="cool-tab">
+                <MudTabPanel Text="Home" Href="/index.html" />
+                <MudTabPanel Text="Projects" Href="/projects-grid-cards.html" />
+            </MudTabs>
+        </MudHidden>
+
+    </MudContainer>
+</MudAppBar>
+
+<!-- Drawer for Mobile -->
+<MudDrawer @bind-Open="_drawerOpen"
+           Anchor="Anchor.Right"
+           Variant="DrawerVariant.Temporary"
+           Elevation="2"
+           Class="mud-theme-dark d-lg-none">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h6" Class="mud-text-white">Menu</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Href="/index.html" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        <MudNavLink Href="/projects-grid-cards.html" Icon="@Icons.Material.Filled.Work">Projects</MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+<style>
+    .cool-tab .mud-tab {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .cool-tab .mud-tab:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
+</style>
+
+@code {
+    private bool _drawerOpen = false;
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}

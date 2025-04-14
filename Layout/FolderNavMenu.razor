@@ -1,19 +1,15 @@
 <MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
-    <MudNavMenu Class="mud-width-full">
-        <MudText Typo="Typo.h6" Class="px-4" @onclick="GoToHomePage" >YourNoteBook</MudText>
-        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Icons</MudText>
-        <MudDivider Class="my-2" />
+    <MudNavMenu Class="mud-width-full" > 
         @if (CurrentContext.IsAuthenticated)
         {
             if (InMemoryRepo.Folders.Count != 0)
             {
                 foreach (var model in InMemoryRepo.Folders)
-                {  
-                    <MudNavLink
-                        Icon="@Icons.Material.Filled.Storage"
-                        OnClick="@(() => OpenFolder(model.Id))">
-                        @model.Name
-                    </MudNavLink>
+                {
+                    <MudNavLink OnClick="@(() => OpenFolder(model.Id))"> 
+                            <MudIcon Icon="@model.Icon" Style=@($"color:{model.IconColor}") /> 
+                        <span> </span> @model.Name
+                    </MudNavLink> 
                 }
             } 
         }

@@ -14,3 +14,6 @@
 .text-primary {
     color: #1976d2; /* Material blue */
 }
+.fill-height {
+    height: 100%;
+}

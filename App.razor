@@ -1,6 +1,6 @@
 ﻿<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@GetLayout(routeData.PageType)"/>
+        <RouteView RouteData="@routeData" DefaultLayout="@GetLayout()"/>
         <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
     </Found>
     <NotFound>
@@ -13,14 +13,14 @@
 
 @code
 {
-   private Type GetLayout(Type pageType)
+   private Type GetLayout()
    {
        var path = NavigationManager.Uri;
 
        return path switch
        {
            _ when path.Contains("/folder") => typeof(FolderLayout),
-           _ when path.Contains("/admin") => typeof(FolderLayout),
+           _ when path.Contains("/landing") => typeof(LandingLayout),
            _ => typeof(MainLayout)
        };
    }

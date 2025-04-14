@@ -1,38 +1,43 @@
 @inject IDialogService DialogService
 
-<MudPaper MinWidth="400px" MaxWidth="800px" Height="180px" 
-          Class="pa-4 rounded-lg hover-elevation  folder-card" 
-          @onclick="OpenFolder">
-    <MudStack >
-        <MudItem>
-            <MudStack Row="true">
-                <MudItem>
-                    <MudIcon Icon="@Icons.Material.Filled.Folder"></MudIcon>
-                </MudItem>
-                <MudItem>
-                    <MudText Typo="Typo.h6" Class="font-weight-bold text-primary">@Model.Name</MudText>
-                </MudItem>
-            </MudStack>
-        </MudItem>
-        <MudItem>
-            <MudText> @Model.UpdatedAt</MudText>
-        </MudItem>
-        <MudItem>
-            <MudStack Row="true">
-                <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Note"> Notes</MudIconButton>
-                </MudItem>
-                <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Shortcut"> Shortcut</MudIconButton>
-                </MudItem>
-                <MudSpacer/>
-                <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="Rename"> Edit</MudIconButton>
-                </MudItem>
-                <MudItem>
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="Delete"> Delete</MudIconButton>
-                </MudItem>
-            </MudStack>
-        </MudItem>
-    </MudStack>
-</MudPaper>
+<MudCard @onclick="OpenFolder" Style=@($"background-color:{Model.BackGroundColor}")>
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Transparent">
+                <MudIcon Icon="@Model.Icon" Style=@($"color:{Model.IconColor}") ></MudIcon>
+            </MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText Typo="Typo.body1">@Model.Name</MudText>
+            <MudText Typo="Typo.body2">@Model.UpdatedAt.ToString("M/d/yy")</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" OnClick="UpdateItem" />
+        </CardHeaderActions>
+    </MudCardHeader> 
+    <MudCardContent>
+        <MudText Typo="Typo.body2">@Model.Description</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        @if (Model.IsPinned)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" 
+                           Color="Color.Success" 
+                           Variant="Variant.Filled" 
+                           OnClick="MakeChangesToPinning"
+                           Ripple="true" 
+                           />
+        }
+        else
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" 
+                           Color="Color.Default" 
+                           Variant="Variant.Outlined" 
+                           OnClick="MakeChangesToPinning"
+                           Ripple="true"
+            />
+        }
+        <MudSpacer/>
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="Delete"/>
+    </MudCardActions>
+</MudCard>

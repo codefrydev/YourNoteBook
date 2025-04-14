@@ -1,95 +1,14 @@
-﻿@inherits LayoutComponentBase
-@inject InMemoryRepo InMemoryRepo
+﻿@using YourNoteBook.Components.UI
+@inherits LayoutComponentBase 
 <MudThemeProvider/>
 <MudPopoverProvider/>
 <MudDialogProvider/>
-<MudSnackbarProvider/>
-@inject IDialogService DialogService
+<MudSnackbarProvider/> 
 <MudLayout>
-    <MudAppBar Color="Color.Surface" Elevation="6" Fixed="true" Class="appbar-custom px-4">
-        <MudStack Direction="Row" AlignItems="AlignItems.Center" JustifyContent="Center" Class="full-width">
-            <!-- Search Bar -->
-            <MudTextField @bind-Value="Search"
-                          Label="Search"
-                          Variant="Variant.Outlined"
-                          Adornment="Adornment.End"
-                          AdornmentIcon="@Icons.Material.Filled.Search"
-                          AdornmentColor="Color.Secondary"
-                          Class="search-field" />
-        </MudStack>
-
-        <MudSpacer />
-
-        <!-- Conditional Button: Add Folder (Authenticated) or Sync (Unauthenticated) -->
-        @if (CurrentContext.IsAuthenticated)
-        {
-            <MudTooltip Text="Add New Folder">
-                <MudIconButton Icon="@Icons.Material.Filled.Folder"
-                               Color="Color.Primary"
-                               OnClick="AddNewFolder" />
-            </MudTooltip>
-        }
-        else
-        {
-            <MudTooltip Text="Sync with Local Storage">
-                <MudIconButton Icon="@Icons.Material.Filled.Sync"
-                               Color="Color.Success"
-                               OnClick="SyncFromLocalStorage" />
-            </MudTooltip>
-        }
-
-        <!-- Settings Icon -->
-        <MudTooltip Text="Settings">
-            <MudIcon Icon="@Icons.Material.Filled.Settings"
-                     Color="Color.Inherit"
-                     @onclick="AddFirebaseCode" />
-        </MudTooltip>
-    </MudAppBar>
-
+    <HomeAppBar/>
     <MudMainContent>
-        <MudPaper Class="pa-4 ma-2 content-paper" Elevation="0">
+        <MudPaper Class="pa-4 ma-2 " Elevation="0">
             @Body
         </MudPaper>
     </MudMainContent>
 </MudLayout>
-<style>
-    /* AppBar Customization */
-    .appbar-custom {
-        background-color: #fafafa;  /* Soft background */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-        color: #333; /* Dark text for readability */
-        border-radius: 8px;
-        position: relative;
-    }
-
-    .search-field {
-        max-width: 400px; /* Constrained width for neatness */
-    }
-
-    .full-width {
-        width: 100%; /* Full width to ensure centering of search */
-    }
-
-    /* Hover effects for IconButtons */
-    .mud-icon-button:hover {
-        background-color: rgba(25, 118, 210, 0.1); /* Light hover effect */
-        border-radius: 8px;
-    }
-
-    /* Main Content Customization */
-    .content-paper {
-        background-color: #ffffff; /* Clean white background */
-        color: #333; /* Dark text for contrast */
-        border-radius: 12px; /* Rounded corners for a smooth feel */
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-    }
-
-    .content-paper .mud-divider {
-        border-color: #e0e0e0; /* Light divider for separation */
-    }
-
-    /* Tooltip style */
-    .mud-tooltip {
-        font-size: 14px; /* Subtle, readable font size */
-    }
-</style>

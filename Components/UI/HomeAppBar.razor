@@ -1,0 +1,43 @@
+<MudAppBar Style="background-color: #1E1E2F; color: white;" Elevation="4">
+    @if (IsHamburgerMenuVisible)
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="Color.Inherit"
+                       Edge="Edge.Start"/>
+    }
+    <MudText Typo="Typo.h6" Class="mr-6">
+        @Heading
+    </MudText>
+    <MudTextField @bind-Value="Search"
+                  Label="Search"
+                  Variant="Variant.Outlined"
+                  Adornment="Adornment.End"
+                  AdornmentIcon="@Icons.Material.Filled.Search"
+                  AdornmentColor="Color.Secondary"
+                  Class="search-field"/>
+    <MudSpacer/>
+    @if (CurrentContext.IsAuthenticated)
+    {
+        <MudTooltip Text="Add New Folder">
+            <MudIconButton Icon="@Icons.Material.Filled.Folder"
+                           Color="Color.Primary"
+                           OnClick="AddNewFolder"/>
+        </MudTooltip>
+    }
+    else
+    {
+        <MudTooltip Text="Sync with Local Storage">
+            <MudIconButton Icon="@Icons.Material.Filled.Sync"
+                           Color="Color.Success"
+                           OnClick="SyncFromLocalStorage"/>
+        </MudTooltip>
+    }
+
+    <!-- Settings Icon -->
+    <MudTooltip Text="Settings">
+        <MudIcon Icon="@Icons.Material.Filled.Settings"
+                 Color="Color.Inherit"
+                 @onclick="AddFirebaseCode"/>
+    </MudTooltip>
+</MudAppBar>
+ 
