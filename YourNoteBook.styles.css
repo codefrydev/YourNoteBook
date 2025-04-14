@@ -15,6 +15,9 @@
 .text-primary[b-j8efw9ppn5] {
     color: #1976d2; /* Material blue */
 }
+.fill-height[b-j8efw9ppn5] {
+    height: 100%;
+}
 /* /Components/NoteCardComponent.razor.rz.scp.css */
 :root[b-l005zhm0a7] {
     --header-border: #e0e0e0;
@@ -307,11 +310,30 @@ header[b-l005zhm0a7] {
 .mud-paper:hover[b-b34p4ydmm5] {
     transition-delay: 0.05s;
 }
+/* /Components/UI/FolderAppBar.razor.rz.scp.css */
+.appbar-custom[b-h3oarwq4k7] {
+    background-color: #f0f2f5; /* Soft gray-blue, neutral */
+    color: #1f1f1f;            /* Strong dark text */
+}
+
+.appbar-custom .mud-icon-button[b-h3oarwq4k7] {
+    margin-left: 6px;
+    margin-right: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.appbar-custom .mud-icon-button:hover[b-h3oarwq4k7] {
+    background-color: rgba(25, 118, 210, 0.1); /* light hover blue */
+    border-radius: 8px;
+}
+/* /Components/UI/LandingAppBar.razor.rz.scp.css */
+/* /Components/UI/LandingFooter.razor.rz.scp.css */
 /* /Layout/FolderLayout.razor.rz.scp.css */
 .my-custom-class[b-12jh3pzi2k] {
     backdrop-filter: blur(10px);
 } 
 /* /Layout/FolderNavMenu.razor.rz.scp.css */
+/* /Layout/LandingLayout.razor.rz.scp.css */
 /* /Layout/MainLayout.razor.rz.scp.css */
 .page[b-lys8dglik0] {
     position: relative;
@@ -749,3 +771,4 @@ header[b-4sm25czyc9] {
         right: 16px;
     }
 }
+/* /Pages/Landing.razor.rz.scp.css */
