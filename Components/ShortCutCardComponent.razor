@@ -1,0 +1,27 @@
+@inject IDialogService DialogService
+
+
+<div class="note-card" style="background-color: @Model.BackGroundColor">
+    <div class="note-title">Notes Name : @Model.Action</div> 
+    <div class="note-content" >
+        <MudStack>
+            <MudText Typo="Typo.body2">Keys: @Model.Keys</MudText>
+            <MudText Typo="Typo.body2">Category: @Model.Category.Name</MudText>
+            <MudText Typo="Typo.body2">Description: @Model.Description</MudText>
+        </MudStack> 
+    </div>
+    <div class="note-actions">
+        @if (Model.IsPinned)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.PushPin" OnClick="MakeChangesToPinning" Variant="Variant.Outlined" />
+        }
+        else
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.PushPin" OnClick="MakeChangesToPinning" Variant="Variant.Filled" />
+        }
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+            <MudMenuItem OnClick="() => EditShortCut()">Edit</MudMenuItem>
+            <MudMenuItem OnClick="() => Delete()">Delete</MudMenuItem>
+        </MudMenu>
+    </div>
+</div> 

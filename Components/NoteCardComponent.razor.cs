@@ -13,13 +13,25 @@ public partial class NoteCardComponent : ComponentBase
     [Inject] private IManager<Note> Manager { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [EditorRequired][Parameter] public Note Model { get; set; } = new();
-    
+
+    private async Task MakeChangesToPinning()
+    {
+        Model.IsPinned = !Model.IsPinned;
+        var resp = await Manager.UpdateSync<SaveDocumentResult>(Model);
+        if (resp.success)   
+        {
+            InMemoryRepo.Notes = InMemoryRepo.Notes.Where(x=>x.Id != Model.Id).ToList();
+            InMemoryRepo.Notes.Add(Model);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Notes Pinned Clicked", Severity.Success);
+        }
+    }
     private async Task EditNote()
     { 
         var options = new DialogOptions { CloseOnEscapeKey = true };
         var parameters = new DialogParameters<EditNotesDialogue>
         { 
-            { x => x.NewNote, Model }
+            { x => x.Model, Model }
         };
         var response = await DialogService.ShowAsync<EditNotesDialogue>("Simple Dialog",parameters, options);
         var result  =  await response.Result;

@@ -17,7 +17,7 @@ public partial class Landing : ComponentBase
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
     [Inject] private IDialogService DialogService { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
-
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -73,5 +73,17 @@ public partial class Landing : ComponentBase
         {
             CurrentContext.IsAuthenticated = (bool)result.Data;
         }
+    }
+
+    private void  OpenHomePage()
+    {
+        NavigationManager.NavigateTo("Home");
+    }
+    private async Task OpenThemeManager()
+    {
+        var options = PopUpDialogueStyle.GetDefaultDialogOptions();
+
+        _ = await DialogService.ShowAsync<MudThemeChooser>(options.Title, options.Options);
+        StateHasChanged();
     }
 }

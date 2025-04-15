@@ -1,4 +1,4 @@
-<MudAppBar Style="background-color: #1E1E2F; color: white;" Elevation="2">
+<MudAppBar Style="background-color: #1E1E2F; color: white;" Elevation="2"  Color="Color.Primary">
     <MudIconButton Icon="@Icons.Material.Filled.Menu"
                    Color="Color.Secondary"
                    Edge="Edge.Start"
@@ -37,6 +37,6 @@
                          title="@(@CurrentContext.IsDarkMode ? "Light" : "Dark")" />
 </MudAppBar>
 
-<MudDrawer @bind-Open="_drawerOpen" Elevation="2" Color="Color.Default" ClipMode="DrawerClipMode.Always">
+<MudDrawer @bind-Open="_drawerOpen" Elevation="2" ClipMode="DrawerClipMode.Always"  Color="Color.Primary">
     <FolderNavMenu/>
 </MudDrawer>

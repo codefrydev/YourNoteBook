@@ -7,20 +7,31 @@ using YourNoteBook.Models;
 
 namespace YourNoteBook.Components;
 
-public partial class ShortcutComponent : ComponentBase
+public partial class ShortCutCardComponent : ComponentBase
 {
     [Inject] private IManager<Shortcut> ShortcutManager { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [Inject] private ISnackbar Snackbar { get; set; } = null!;
     
     [EditorRequired] [Parameter] public Shortcut Model { get; set; } = null!;
-    
+    private async Task MakeChangesToPinning()
+    {
+        Model.IsPinned = !Model.IsPinned;
+        var resp = await ShortcutManager.UpdateSync<SaveDocumentResult>(Model);
+        if (resp.success)   
+        {
+            InMemoryRepo.Shortcuts = InMemoryRepo.Shortcuts.Where(x=>x.Id != Model.Id).ToList();
+            InMemoryRepo.Shortcuts.Add(Model);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Shortcut Pinned Clicked", Severity.Success);
+        }
+    }
     private async Task EditShortCut()
     { 
         var options = new DialogOptions { CloseOnEscapeKey = true };
         var parameters = new DialogParameters<EditShortcutDialogue>
         { 
-            { x => x.NewShortcut, Model }
+            { x => x.Model, Model }
         };
         var response = await DialogService.ShowAsync<EditShortcutDialogue>("Simple Dialog",parameters, options);
         var result  =  await response.Result;

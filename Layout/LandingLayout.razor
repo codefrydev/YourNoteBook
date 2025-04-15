@@ -3,7 +3,8 @@
 <MudThemeProvider @bind-IsDarkMode="@CurrentContext.IsDarkMode" Theme="@CurrentContext.Theme"/>
 <MudPopoverProvider/>
 <MudDialogProvider/>
-<MudSnackbarProvider/>
-@* <LandingAppBar/> *@
-@Body
+<MudSnackbarProvider/> 
+<MudPaper Class="pa-2 ma-2" Elevation="0" Color="Color.Primary">
+    @Body
+</MudPaper>
 <LandingFooter/>

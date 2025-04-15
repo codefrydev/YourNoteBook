@@ -8,7 +8,7 @@ public partial class EditShortcutDialogue : ComponentBase
 {
     [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
 
-    [Parameter] public Shortcut NewShortcut { get; set; } = null!;
+    [Parameter] public Shortcut Model { get; set; } = null!;
     
     string _selectedCategory = string.Empty;
     List<string> Categories { get; } =
@@ -30,11 +30,11 @@ public partial class EditShortcutDialogue : ComponentBase
         {
             _selectedCategory = Categories.Last();
         }
-        NewShortcut.Category = new Category()
+        Model.Category = new Category()
         {
             Name = _selectedCategory
         };
-        MudDialog.Close(DialogResult.Ok(NewShortcut));
+        MudDialog.Close(DialogResult.Ok(Model));
     }
 
     private void Cancel() => MudDialog.Cancel();

@@ -1,7 +1,7 @@
 @page "/folder/{folderId}"
 @inject InMemoryRepo InMemoryRepo
-<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1" Elevation="0">
-    <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px">
+<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1" Elevation="0" Color="Color.Primary">
+    <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px" Color="Color.Primary">
         <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes" OnClick="ShowNotes"/>
         <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut" OnClick="ShowShortCut"/>
     </MudTabs>
@@ -10,18 +10,18 @@
     <div class="notes-grid" id="notesContainer">
         @if (_isNoteShowing)
         {
-            @foreach (var model in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
+            @foreach (var model in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found")
+                          .OrderByDescending(x=>x.IsPinned).ThenByDescending(x=>x.Modified))
             {
-                <NoteCardComponent Model="model"/>
-
-                //<NotesComponent Model="model"/>
+                <NoteCardComponent Model="model"/> 
             }
         }
         else
         {
-            @foreach (var model in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found"))
+            @foreach (var model in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found")
+                          .OrderByDescending(x=>x.IsPinned).ThenByDescending(x=>x.Modified))
             { 
-                <ShortcutComponent Model="model"/>
+                <ShortCutCardComponent Model="model"/>
             }
         } 
     </div>

@@ -20,8 +20,8 @@
        return path switch
        {
            _ when path.Contains("/folder") => typeof(FolderLayout),
-           _ when path.Contains("/landing") => typeof(LandingLayout),
-           _ => typeof(MainLayout)
+           _ when path.Contains("/Home") => typeof(MainLayout),
+           _ => typeof(LandingLayout)
        };
    }
     

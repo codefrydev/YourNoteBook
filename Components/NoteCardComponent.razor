@@ -1,18 +1,20 @@
-<div class="note-card">
-    <div class="note-title">Meeting Notes</div>
+<div class="note-card" style="background-color: @Model.BackGroundColor">
+    <div class="note-title">Notes Name : @Model.Title</div>
     <div class="note-content">
-        - Discuss Q4 goals<br>
-        - Review new features<br>
-        - Team building activity planning<br>
-        - Budget allocation for marketing
-        - Discuss Q4 goals<br>
-        - Review new features<br>
-        - Team building activity planning<br>
-        - Budget allocation for marketing
-        - Discuss Q4 goals<br>
+        @Model.Content
     </div>
     <div class="note-actions">
-        <span class="material-icons">push_pin</span>
-        <span class="material-icons">more_vert</span>
+        @if (Model.IsPinned)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.PushPin" OnClick="MakeChangesToPinning" Variant="Variant.Outlined" />
+        }
+        else
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.PushPin" OnClick="MakeChangesToPinning" Variant="Variant.Filled" />
+        }
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert" >
+            <MudMenuItem OnClick="() => EditNote()">Edit</MudMenuItem>
+            <MudMenuItem OnClick="() => Delete()">Delete</MudMenuItem>
+        </MudMenu> 
     </div>
 </div>

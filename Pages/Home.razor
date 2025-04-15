@@ -1,8 +1,7 @@
-﻿@page "/"
-@page "/Home"
+﻿@page "/Home"
 @inject InMemoryRepo InMemoryRepo
 <PageTitle>Home</PageTitle> 
-<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0">
+<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0"  Color="Color.Primary">
     @if (CurrentContext.IsAuthenticated)
     {
         if (InMemoryRepo.Folders.Count == 0)
@@ -12,7 +11,7 @@
         }
         else
         {
-            foreach (var model in InMemoryRepo.Folders)
+            foreach (var model in InMemoryRepo.Folders.OrderByDescending(x=>x.IsPinned).ThenByDescending(x=>x.UpdatedAt))
             {
                 <FolderComponent Model="model"/>
             }
@@ -22,13 +21,17 @@
     else
     {
         <div class="loading">
-            <div class="loadingBaba"> 
+            <div class="loadingBaba">
+                <MudStack> 
+                <MudText Typo="Typo.h4" Color="Color.Primary"> Please connect with database first. </MudText>
+                <hr/>
                 <MudFab
-                    Icon="@Icons.Material.Filled.Settings" 
-                    @onclick="AddFirebaseCode" 
+                    Icon="@Icons.Material.Filled.Settings"
+                    @onclick="AddFirebaseCode"
                     Color="Color.Warning"
                     Style="text-decoration-color: black"
-                    Label="Please connect with you database first.  Click me To Fill Data"/>
+                    Label="Click me To Fill Data"/>
+                </MudStack>
             </div>
         </div>
     }
