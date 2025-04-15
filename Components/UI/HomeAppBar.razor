@@ -1,4 +1,4 @@
-<MudAppBar Style="background-color: #1E1E2F; color: white;" Elevation="4">
+<MudAppBar Style="background-color: #1E1E2F; color: white;" Elevation="2">
     @if (IsHamburgerMenuVisible)
     {
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
@@ -39,5 +39,11 @@
                  Color="Color.Inherit"
                  @onclick="AddFirebaseCode"/>
     </MudTooltip>
+    <MudTooltip Text="Settings">
+        <MudIcon Icon="@Icons.Material.Filled.Colorize"
+                 Color="Color.Inherit"
+                 @onclick="OpenThemeManager"/>
+    </MudTooltip>
+    
 </MudAppBar>
  

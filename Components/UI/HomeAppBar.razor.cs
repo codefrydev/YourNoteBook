@@ -26,6 +26,13 @@ public partial class HomeAppBar: ComponentBase
     [Inject] private IDialogService DialogService { get; set; } = null!;
     [Inject] private IManager<FolderModel> FolderManager { get; set; } = null!;
 
+    private async Task OpenThemeManager()
+    {
+        var options = PopUpDialogueStyle.GetDefaultDialogOptions();
+
+        _ = await DialogService.ShowAsync<MudThemeChooser>(options.Title, options.Options);
+        StateHasChanged();
+    }
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;

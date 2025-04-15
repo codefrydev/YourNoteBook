@@ -1,0 +1,24 @@
+
+<MudDialog Style="@Constant.DialogueUiStyle" MaxWidth="MaxWidth.Medium">
+    <TitleContent>
+        <MudText Typo="Typo.h5" Class="font-weight-bold text-center sm:text-left">
+            Choose the Theme
+        </MudText>
+    </TitleContent>
+    <DialogContent> 
+        <MudSelect T="MudTheme" @bind-Value="@CurrentContext.Theme">
+            <MudSelectItem Value="ThemeChooser.Ceruleantheme">Cerulean</MudSelectItem>
+            <MudSelectItem Value="ThemeChooser.Journaltheme">Journal</MudSelectItem>
+            <MudSelectItem Value="ThemeChooser.Flatlytheme">Flatly</MudSelectItem>
+        </MudSelect>
+        <MudToggleIconButton @bind-Toggled="@CurrentContext.IsDarkMode"
+                             Icon="@Icons.Material.Filled.Lightbulb"
+                             Color="@Color.Error"
+                             ToggledIcon="@Icons.Material.Filled.DarkMode"
+                             ToggledColor="@Color.Success"
+                             title="@(@CurrentContext.IsDarkMode ? "Light" : "Dark")" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Submit" Class="text-primary">Close</MudButton>
+    </DialogActions>
+</MudDialog> 

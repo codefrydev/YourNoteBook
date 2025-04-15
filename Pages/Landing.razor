@@ -1,81 +1,128 @@
 @page "/landing"
-<main>
+@using MudBlazor
 
-    <!-- Hero / About Me -->
-    <MudPaper Class="py-20" Style="background: linear-gradient(135deg, #2196F3, #21CBF3); color: white;">
-        <MudContainer MaxWidth="MaxWidth.Medium" Class="text-center">
-            <MudText Typo="Typo.h3" Class="mb-2 font-weight-bold">Welcome to Your Notebook App 📓</MudText>
-            <MudText Typo="Typo.subtitle1" Class="mb-4">
-                Manage your notes and organize them effortlessly. Connect to your database, start creating notes, and store them in folders.
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-16"> @* Main container for the page content *@
+
+    @* --- Hero Section --- *@
+    @* A prominent section to grab user attention. *@
+    <MudGrid Justify="Justify.Center" Class="py-16 text-center">
+        <MudItem xs="12" md="8">
+            @* Main headline *@
+            <MudText Typo="Typo.h2" GutterBottom="true" Class="mb-4 font-weight-bold">
+                NoteBook
             </MudText>
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" OnClick="AddFirebaseCode">Get Started</MudButton>
-        </MudContainer>
-    </MudPaper>
- 
-    <!-- Features -->
-    <MudContainer MaxWidth="MaxWidth.Large" Class="my-12">
-        <MudGrid Spacing="3">
-            @foreach (var feature in Features)
-            {
-                <MudItem xs="12" sm="6" md="4">
-                    <MudPaper Class="rounded-xl hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                        <MudCard Elevation="2" Class="h-100 flex flex-column items-center justify-center p-6">
-                            <MudAvatar Icon="@feature.Icon" Color="Color.Primary" Size="Size.Large" Class="mb-4" />
-                            <MudText Typo="Typo.h6" Class="mb-2 text-center font-semibold text-lg text-gray-800">@feature.Title</MudText>
-                            <MudText Typo="Typo.body2" Class="text-center text-gray-600">@feature.Description</MudText>
-                        </MudCard>
-                    </MudPaper>
-                </MudItem>
+
+            @* Subtitle or brief description *@
+            <MudText Typo="Typo.h5" Color="Color.Dark" Class="mb-8">
+                The revolutionary solution you've been waiting for. Streamline your workflow and boost productivity
+                effortlessly.
+            </MudText>
+
+            @* Call-to-action buttons *@
+            @if (!CurrentContext.IsAuthenticated)
+            { 
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="AddFirebaseCode" Class="mr-4">
+                    Connect With DataBase
+                </MudButton>
             }
-        </MudGrid>
-    </MudContainer>
-    <!-- Call to Action -->
-    <MudPaper Class="py-14 bg-grey-lighten-4 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-        <MudContainer>
-            <MudStack AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Spacing="2">
-                <MudText Typo="Typo.h4" Class="mb-4 text-center font-semibold text-gray-800">Ready to Start Organizing?</MudText>
-                <MudButton Variant="Variant.Outlined" 
-                           Color="Color.Primary" 
-                           Size="Size.Large" 
-                           Class="transition-all duration-300 hover:bg-primary hover:text-white"
-                           OnClick="AddFirebaseCode"
-                           >Connect to Database</MudButton>
-            </MudStack>
-        </MudContainer>
+            else
+            { 
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" Href="/Home">
+                    Start Your NoteBook
+                </MudButton>
+            }
+            
+        </MudItem> 
+    </MudGrid>
+
+    @* --- Features Section --- *@
+    @* Highlighting key features of the app. *@
+    <MudGrid Spacing="4" Justify="Justify.Center" Class="py-16">
+        <MudItem xs="12">
+            <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Key Features</MudText>
+            <MudDivider Class="my-4"/>
+        </MudItem>
+
+        @* Feature 1 *@
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="3" Class="d-flex flex-column align-center text-center" Style="height: 100%;">
+                <img src="https://codefrydev.in/images/IconCodefrydev.svg" alt="CFD Image"/>
+                <MudCardContent Class="pa-6 d-flex flex-column align-items-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Sync" Color="Color.Primary" Size="Size.Large" Class="mb-4"/>
+                    <MudText Typo="Typo.h6" GutterBottom="true">Real-time Sync</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Dark">Keep your data up-to-date across all your devices
+                        instantly.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        @* Feature 2 *@
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="3" Class="d-flex flex-column align-center text-center" Style="height: 100%;">
+                <img src="https://codefrydev.in/images/IconCodefrydev.svg" alt="CFD Image"/>
+                <MudCardContent Class="pa-6 d-flex flex-column align-items-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Sync" Color="Color.Primary" Size="Size.Large" Class="mb-4"/>
+                    <MudText Typo="Typo.h6" GutterBottom="true">Real-time Sync</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Dark">Keep your data up-to-date across all your devices
+                        instantly.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        @* Feature 3 *@
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="3" Class="d-flex flex-column align-center text-center" Style="height: 100%;">
+                <img src="https://codefrydev.in/images/IconCodefrydev.svg" alt="CFD Image"/>
+                <MudCardContent Class="pa-6 d-flex flex-column align-items-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Sync" Color="Color.Primary" Size="Size.Large" Class="mb-4"/>
+                    <MudText Typo="Typo.h6" GutterBottom="true">Real-time Sync</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Dark">Keep your data up-to-date across all your devices
+                        instantly.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    @* --- Call to Action (CTA) Section --- *@
+    @* Encouraging users to take the next step. *@
+    <MudPaper Style="padding:16px; background-color:#ffffffd6;border:4px solid #ffffffb3; border-radius:30px;box-shadow: inset  0 0 10px rgba(0, 0, 0, 0.1);">
+        <MudExpansionPanels Style=" border-radius:30px;box-shadow:inset 0 0 10px rgba(0, 0, 0, 0.1);">
+            <MudExpansionPanel Text="General" DisableGutters="true" Class="pl-3" Dense="true">
+                <pre>
+                <code>
+Answer one of the following questions
+                            </code>
+                        </pre>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Corner Cells behaviour" DisableGutters="true" Class="pl-3" Dense="true">
+                <MudImage Src="CornerRule.gif" Fluid="true"/>
+                <pre>
+                <code>
+Answer one of the following questions
+                        </code>
+                    </pre>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Edge Cells behaviour" DisableGutters="true" Class="pl-3" Dense="true">
+                <MudImage Src="EdgeRule.gif" Fluid="true"/>
+                <pre>
+                <code>
+Answer one of the following questions
+                        </code>
+                    </pre>
+            </MudExpansionPanel>
+            <MudExpansionPanel Text="Rest Cells behaviour" DisableGutters="true" Class="pl-3 mb-4" Dense="true">
+                <MudImage Src="RestRule.gif" Fluid="true"/>
+                <pre>
+                <code>
+Answer one of the following questions
+                </code>
+                </pre>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
     </MudPaper>
 
-    <!-- Special Features -->
-    <MudContainer Class="my-12">
-        <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-8 font-weight-bold text-gray-800">🌟 Special Features</MudText>
-        <MudGrid Spacing="3">
-            @foreach (var feature in _specialFeatures)
-            {
-                <MudItem xs="12" sm="6" md="4">
-                    <MudPaper Class="rounded-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                        <MudCard Elevation="2" Class="flex flex-column items-center justify-center p-6 h-100">
-                            <MudAvatar Icon="@feature.Icon" Color="Color.Primary" Size="Size.Large" Class="mb-4" />
-                            <MudText Typo="Typo.h6" Class="mb-2 text-center font-semibold text-lg text-gray-800 transition-all duration-300 hover:text-primary">@feature.Title</MudText>
-                            <MudText Typo="Typo.body2" Class="text-center text-gray-600 transition-all duration-300 hover:text-gray-700">@feature.Description</MudText>
-                        </MudCard>
-                    </MudPaper>
-                </MudItem>
-            }
-        </MudGrid>
-    </MudContainer>
-
-</main>
-
-@code { 
-    private readonly List<(string Title, string Description, string Icon)> Features =
-    [
-        ("Database Connectivity", "Seamlessly connect to your database and manage your notes.", Icons.Material.Filled.DataObject),
-        ("Folder Organization", "Store your notes in easily accessible folders.", Icons.Material.Filled.Folder),
-        ("Search & Filter", "Find your notes quickly with search and filtering options.", Icons.Material.Filled.Search)
-    ];
-
-    private readonly List<(string Title, string Description, string Icon)> _specialFeatures =
-    [
-        ("Multi-User Support", "Collaborate and share notes with multiple users.", Icons.Material.Filled.People),
-        ("Offline Access", "Access your notes even without an internet connection.", Icons.Material.Filled.CloudOff)
-    ];
-}
+    
+</MudContainer> 

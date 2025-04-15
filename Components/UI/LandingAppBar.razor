@@ -1,4 +1,4 @@
-<MudAppBar Elevation="4" Color="Color.Primary" Class="mud-theme-dark px-4 py-2">
+<MudAppBar Elevation="2" Color="Color.Primary" Class="mud-theme-dark px-4 py-2">
     <MudContainer MaxWidth="MaxWidth.Large" Class="d-flex justify-space-between align-center">
 
         <!-- Brand -->
@@ -18,7 +18,12 @@
                 <MudTabPanel Text="Projects" Href="/projects-grid-cards.html" />
             </MudTabs>
         </MudHidden>
-
+        <MudToggleIconButton @bind-Toggled="@CurrentContext.IsDarkMode"
+                             Icon="@Icons.Material.Filled.Lightbulb"
+                             Color="@Color.Error"
+                             ToggledIcon="@Icons.Material.Filled.DarkMode"
+                             ToggledColor="@Color.Success"
+                             title="@(@CurrentContext.IsDarkMode ? "Light" : "Dark")" />
     </MudContainer>
 </MudAppBar>
 

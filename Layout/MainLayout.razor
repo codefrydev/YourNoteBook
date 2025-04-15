@@ -1,6 +1,6 @@
 ﻿@using YourNoteBook.Components.UI
 @inherits LayoutComponentBase 
-<MudThemeProvider/>
+<MudThemeProvider @bind-IsDarkMode="@CurrentContext.IsDarkMode" Theme="@CurrentContext.Theme"/>
 <MudPopoverProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/> 

@@ -1,4 +1,4 @@
-<MudAppBar Style="background-color: #1E1E2F; color: white;" Elevation="4">
+<MudAppBar Style="background-color: #1E1E2F; color: white;" Elevation="2">
     <MudIconButton Icon="@Icons.Material.Filled.Menu"
                    Color="Color.Secondary"
                    Edge="Edge.Start"
@@ -29,6 +29,12 @@
                        Color="Color.Info"
                        OnClick="AddShortcut"/>
     </MudTooltip>
+    <MudToggleIconButton @bind-Toggled="@CurrentContext.IsDarkMode"
+                         Icon="@Icons.Material.Filled.Lightbulb"
+                         Color="@Color.Error"
+                         ToggledIcon="@Icons.Material.Filled.DarkMode"
+                         ToggledColor="@Color.Success"
+                         title="@(@CurrentContext.IsDarkMode ? "Light" : "Dark")" />
 </MudAppBar>
 
 <MudDrawer @bind-Open="_drawerOpen" Elevation="2" Color="Color.Default" ClipMode="DrawerClipMode.Always">
