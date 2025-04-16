@@ -1,0 +1,96 @@
+@page "/csveditor"  
+@using System.Linq  
+
+<PageTitle>CSV Editor & Viewer</PageTitle>
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h4" Align="Align.Center">CSV Table Viewer & Editor</MudText>
+    <MudGrid Class="mb-4">
+        <MudItem xs="12" sm="4">
+            <!-- File Upload -->
+            <InputFile OnChange="HandleFileSelected" accept=".csv" />
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <!-- File Upload -->
+            <MudTextField @bind-value="_numberOfDataToBeGenerated"></MudTextField>
+            <MudButton OnClick="GenerateDataAsync">Generate Data</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <!-- Toggle Edit Mode -->
+            <MudButton OnClick="@ToggleEditMode" Color="Color.Primary" Variant="Variant.Filled">
+                @if (_isEditMode)
+                {
+                    <span>Disable Edit</span>
+                }
+                else
+                {
+                    <span>Enable Edit</span>
+                }
+            </MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <!-- Download CSV -->
+            @if (_tableData.Count > 0)
+            {
+                <MudButton Color="Color.Secondary" Variant="Variant.Filled">
+                    <a href="@DownloadLink" download="table_data.csv" style="text-decoration: none; color:inherit;">
+                        Download CSV
+                    </a>
+                </MudButton>
+            }
+        </MudItem>
+    </MudGrid>
+
+
+    @if (_isLoading)
+    {
+        <MudProgressLinear Color="Color.Primary" Value="@Value" Class="my-7" Min="0" Max="@_numberOfDataToBeGenerated"/>  
+    }
+    else if (_tableData.Count > 0 )
+    {
+        <MudTable Items="@_tableData.Skip(1)" Striped="true" Hover="true" Bordered="true">
+            <HeaderContent>
+                @foreach (var header in _tableData[0])
+                {
+                    <MudTh Style="cursor:pointer" @onclick="()=>SortTable(header)">
+                        @header.Value
+                    </MudTh>
+                }
+            </HeaderContent>
+            <RowTemplate>
+                @foreach (var item in context)
+                {
+                    <MudTd
+                        @onmouseover="@(() => item.IsHovered = true)"
+                        @onmouseout="@(() => item.IsHovered = false)"
+                        @ondblclick="() => ToggleEdit(item)"
+                        Style="position: relative; cursor: pointer;">
+
+                        @if (_isEditMode || item.IsEditing)
+                        {
+                            <MudTextField @bind-Value="item.Value" Immediate="true" />
+                            <MudIcon Icon="@Icons.Material.Filled.Save"
+                                     Style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 18px; color: gray;"
+                                     @onclick="() => ToggleEdit(item)"/> 
+                        }
+                        else
+                        {
+                            @item.Value
+                            if (item.IsHovered)
+                            {
+                                <MudIcon Icon="@Icons.Material.Filled.Edit"
+                                         Style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 18px; color: gray;"
+                                         @onclick="() => ToggleEdit(item)"/>
+                            }
+                            
+                        }
+                    </MudTd>
+
+                }
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[]{10,20}" />
+            </PagerContent>
+        </MudTable>
+    }
+</MudPaper> 
