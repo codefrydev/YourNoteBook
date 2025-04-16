@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "YourNoteBook",
   "resources": {
-    "hash": "sha256-aaH7uwZzZCcHLyfF4owpj0pRm/HMTjL8sqmgX4lm69w=",
+    "hash": "sha256-xXt7EeONuVYRuCcaBm7rTjDD00oJZRJihleK6PU8bho=",
     "fingerprinting": {
       "Blazored.LocalStorage.12n6dz54qr.wasm": "Blazored.LocalStorage.wasm",
       "Faker.Net.6.0.bz2mmab7cl.wasm": "Faker.Net.6.0.wasm",
@@ -52,7 +52,7 @@
       "System.Threading.Thread.qy7pqu6yhc.wasm": "System.Threading.Thread.wasm",
       "System.Threading.r47xif7jtc.wasm": "System.Threading.wasm",
       "System.f0fr8djds0.wasm": "System.wasm",
-      "YourNoteBook.6zkjlddn6u.wasm": "YourNoteBook.wasm",
+      "YourNoteBook.17ipdhq0ge.wasm": "YourNoteBook.wasm",
       "Faker.Net.6.0.resources.joonkpof6v.wasm": "Faker.Net.6.0.resources.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.hvg7u8bimp.js": "dotnet.native.js",
@@ -128,7 +128,7 @@
       "System.Threading.Thread.qy7pqu6yhc.wasm": "sha256-kmZb15qYrQB2PDPMM82BNT9KdWfSCLD84ZuKZNgTch8=",
       "System.Threading.r47xif7jtc.wasm": "sha256-W8DJdZdH9rAehEdXgdaduBtxi83kqh6Dk23JsQnRUro=",
       "System.f0fr8djds0.wasm": "sha256-v1DeJU321NUwk3KJ0Lf8lQA3zwRfrxNommmMBs1s3Gk=",
-      "YourNoteBook.6zkjlddn6u.wasm": "sha256-DvbTtsS+Fkf2ZPkvZWNbFBqhp6AL60uy0MVmmG37/Uw="
+      "YourNoteBook.17ipdhq0ge.wasm": "sha256-XdmjZEwHzulJ1zmU3lxN+UQ36+GA5dnXoDA3ciAoS7M="
     },
     "satelliteResources": {
       "de-DE": {
