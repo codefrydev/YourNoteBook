@@ -17,12 +17,12 @@ public partial class Folder : ComponentBase
         return base.OnInitializedAsync();
     }
 
-    void ShowShortCut()
+    private void ShowShortCut()
     {
         _isNoteShowing = false;
     }
 
-    void ShowNotes()
+    private void ShowNotes()
     {
         _isNoteShowing = true;
     }
