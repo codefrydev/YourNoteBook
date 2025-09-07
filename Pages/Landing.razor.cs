@@ -6,6 +6,7 @@ using YourNoteBook.Shared.Helpers;
 using YourNoteBook.Core.Entities;
 using YourNoteBook.Core.Interfaces;
 using YourNoteBook.Shared.Utilities;
+using YourNoteBook.Shared.Services.Utilities;
 
 namespace YourNoteBook.Pages;
 
@@ -17,6 +18,7 @@ public partial class Landing : ComponentBase
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -29,6 +31,8 @@ public partial class Landing : ComponentBase
         if (CurrentContext.IsAuthenticated)
         {
             await LoadAllData();
+            // Automatically redirect to Home page if already authenticated
+            NavigationManager.NavigateTo("/Home");
         }
     }
 
@@ -53,7 +57,7 @@ public partial class Landing : ComponentBase
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"Error loading contacts: {ex.Message}");
+            SnackbarService.ShowError($"Error loading contacts: {ex.Message}");
         }
     }
 
@@ -72,11 +76,13 @@ public partial class Landing : ComponentBase
         {
             CurrentContext.IsAuthenticated = true;
             await LoadAllData();
-            await JsRuntime.InvokeVoidAsync("alert", "✅ Firebase connected successfully! You can now create folders and notes.");
+            SnackbarService.ShowSuccess("Firebase connected successfully! Redirecting to Home page...");
+            // Automatically redirect to Home page
+            NavigationManager.NavigateTo("/Home");
         }
         else
         {
-            await JsRuntime.InvokeVoidAsync("alert", "❌ Failed to connect to Firebase. Please check your configuration.");
+            SnackbarService.ShowError("Failed to connect to Firebase. Please check your configuration.");
         }
     }
 
@@ -92,7 +98,7 @@ public partial class Landing : ComponentBase
     
     private async Task OpenThemeManager()
     {
-        await JsRuntime.InvokeVoidAsync("alert", "Theme management is now handled by Tailwind CSS!");
+        SnackbarService.ShowInfo("Theme management is now handled by Tailwind CSS!");
         StateHasChanged();
     }
 }

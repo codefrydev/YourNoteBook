@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using YourNoteBook.Core.Abstractions;
 
 namespace YourNoteBook.Core.Entities;
@@ -15,5 +16,6 @@ public class Category : BaseEntity
     /// <summary>
     /// Name of the category
     /// </summary>
+    [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 }

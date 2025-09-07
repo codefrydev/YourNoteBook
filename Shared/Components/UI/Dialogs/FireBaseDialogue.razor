@@ -2,6 +2,7 @@
 @using YourNoteBook.Shared.Helpers
 @using YourNoteBook.Shared.Utilities
 @using Blazored.LocalStorage
+@using YourNoteBook.Shared.Services.Utilities
 
 <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -91,6 +92,7 @@
     [Inject] private IFirebaseHelper FirebaseHelper { get; set; } = null!;
     [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
 
     private string FirebaseConfigJson { get; set; } = "";
     private bool _isTesting = false;
@@ -169,7 +171,7 @@
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"Failed to save configuration: {ex.Message}");
+            SnackbarService.ShowError($"Failed to save configuration: {ex.Message}");
             await OnSave.InvokeAsync(false);
         }
     }

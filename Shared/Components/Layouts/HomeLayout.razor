@@ -1,5 +1,6 @@
 @namespace YourNoteBook.Shared.Components.Layouts
-@inherits LayoutComponentBase  
+@inherits LayoutComponentBase
+@using YourNoteBook.Shared.Components.UI.Snackbar  
 
 <div class="home-layout">
     <!-- Home Header -->
@@ -144,6 +145,9 @@
             </div>
         </main>
     </div>
+    
+    <!-- Snackbar Component -->
+    <SnackbarComponent />
 </div>
 
 <style>

@@ -56,6 +56,9 @@ public static class ServiceCollectionExtensions
 
         // Add logger service
         services.AddScoped<ILoggerService, LoggerService>();
+
+        // Add snackbar service
+        services.AddSingleton<SnackbarService>();
     }
 }
 

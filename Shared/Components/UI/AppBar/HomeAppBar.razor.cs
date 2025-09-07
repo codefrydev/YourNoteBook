@@ -9,6 +9,7 @@ using YourNoteBook.Core.Entities;
 using YourNoteBook.Core.Interfaces;
 using YourNoteBook.Shared.Utilities;
 using YourNoteBook.Shared.Models.Results;
+using YourNoteBook.Shared.Services.Utilities;
 
 namespace YourNoteBook.Shared.Components.UI.AppBar;
 
@@ -23,6 +24,8 @@ public partial class HomeAppBar: ComponentBase
     [Inject] private IFirebaseHelper FirebaseHelper { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [Inject] private IManager<Core.Entities.Folder> FolderManager { get; set; } = null!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
  
     private void DrawerToggle()
     {
@@ -50,7 +53,7 @@ public partial class HomeAppBar: ComponentBase
             else
             {
                 // Show error message - you can implement a custom notification system
-                await JsRuntime.InvokeVoidAsync("alert", firebaseModerResponse?.Message ?? "Failed to sync data");
+                SnackbarService.ShowError(firebaseModerResponse?.Message ?? "Failed to sync data");
             }
         }
     }
@@ -65,7 +68,7 @@ public partial class HomeAppBar: ComponentBase
         }
         else
         {
-            JsRuntime.InvokeVoidAsync("alert", "Please connect to Firebase first!");
+            SnackbarService.ShowWarning("Please connect to Firebase first!");
         }
     }
 
@@ -78,11 +81,11 @@ public partial class HomeAppBar: ComponentBase
         {
             folder.Id = response.id;
             InMemoryRepo.AddItem(folder);
-            await JsRuntime.InvokeVoidAsync("alert", $"✅ Folder '{folder.Name}' created successfully!");
+            SnackbarService.ShowSuccess($"Folder '{folder.Name}' created successfully!");
         }
         else
         {
-            await JsRuntime.InvokeVoidAsync("alert", "❌ Failed to create folder. Please try again.");
+            SnackbarService.ShowError("Failed to create folder. Please try again.");
         }
     }
 
@@ -115,11 +118,13 @@ public partial class HomeAppBar: ComponentBase
         if (success)
         {
             CurrentContext.IsAuthenticated = true;
-            await JsRuntime.InvokeVoidAsync("alert", "✅ Firebase connected successfully! You can now create folders and notes.");
+            SnackbarService.ShowSuccess("Firebase connected successfully! Redirecting to Home page...");
+            // Automatically redirect to Home page
+            NavigationManager.NavigateTo("/Home");
         }
         else
         {
-            await JsRuntime.InvokeVoidAsync("alert", "❌ Failed to connect to Firebase. Please check your configuration.");
+            SnackbarService.ShowError("Failed to connect to Firebase. Please check your configuration.");
         }
     }
 

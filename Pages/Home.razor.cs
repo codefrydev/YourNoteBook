@@ -5,6 +5,7 @@ using YourNoteBook.Core.Entities;
 using YourNoteBook.Core.Interfaces;
 using YourNoteBook.Shared.Utilities;
 using YourNoteBook.Shared.Models.Configuration;
+using YourNoteBook.Shared.Services.Utilities;
 
 namespace YourNoteBook.Pages;
 
@@ -19,6 +20,7 @@ public partial class Home : ComponentBase, IDisposable
     [Inject] private IManager<Core.Entities.Folder> FolderManager { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
 
     // Computed properties that react to InMemoryRepo changes
     public List<Core.Entities.Folder> Folders => InMemoryRepo.Folders;
@@ -113,7 +115,7 @@ public partial class Home : ComponentBase, IDisposable
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"Error loading data: {ex.Message}");
+            SnackbarService.ShowError($"Error loading data: {ex.Message}");
             await JsRuntime.InvokeVoidAsync("console.log", $"Error: {ex.Message}");
         }
         finally
@@ -222,11 +224,11 @@ public partial class Home : ComponentBase, IDisposable
             // Refresh data to show the new folder
             await RefreshDataAsync();
             
-            await JsRuntime.InvokeVoidAsync("alert", "✅ Test folder created successfully! Check the UI to see it appear.");
+            SnackbarService.ShowSuccess("Test folder created successfully! Check the UI to see it appear.");
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"❌ Error creating test data: {ex.Message}");
+            SnackbarService.ShowError($"Error creating test data: {ex.Message}");
             await JsRuntime.InvokeVoidAsync("console.log", $"Error creating test data: {ex}");
         }
     }
@@ -238,11 +240,11 @@ public partial class Home : ComponentBase, IDisposable
             await JsRuntime.InvokeVoidAsync("console.log", "Listing Firebase collections...");
             var collections = await JsRuntime.InvokeAsync<string[]>("listAllCollections");
             await JsRuntime.InvokeVoidAsync("console.log", $"Found collections: {string.Join(", ", collections)}");
-            await JsRuntime.InvokeVoidAsync("alert", $"Firebase Collections: {string.Join(", ", collections)}");
+            SnackbarService.ShowInfo($"Firebase Collections: {string.Join(", ", collections)}");
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"❌ Error listing collections: {ex.Message}");
+            SnackbarService.ShowError($"Error listing collections: {ex.Message}");
             await JsRuntime.InvokeVoidAsync("console.log", $"Error listing collections: {ex}");
         }
     }
@@ -262,11 +264,11 @@ public partial class Home : ComponentBase, IDisposable
             };
             
             await JsRuntime.InvokeVoidAsync("console.log", "Firebase Configuration:", config);
-            await JsRuntime.InvokeVoidAsync("alert", $"Firebase Config:\nProjectId: {config.ProjectId}\nAuthDomain: {config.AuthDomain}\nApiKey: {config.ApiKey}");
+            SnackbarService.ShowInfo($"Firebase Config: ProjectId: {config.ProjectId}, AuthDomain: {config.AuthDomain}, ApiKey: {config.ApiKey}");
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"❌ Error showing config: {ex.Message}");
+            SnackbarService.ShowError($"Error showing config: {ex.Message}");
             await JsRuntime.InvokeVoidAsync("console.log", $"Error showing config: {ex}");
         }
     }
@@ -275,33 +277,43 @@ public partial class Home : ComponentBase, IDisposable
 
     private void CreateNote()
     {
+        Console.WriteLine("[Home] CreateNote called");
         _showAddNoteDialog = true;
         StateHasChanged();
+        Console.WriteLine("[Home] CreateNote - dialog should be visible now");
     }
 
     private async Task OnNoteSaved(Note note)
     {
+        Console.WriteLine("[Home] OnNoteSaved called");
         _showAddNoteDialog = false;
         
         try
         {
+            Console.WriteLine("[Home] Saving note to Firebase...");
             // Save the note to Firebase
             var result = await NotesManager.AddSync<object>(note);
+            Console.WriteLine($"[Home] Firebase save result: {result}");
             
             if (result != null)
             {
+                Console.WriteLine("[Home] Note saved successfully, refreshing data...");
                 // Refresh data to show the new note
                 await RefreshDataAsync();
-                await JsRuntime.InvokeVoidAsync("alert", "✅ Note created successfully!");
+                Console.WriteLine("[Home] Calling SnackbarService.ShowSuccess...");
+                SnackbarService.ShowSuccess("Note created successfully!");
+                Console.WriteLine("[Home] SnackbarService.ShowSuccess called");
             }
             else
             {
-                await JsRuntime.InvokeVoidAsync("alert", "❌ Failed to create note. Please try again.");
+                Console.WriteLine("[Home] Note save failed, showing error snackbar...");
+                SnackbarService.ShowError("Failed to create note. Please try again.");
             }
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"❌ Error creating note: {ex.Message}");
+            Console.WriteLine($"[Home] Exception in OnNoteSaved: {ex.Message}");
+            SnackbarService.ShowError($"Error creating note: {ex.Message}");
         }
         
         StateHasChanged();
@@ -311,6 +323,55 @@ public partial class Home : ComponentBase, IDisposable
     {
         _showAddNoteDialog = false;
         StateHasChanged();
+    }
+
+    private bool _showAddShortcutDialog = false;
+
+    private void CreateShortcut()
+    {
+        _showAddShortcutDialog = true;
+        StateHasChanged();
+    }
+
+    private async Task OnShortcutSaved(Shortcut shortcut)
+    {
+        _showAddShortcutDialog = false;
+        
+        try
+        {
+            // Save the shortcut to Firebase
+            var result = await ShortcutManager.AddSync<object>(shortcut);
+            
+            if (result != null)
+            {
+                // Refresh data to show the new shortcut
+                await RefreshDataAsync();
+                SnackbarService.ShowSuccess("Shortcut created successfully!");
+            }
+            else
+            {
+                SnackbarService.ShowError("Failed to create shortcut. Please try again.");
+            }
+        }
+        catch (Exception ex)
+        {
+            SnackbarService.ShowError($"Error creating shortcut: {ex.Message}");
+        }
+        
+        StateHasChanged();
+    }
+
+    private void OnShortcutDialogCancel()
+    {
+        _showAddShortcutDialog = false;
+        StateHasChanged();
+    }
+
+    private void TestSnackbar()
+    {
+        Console.WriteLine("[Home] TestSnackbar called");
+        SnackbarService.ShowSuccess("Test snackbar message!");
+        Console.WriteLine("[Home] TestSnackbar - ShowSuccess called");
     }
 
     public void Dispose()

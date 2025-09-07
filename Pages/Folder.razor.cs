@@ -20,6 +20,7 @@ public partial class Folder : ComponentBase, IDisposable
     [Inject] private IManager<Shortcut> ShortcutManager { get; set; } = null!;
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
 
     // Computed properties that react to InMemoryRepo changes
     public Core.Entities.Folder? CurrentFolder => InMemoryRepo.GetFolderById(FolderId);
@@ -94,13 +95,13 @@ public partial class Folder : ComponentBase, IDisposable
     private void OpenNote(string noteId)
     {
         // For now, we'll just show an alert. In a real app, you might navigate to a note editor
-        JsRuntime.InvokeVoidAsync("alert", $"Opening note: {noteId}");
+        SnackbarService.ShowInfo($"Opening note: {noteId}");
     }
 
     private void OpenShortcut(string shortcutId)
     {
         // For now, we'll just show an alert. In a real app, you might execute the shortcut
-        JsRuntime.InvokeVoidAsync("alert", $"Executing shortcut: {shortcutId}");
+        SnackbarService.ShowInfo($"Executing shortcut: {shortcutId}");
     }
 
     private bool _showAddNoteDialog = false;
@@ -124,16 +125,16 @@ public partial class Folder : ComponentBase, IDisposable
             {
                 // Refresh data to show the new note
                 await RefreshDataAsync();
-                await JsRuntime.InvokeVoidAsync("alert", "✅ Note created successfully!");
+                SnackbarService.ShowSuccess("Note created successfully!");
             }
             else
             {
-                await JsRuntime.InvokeVoidAsync("alert", "❌ Failed to create note. Please try again.");
+                SnackbarService.ShowError("Failed to create note. Please try again.");
             }
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"❌ Error creating note: {ex.Message}");
+            SnackbarService.ShowError($"Error creating note: {ex.Message}");
         }
         
         StateHasChanged();
@@ -145,10 +146,46 @@ public partial class Folder : ComponentBase, IDisposable
         StateHasChanged();
     }
 
+    private bool _showAddShortcutDialog = false;
+
     private void AddShortcut()
     {
-        // TODO: Implement shortcut creation
-        JsRuntime.InvokeVoidAsync("alert", "Add Shortcut functionality not yet implemented");
+        _showAddShortcutDialog = true;
+        StateHasChanged();
+    }
+
+    private async Task OnShortcutSaved(Shortcut shortcut)
+    {
+        _showAddShortcutDialog = false;
+        
+        try
+        {
+            // Save the shortcut to Firebase
+            var result = await ShortcutManager.AddSync<object>(shortcut);
+            
+            if (result != null)
+            {
+                // Refresh data to show the new shortcut
+                await RefreshDataAsync();
+                SnackbarService.ShowSuccess("Shortcut created successfully!");
+            }
+            else
+            {
+                SnackbarService.ShowError("Failed to create shortcut. Please try again.");
+            }
+        }
+        catch (Exception ex)
+        {
+            SnackbarService.ShowError($"Error creating shortcut: {ex.Message}");
+        }
+        
+        StateHasChanged();
+    }
+
+    private void OnShortcutDialogCancel()
+    {
+        _showAddShortcutDialog = false;
+        StateHasChanged();
     }
 
     private async Task LoadAllData()
@@ -174,7 +211,7 @@ public partial class Folder : ComponentBase, IDisposable
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"Error loading data: {ex.Message}");
+            SnackbarService.ShowError($"Error loading data: {ex.Message}");
         }
         finally
         {

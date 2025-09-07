@@ -8,6 +8,7 @@ using YourNoteBook.Core.Entities;
 using YourNoteBook.Core.Interfaces;
 using YourNoteBook.Shared.Utilities;
 using YourNoteBook.Shared.Models.Results;
+using YourNoteBook.Shared.Services.Utilities;
 
 namespace YourNoteBook.Shared.Components.UI.AppBar;
 
@@ -21,6 +22,7 @@ public partial class FolderAppBar : ComponentBase
     [Inject] private IFirebaseHelper FirebaseHelper { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [Inject] private IManager<Core.Entities.Folder> FolderManager { get; set; } = null!;
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
     bool _drawerOpen = true;
     public string Search { get; set; } = string.Empty;
 
@@ -65,7 +67,7 @@ public partial class FolderAppBar : ComponentBase
         }
         catch (Exception ex)
         {
-            await JsRuntime.InvokeVoidAsync("alert", $"Error loading Data: {ex.Message}");
+            SnackbarService.ShowError($"Error loading Data: {ex.Message}");
         }
     }
 
@@ -91,7 +93,7 @@ public partial class FolderAppBar : ComponentBase
                 {
                     note.Id = response.id;
                     InMemoryRepo.AddItem(note);
-                    await JsRuntime.InvokeVoidAsync("alert", "Note added successfully!");
+                    SnackbarService.ShowSuccess("Note added successfully!");
                 }
             }
         }
@@ -119,7 +121,7 @@ public partial class FolderAppBar : ComponentBase
                 {
                     shortcut.Id = response.id;
                     InMemoryRepo.AddItem(shortcut);
-                    await JsRuntime.InvokeVoidAsync("alert", "Shortcut added successfully!");
+                    SnackbarService.ShowSuccess("Shortcut added successfully!");
                 }
             }
         }

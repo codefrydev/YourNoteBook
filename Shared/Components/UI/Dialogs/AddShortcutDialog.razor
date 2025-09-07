@@ -1,0 +1,236 @@
+@using Microsoft.AspNetCore.Components.Web
+@using YourNoteBook.Core.Entities
+
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-xl">keyboard</span>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Create New Shortcut</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Add a keyboard shortcut for quick access</p>
+                    </div>
+                </div>
+                <button @onclick="OnCancel" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <div class="space-y-4 max-h-[60vh] overflow-y-auto">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Action Name *
+                    </label>
+                    <input @bind="ActionName" 
+                           @onkeypress="HandleKeyPress"
+                           placeholder="e.g., Copy, Paste, Save, New File..."
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors" />
+                    @if (!string.IsNullOrEmpty(_actionError))
+                    {
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">@_actionError</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Keyboard Shortcut *
+                    </label>
+                    <input @bind="KeyboardKeys" 
+                           placeholder="e.g., Ctrl+C, Cmd+S, Alt+F4..."
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors font-mono" />
+                    @if (!string.IsNullOrEmpty(_keysError))
+                    {
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">@_keysError</p>
+                    }
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Use standard notation: Ctrl, Alt, Shift, Cmd (Mac), or individual keys</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Description *
+                    </label>
+                    <textarea @bind="Description" 
+                              placeholder="Describe what this shortcut does..."
+                              rows="3"
+                              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none"></textarea>
+                    @if (!string.IsNullOrEmpty(_descriptionError))
+                    {
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">@_descriptionError</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Category (Optional)
+                    </label>
+                    <select @bind="SelectedCategoryId" 
+                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
+                        <option value="">Select a category (optional)</option>
+                        @foreach (var category in AvailableCategories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Choose a category to organize your shortcuts</p>
+                </div>
+
+                @if (AvailableFolders.Any())
+                {
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Folder
+                        </label>
+                        <select @bind="SelectedFolderId" 
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
+                            <option value="">Select a folder (optional)</option>
+                            @foreach (var folder in AvailableFolders)
+                            {
+                                <option value="@folder.Id">@folder.Name</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                <!-- Common Shortcuts Reference -->
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Common Shortcuts Reference</h4>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Copy:</span>
+                            <span class="font-mono text-gray-800 dark:text-gray-200">Ctrl+C</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Paste:</span>
+                            <span class="font-mono text-gray-800 dark:text-gray-200">Ctrl+V</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Save:</span>
+                            <span class="font-mono text-gray-800 dark:text-gray-200">Ctrl+S</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Undo:</span>
+                            <span class="font-mono text-gray-800 dark:text-gray-200">Ctrl+Z</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Find:</span>
+                            <span class="font-mono text-gray-800 dark:text-gray-200">Ctrl+F</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">New:</span>
+                            <span class="font-mono text-gray-800 dark:text-gray-200">Ctrl+N</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <button @onclick="OnCancel" 
+                        class="flex-1 px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-xl transition-colors duration-200">
+                    Cancel
+                </button>
+                <button @onclick="CreateShortcut" 
+                        disabled="@(string.IsNullOrWhiteSpace(ActionName) || string.IsNullOrWhiteSpace(KeyboardKeys) || string.IsNullOrWhiteSpace(Description))"
+                        class="flex-1 px-6 py-3 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2">
+                    <span class="material-symbols-outlined text-lg">add</span>
+                    <span>Create Shortcut</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback<Shortcut> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public List<Folder> AvailableFolders { get; set; } = new();
+    [Parameter] public List<Category> AvailableCategories { get; set; } = new();
+
+    private string ActionName { get; set; } = "";
+    private string KeyboardKeys { get; set; } = "";
+    private string Description { get; set; } = "";
+    private string SelectedCategoryId { get; set; } = "";
+    private string SelectedFolderId { get; set; } = "";
+    private string _actionError = "";
+    private string _keysError = "";
+    private string _descriptionError = "";
+
+    private async void HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && e.CtrlKey)
+        {
+            await CreateShortcut();
+        }
+    }
+
+    private async Task CreateShortcut()
+    {
+        _actionError = "";
+        _keysError = "";
+        _descriptionError = "";
+
+        if (string.IsNullOrWhiteSpace(ActionName))
+        {
+            _actionError = "Action name is required";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(KeyboardKeys))
+        {
+            _keysError = "Keyboard shortcut is required";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Description))
+        {
+            _descriptionError = "Description is required";
+            return;
+        }
+
+        if (ActionName.Length > 50)
+        {
+            _actionError = "Action name must be less than 50 characters";
+            return;
+        }
+
+        if (KeyboardKeys.Length > 30)
+        {
+            _keysError = "Keyboard shortcut must be less than 30 characters";
+            return;
+        }
+
+        if (Description.Length > 200)
+        {
+            _descriptionError = "Description must be less than 200 characters";
+            return;
+        }
+
+        // Find selected category
+        Category? selectedCategory = null;
+        if (!string.IsNullOrWhiteSpace(SelectedCategoryId))
+        {
+            selectedCategory = AvailableCategories.FirstOrDefault(c => c.Id == SelectedCategoryId);
+        }
+
+        var shortcut = new Shortcut
+        {
+            Id = Guid.NewGuid().ToString(),
+            Action = ActionName.Trim(),
+            Keys = KeyboardKeys.Trim(),
+            Description = Description.Trim(),
+            Category = selectedCategory,
+            FolderId = SelectedFolderId,
+            Created = DateTime.Now,
+            Modified = DateTime.Now,
+            CreatedAt = DateTime.Now,
+            ModifiedAt = DateTime.Now
+        };
+
+        await OnSave.InvokeAsync(shortcut);
+    }
+}

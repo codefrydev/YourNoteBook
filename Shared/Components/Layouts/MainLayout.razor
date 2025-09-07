@@ -1,4 +1,9 @@
-﻿@inherits LayoutComponentBase 
+﻿@inherits LayoutComponentBase
+@using YourNoteBook.Shared.Components.UI.Snackbar
+
+<script>
+    console.log('[MainLayout] About to render SnackbarComponent');
+</script> 
 
 <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden bg-stone-50 text-stone-900 dark:bg-gray-900 dark:text-stone-200">
     <div class="flex h-full grow flex-col">
@@ -32,6 +37,16 @@
             </div>
         </main>
     </div>
+    
+    <!-- Snackbar Component -->
+    <div style="position: fixed; top: 10px; left: 10px; background: red; color: white; padding: 5px; z-index: 9999;">
+        MainLayout: About to render SnackbarComponent
+    </div>
+    <SnackbarComponent />
+    
+    <script>
+        console.log('[MainLayout] SnackbarComponent should be rendered');
+    </script>
 </div>
 
 <script>

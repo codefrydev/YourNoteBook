@@ -44,6 +44,13 @@ else
                                 <span>Create Note</span>
                             </button>
                         }
+                        else
+                        {
+                            <button @onclick="AddShortcut" class="btn-modern-primary">
+                                <span class="material-symbols-outlined">add</span>
+                                <span>Create Shortcut</span>
+                            </button>
+                        }
                         <ContentFilter 
                             IsNotesActive="_isNoteShowing"
                             IsShortcutsActive="!_isNoteShowing"
@@ -90,6 +97,15 @@ else
         OnSave="OnNoteSaved"
         OnCancel="OnNoteDialogCancel"
         AvailableFolders="@InMemoryRepo.Folders" />
+}
+
+@if (_showAddShortcutDialog)
+{
+    <AddShortcutDialog 
+        OnSave="OnShortcutSaved"
+        OnCancel="OnShortcutDialogCancel"
+        AvailableFolders="@InMemoryRepo.Folders"
+        AvailableCategories="@InMemoryRepo.Categories" />
 }
 
 <style>
