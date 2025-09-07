@@ -34,14 +34,25 @@ else
         <div class="content-section">
             <!-- Content Header -->
             <div class="content-header">
-                <h2 class="content-title">Contents</h2>
-                <ContentFilter 
-                    IsNotesActive="_isNoteShowing"
-                    IsShortcutsActive="!_isNoteShowing"
-                    NotesCount="Notes.Count"
-                    ShortcutsCount="Shortcuts.Count"
-                    OnShowNotes="ShowNotes"
-                    OnShowShortcuts="ShowShortcuts" />
+                <div class="flex items-center justify-between">
+                    <h2 class="content-title">Contents</h2>
+                    <div class="flex items-center gap-3">
+                        @if (_isNoteShowing)
+                        {
+                            <button @onclick="CreateNote" class="btn-modern-primary">
+                                <span class="material-symbols-outlined">add</span>
+                                <span>Create Note</span>
+                            </button>
+                        }
+                        <ContentFilter 
+                            IsNotesActive="_isNoteShowing"
+                            IsShortcutsActive="!_isNoteShowing"
+                            NotesCount="Notes.Count"
+                            ShortcutsCount="Shortcuts.Count"
+                            OnShowNotes="ShowNotes"
+                            OnShowShortcuts="ShowShortcuts" />
+                    </div>
+                </div>
             </div>
 
             <!-- Content Grid -->
@@ -71,6 +82,14 @@ else
             OnCreateNote="CreateNote"
             OnAddShortcut="AddShortcut" />
     }
+}
+
+@if (_showAddNoteDialog)
+{
+    <AddNoteDialog 
+        OnSave="OnNoteSaved"
+        OnCancel="OnNoteDialogCancel"
+        AvailableFolders="@InMemoryRepo.Folders" />
 }
 
 <style>

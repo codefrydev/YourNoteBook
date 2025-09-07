@@ -88,6 +88,10 @@ else if (CurrentContext.IsAuthenticated)
             <span class="material-symbols-outlined">settings</span>
             <span class="truncate">Show Config</span>
         </button>
+        <button @onclick="CreateNote" class="btn-modern-primary">
+            <span class="material-symbols-outlined">description</span>
+            <span class="truncate">Create Note</span>
+        </button>
     </div>
 
     @if (InMemoryRepo.Folders.Count == 0 && InMemoryRepo.Notes.Count == 0)
@@ -259,4 +263,12 @@ else
             <span class="truncate">Connect Database</span>
         </button>
     </div>
+}
+
+@if (_showAddNoteDialog)
+{
+    <AddNoteDialog 
+        OnSave="OnNoteSaved"
+        OnCancel="OnNoteDialogCancel"
+        AvailableFolders="@InMemoryRepo.Folders" />
 }

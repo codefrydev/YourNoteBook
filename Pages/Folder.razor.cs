@@ -103,10 +103,46 @@ public partial class Folder : ComponentBase, IDisposable
         JsRuntime.InvokeVoidAsync("alert", $"Executing shortcut: {shortcutId}");
     }
 
+    private bool _showAddNoteDialog = false;
+
     private void CreateNote()
     {
-        // TODO: Implement note creation
-        JsRuntime.InvokeVoidAsync("alert", "Create Note functionality not yet implemented");
+        _showAddNoteDialog = true;
+        StateHasChanged();
+    }
+
+    private async Task OnNoteSaved(Note note)
+    {
+        _showAddNoteDialog = false;
+        
+        try
+        {
+            // Save the note to Firebase
+            var result = await NotesManager.AddSync<object>(note);
+            
+            if (result != null)
+            {
+                // Refresh data to show the new note
+                await RefreshDataAsync();
+                await JsRuntime.InvokeVoidAsync("alert", "✅ Note created successfully!");
+            }
+            else
+            {
+                await JsRuntime.InvokeVoidAsync("alert", "❌ Failed to create note. Please try again.");
+            }
+        }
+        catch (Exception ex)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", $"❌ Error creating note: {ex.Message}");
+        }
+        
+        StateHasChanged();
+    }
+
+    private void OnNoteDialogCancel()
+    {
+        _showAddNoteDialog = false;
+        StateHasChanged();
     }
 
     private void AddShortcut()
