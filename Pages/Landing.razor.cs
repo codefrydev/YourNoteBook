@@ -39,7 +39,7 @@ public partial class Landing : ComponentBase
         {
             await LoadAllData();
             // Automatically redirect to Home page if already authenticated
-            NavigationManager.NavigateTo("/Home");
+            NavigationManager.NavigateTo("Home");
         }
         
         // Set SEO metadata for landing page
@@ -117,7 +117,7 @@ public partial class Landing : ComponentBase
             await LoadAllData();
             SnackbarService.ShowSuccess("Firebase connected successfully! Redirecting to Home page...");
             // Automatically redirect to Home page
-            NavigationManager.NavigateTo("/Home");
+            NavigationManager.NavigateTo("Home");
         }
         else
         {

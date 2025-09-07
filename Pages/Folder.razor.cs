@@ -89,7 +89,7 @@ public partial class Folder : ComponentBase, IDisposable
 
     private void NavigateToHome()
     {
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("");
     }
 
     private void OpenNote(string noteId)

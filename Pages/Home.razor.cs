@@ -134,7 +134,7 @@ public partial class Home : ComponentBase, IDisposable
     private void NavigateToFolder(string folderId)
     {
         CurrentContext.CurrentFolderId = folderId;
-        NavigationManager.NavigateTo($"/folder/{folderId}");
+        NavigationManager.NavigateTo($"folder/{folderId}");
     }
 
     private void NavigateToNote(string noteId)
@@ -143,7 +143,7 @@ public partial class Home : ComponentBase, IDisposable
         if (note != null)
         {
             CurrentContext.CurrentFolderId = note.FolderId;
-            NavigationManager.NavigateTo($"/folder/{note.FolderId}");
+            NavigationManager.NavigateTo($"folder/{note.FolderId}");
         }
     }
 
@@ -153,13 +153,13 @@ public partial class Home : ComponentBase, IDisposable
         if (shortcut != null)
         {
             CurrentContext.CurrentFolderId = shortcut.FolderId;
-            NavigationManager.NavigateTo($"/folder/{shortcut.FolderId}");
+            NavigationManager.NavigateTo($"folder/{shortcut.FolderId}");
         }
     }
 
     private void NavigateToAllFolders()
     {
-        NavigationManager.NavigateTo("/Folder");
+        NavigationManager.NavigateTo("Folder");
     }
 
     private void ShowFolderOptions(string folderId)
@@ -197,13 +197,13 @@ public partial class Home : ComponentBase, IDisposable
 
     private void AddNewFolder()
     {
-        NavigationManager.NavigateTo("/Folder");
+        NavigationManager.NavigateTo("Folder");
     }
 
     private void AddFirebaseCode()
     {
         // Navigate to Firebase configuration or show Firebase setup dialog
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("");
     }
 
     private async Task CreateTestData()

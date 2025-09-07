@@ -120,7 +120,7 @@ public partial class HomeAppBar: ComponentBase
             CurrentContext.IsAuthenticated = true;
             SnackbarService.ShowSuccess("Firebase connected successfully! Redirecting to Home page...");
             // Automatically redirect to Home page
-            NavigationManager.NavigateTo("/Home");
+            NavigationManager.NavigateTo("Home");
         }
         else
         {
