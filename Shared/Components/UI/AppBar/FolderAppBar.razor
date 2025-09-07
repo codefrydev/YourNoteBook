@@ -1,0 +1,67 @@
+<!-- App Bar -->
+<header class="bg-gray-800 text-white shadow-lg">
+    <div class="flex items-center justify-between px-4 py-3">
+        <!-- Left side - Menu and Back buttons -->
+        <div class="flex items-center space-x-3">
+            <button @onclick="DrawerToggle" 
+                    class="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+                    title="Menu">
+                <span class="text-xl">☰</span>
+            </button>
+            <button @onclick="GoBack" 
+                    class="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+                    title="Go Back">
+                <span class="text-xl">←</span>
+            </button>
+        </div>
+
+        <!-- Center - Search Input -->
+        <div class="flex-1 max-w-md mx-4">
+            <div class="relative">
+                <input @bind="Search" 
+                       type="text" 
+                       placeholder="Search..."
+                       class="w-full px-4 py-2 pl-10 bg-gray-700 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <span class="absolute left-3 top-2.5 text-gray-400">🔍</span>
+            </div>
+        </div>
+
+        <!-- Right side - Action buttons -->
+        <div class="flex items-center space-x-2">
+            <button @onclick="AddNotes" 
+                    class="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+                    title="Add Notes">
+                <span class="text-xl">📝</span>
+            </button>
+            <button @onclick="AddShortcut" 
+                    class="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+                    title="Add Shortcut">
+                <span class="text-xl">⚡</span>
+            </button>
+            <button @onclick="() => CurrentContext.IsDarkMode = !CurrentContext.IsDarkMode" 
+                    class="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+                    title="@(CurrentContext.IsDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")">
+                <span class="text-xl">@(CurrentContext.IsDarkMode ? "🌙" : "☀️")</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Drawer -->
+<div class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out @(_drawerOpen ? "translate-x-0" : "-translate-x-full")">
+    <div class="flex items-center justify-between p-4 border-b border-gray-700">
+        <h2 class="text-lg font-semibold">Navigation</h2>
+        <button @onclick="DrawerToggle" class="p-1 rounded hover:bg-gray-700">
+            <span class="text-xl">✕</span>
+        </button>
+    </div>
+    <div class="p-4">
+        <FolderNavMenu/>
+    </div>
+</div>
+
+<!-- Drawer Overlay -->
+@if (_drawerOpen)
+{
+    <div class="fixed inset-0 z-40 bg-black bg-opacity-50" @onclick="DrawerToggle"></div>
+}

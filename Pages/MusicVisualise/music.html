@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Music Visualizer</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; font-family: sans-serif; color: white; }
+        canvas { display: block; }
+        #controls {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            padding: 10px;
+            background: rgba(0,0,0,0.6);
+            z-index: 10;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+        #album {
+            width: 100px; height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.1s ease;
+        }
+        select, input[type="file"], button {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="controls">
+    <input type="file" id="imageInput" accept="image/*" />
+    <input type="file" id="audioInput" accept="audio/*" />
+    <select id="visualizerMode">
+        <option value="bars">Bars</option>
+        <option value="circle">Circle Pulse</option>
+        <option value="sine">Sine Wave</option>
+        <option value="dots">Radial Dots</option>
+        <option value="spiral">Spiral</option>
+        <option value="fireworks">Fireworks</option>
+        <option value="mirrorbars">Mirror Bars</option>
+        <option value="blob">Blob Pulse</option>
+        <option value="polygon">Polygon Mesh</option>
+        <option value="depthbars">3D Depth Bars</option>
+        <option value="spectrum">Spectrum Line</option>
+
+    </select>
+    <button onclick="playMusic()">Play</button>
+    <img id="album" src="" alt="Album" />
+</div>
+
+<canvas id="visualizer"></canvas>
+
+<script>
+    const canvas = document.getElementById("visualizer");
+    const ctx = canvas.getContext("2d");
+    const albumImg = document.getElementById("album");
+    let audioContext, analyser, source, dataArray, bufferLength, audio, imageBg = null;
+
+    const visualizerMode = document.getElementById("visualizerMode");
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    document.getElementById("imageInput").onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            albumImg.src = url;
+
+            // Load as background image
+            const img = new Image();
+            img.onload = () => { imageBg = img; };
+            img.src = url;
+        }
+    };
+
+    document.getElementById("audioInput").onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (audio) audio.pause();
+            audio = new Audio(URL.createObjectURL(file));
+            audio.crossOrigin = "anonymous";
+        }
+    };
+
+    function playMusic() {
+        if (!audio) return alert("Select audio first.");
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        source = audioContext.createMediaElementSource(audio);
+        analyser = audioContext.createAnalyser();
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+        analyser.fftSize = 64;
+        bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+
+        audio.play();
+        draw();
+    }
+
+    function draw() {
+        requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (imageBg) {
+            ctx.globalAlpha = 0.3;
+            ctx.drawImage(imageBg, 0, 0, canvas.width, canvas.height);
+            ctx.globalAlpha = 1;
+        }
+
+        const mode = visualizerMode.value;
+
+        switch (visualizerMode.value) {
+            case "bars": drawBars(); break;
+            case "circle": drawCircle(); break;
+            case "sine": drawSine(); break;
+            case "dots": drawRadialDots(); break;
+            case "spiral": drawSpiral(); break;
+            case "fireworks": drawFireworks(); break;
+            case "mirrorbars": drawMirrorBars(); break;
+            case "blob": drawBlobPulse(); break;
+            case "polygon": drawPolygonMesh(); break;
+            case "depthbars": drawDepthBars(); break;
+            case "spectrum": drawSpectrumLine(); break;
+        }
+
+
+        // Image zoom
+        const avg = dataArray.reduce((a, b) => a + b) / dataArray.length;
+        const scale = 1 + avg / 300;
+        albumImg.style.transform = `scale(${scale})`;
+    }
+
+    function drawBars() {
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+            const barHeight = dataArray[i];
+            const r = barHeight + 25 * (i / bufferLength);
+            const g = 250 * (i / bufferLength);
+            const b = 50;
+            ctx.fillStyle = `rgb(${r},${g},${b})`;
+            ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+            x += barWidth + 1;
+        }
+    }
+
+    function drawCircle() {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 100;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#fff";
+        ctx.stroke();
+
+        for (let i = 0; i < bufferLength; i++) {
+            const angle = (i / bufferLength) * Math.PI * 2;
+            const len = dataArray[i];
+            const x = centerX + Math.cos(angle) * radius;
+            const y = centerY + Math.sin(angle) * radius;
+            const xEnd = centerX + Math.cos(angle) * (radius + len);
+            const yEnd = centerY + Math.sin(angle) * (radius + len);
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(xEnd, yEnd);
+            ctx.strokeStyle = `hsl(${i * 2}, 100%, 50%)`;
+            ctx.stroke();
+        }
+    }
+    function drawSine() {
+        ctx.beginPath();
+        let x = 0;
+        const sliceWidth = canvas.width / bufferLength;
+        for (let i = 0; i < bufferLength; i++) {
+            const v = dataArray[i] / 128.0;
+            const y = canvas.height / 2 + Math.sin(i * 0.1) * v * 50;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            x += sliceWidth;
+        }
+        ctx.strokeStyle = "#0f0";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+    function drawRadialDots() {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 150;
+        for (let i = 0; i < bufferLength; i++) {
+            const angle = (i / bufferLength) * Math.PI * 2;
+            const len = dataArray[i];
+            const x = centerX + Math.cos(angle) * (radius + len / 3);
+            const y = centerY + Math.sin(angle) * (radius + len / 3);
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${i * 4}, 100%, 60%)`;
+            ctx.fill();
+        }
+    }
+    function drawSpiral() {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        for (let i = 0; i < bufferLength; i++) {
+            const angle = i * 0.15;
+            const len = dataArray[i] * 0.5;
+            const radius = i * 0.7;
+            const x = centerX + Math.cos(angle) * (radius + len);
+            const y = centerY + Math.sin(angle) * (radius + len);
+
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${i * 4}, 100%, 50%)`;
+            ctx.fill();
+        }
+    }
+    function drawFireworks() {
+        for (let i = 0; i < bufferLength; i++) {
+            const angle = Math.random() * 2 * Math.PI;
+            const len = dataArray[i] * 0.6;
+            const x = canvas.width / 2 + Math.cos(angle) * len;
+            const y = canvas.height / 2 + Math.sin(angle) * len;
+
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = `hsl(${i * 5}, 100%, 50%)`;
+            ctx.fill();
+        }
+    }
+    function drawMirrorBars() {
+        const barWidth = canvas.width / bufferLength;
+        for (let i = 0; i < bufferLength; i++) {
+            const barHeight = dataArray[i];
+            const x = i * barWidth;
+            ctx.fillStyle = `hsl(${i * 3}, 100%, 50%)`;
+            ctx.fillRect(x, canvas.height / 2, barWidth, barHeight);
+            ctx.fillRect(x, canvas.height / 2 - barHeight, barWidth, barHeight);
+        }
+    }
+    function drawBlobPulse() {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        ctx.beginPath();
+        for (let i = 0; i <= bufferLength; i++) {
+            const angle = (i / bufferLength) * 2 * Math.PI;
+            const len = 50 + dataArray[i % bufferLength];
+            const x = centerX + Math.cos(angle) * len;
+            const y = centerY + Math.sin(angle) * len;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(0, 255, 255, 0.3)';
+        ctx.fill();
+        ctx.strokeStyle = 'cyan';
+        ctx.stroke();
+    }
+    function drawPolygonMesh() {
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const points = [];
+
+        for (let i = 0; i < bufferLength; i++) {
+            const angle = (i / bufferLength) * 2 * Math.PI;
+            const len = 100 + dataArray[i];
+            const x = centerX + Math.cos(angle) * len;
+            const y = centerY + Math.sin(angle) * len;
+            points.push({ x, y });
+        }
+
+        ctx.beginPath();
+        points.forEach((pt, i) => {
+            ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.closePath();
+        ctx.strokeStyle = "lime";
+        ctx.stroke();
+    }
+    function drawDepthBars() {
+        const barWidth = canvas.width / bufferLength;
+        for (let i = 0; i < bufferLength; i++) {
+            const barHeight = dataArray[i];
+            const fade = 1 - i / bufferLength;
+            ctx.fillStyle = `rgba(255, 255, 255, ${fade})`;
+            ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth, barHeight);
+        }
+    }
+    function drawSpectrumLine() {
+        ctx.beginPath();
+        const sliceWidth = canvas.width / bufferLength;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+            const y = canvas.height / 2 - dataArray[i];
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+            x += sliceWidth;
+        }
+        ctx.strokeStyle = "#ff0";
+        ctx.stroke();
+    }
+
+</script>
+
+</body>
+</html>

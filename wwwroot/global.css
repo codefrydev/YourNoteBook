@@ -1,22 +1,543 @@
+/* Tailwind CSS Base Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Spline+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+/* CSS Variables for Design System */
+:root {
+    --primary-color: #f9f506;
+    --primary-hover: #e6e205;
+    --stone-50: #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-700: #44403c;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+}
+
+/* Base font family with fallbacks */
+body {
+    font-family: "Spline Sans", "Noto Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Material Symbols Outlined */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom utility classes */
 .my-custom-class {
     backdrop-filter: blur(10px);
 }
-.loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+
+/* Dark mode support */
+.dark {
+    color-scheme: dark;
 }
 
-.loadingBaba {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Focus styles */
+.focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+}
+
+/* Modern Button styles inspired by the UIs */
+.btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus-ring;
+}
+
+.btn-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700;
+}
+
+.btn-secondary {
+    @apply bg-secondary-200 text-secondary-800 hover:bg-secondary-300 active:bg-secondary-400 dark:bg-secondary-700 dark:text-secondary-200 dark:hover:bg-secondary-600;
+}
+
+.btn-outline {
+    @apply border border-primary-500 text-primary-500 hover:bg-primary-50 active:bg-primary-100 dark:hover:bg-primary-900 dark:active:bg-primary-800;
+}
+
+/* Modern button styles from inspiration UIs with dark theme support */
+.btn-modern-primary {
+    @apply flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-5 bg-[var(--primary-color)] text-stone-900 text-sm font-bold leading-normal tracking-[-0.015em] gap-2 hover:bg-yellow-500 transition-colors duration-300;
+}
+
+.btn-modern-secondary {
+    @apply flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full border border-stone-200 bg-white px-4 text-sm font-medium text-stone-700 hover:bg-stone-50 dark:border-gray-700 dark:bg-gray-800 dark:text-stone-300 dark:hover:bg-gray-700;
+}
+
+.btn-modern-icon {
+    @apply flex items-center justify-center rounded-full h-10 w-10 text-slate-500 hover:bg-slate-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-700;
+}
+
+/* Modern Card styles inspired by the UIs */
+.card {
+    @apply bg-white rounded-xl shadow-soft border border-gray-100 dark:bg-gray-800 dark:border-gray-700;
+}
+
+.card-hover {
+    @apply hover:shadow-medium hover:-translate-y-1 transition-all duration-200;
+}
+
+/* Modern note card styles with dark theme support */
+.note-card {
+    @apply group flex cursor-pointer flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-5 transition-all duration-300 hover:shadow-lg hover:border-yellow-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-yellow-400 dark:hover:shadow-yellow-400/10;
+}
+
+.note-card-title {
+    @apply text-lg font-semibold text-stone-800 dark:text-stone-200;
+}
+
+.note-card-content {
+    @apply text-sm text-stone-600 line-clamp-2 dark:text-gray-400;
+}
+
+.note-card-meta {
+    @apply text-xs text-stone-500 mt-auto pt-2 dark:text-gray-500;
+}
+
+/* Search input styles with dark theme support */
+.search-input {
+    @apply form-input w-full rounded-full border border-stone-200 bg-stone-100 py-2 pl-10 pr-4 text-stone-900 placeholder:text-stone-500 focus:border-yellow-400 focus:ring-yellow-400 dark:border-gray-700 dark:bg-gray-800 dark:text-stone-200 dark:placeholder:text-gray-400 dark:focus:border-yellow-400 dark:focus:ring-yellow-400;
+}
+
+.search-input-large {
+    @apply form-input w-full rounded-full border-slate-300 bg-white h-14 pl-12 pr-12 text-base shadow-sm focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-shadow dark:border-gray-700 dark:bg-gray-800 dark:text-stone-200;
+}
+
+/* Input styles */
+.input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-400 dark:focus:border-primary-400;
+}
+
+/* Modal/Dialog styles */
+.modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+.modal-content {
+    @apply bg-white rounded-xl shadow-large max-w-md w-full mx-4 dark:bg-gray-800;
+}
+
+/* Animation utilities */
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from { 
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to { 
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Loading spinner */
+.spinner {
+    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary-500;
+}
+
+/* Text utilities */
+.text-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent;
+}
+
+/* Glass effect */
+.glass {
+    @apply bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20;
+}
+
+.glass-dark {
+    @apply bg-black bg-opacity-10 backdrop-blur-md border border-white border-opacity-10;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Compact card utilities */
+.compact-card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg border border-gray-100 dark:border-gray-700 cursor-pointer overflow-hidden transition-all duration-200 hover:scale-105;
+}
+
+.compact-card-header {
+    @apply flex items-start justify-between mb-2;
+}
+
+.compact-card-icon {
+    @apply p-1.5 rounded-lg;
+}
+
+.compact-card-title {
+    @apply text-sm font-semibold text-gray-900 dark:text-white mb-0.5;
+}
+
+.compact-card-meta {
+    @apply text-xs text-gray-500 dark:text-gray-400;
+}
+
+.compact-card-content {
+    @apply text-xs text-gray-600 dark:text-gray-300 line-clamp-2 mb-2;
+}
+
+.compact-card-footer {
+    @apply flex items-center justify-between;
+}
+
+/* Masonry Layout System */
+.masonry-container {
+    column-count: 1;
+    column-gap: 1rem;
+    break-inside: avoid;
+}
+
+@media (min-width: 640px) {
+    .masonry-container {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1024px) {
+    .masonry-container {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 1280px) {
+    .masonry-container {
+        column-count: 4;
+    }
+}
+
+@media (min-width: 1536px) {
+    .masonry-container {
+        column-count: 5;
+    }
+}
+
+.masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    display: inline-block;
+    width: 100%;
+}
+
+/* Alternative CSS Grid Masonry (for browsers that support it) */
+.masonry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: 1rem;
+    grid-auto-rows: 10px;
+}
+
+.masonry-grid-item {
+    grid-row-end: span var(--row-span);
+}
+
+/* Dynamic height calculation for masonry */
+.masonry-card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg border border-gray-100 dark:border-gray-700 cursor-pointer overflow-hidden transition-all duration-200 hover:scale-105;
+    height: fit-content;
+}
+
+/* Enhanced masonry animations */
+.masonry-item {
+    animation: fadeInUp 0.3s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Staggered animation delays */
+.masonry-item:nth-child(1) { animation-delay: 0ms; }
+.masonry-item:nth-child(2) { animation-delay: 50ms; }
+.masonry-item:nth-child(3) { animation-delay: 100ms; }
+.masonry-item:nth-child(4) { animation-delay: 150ms; }
+.masonry-item:nth-child(5) { animation-delay: 200ms; }
+.masonry-item:nth-child(6) { animation-delay: 250ms; }
+.masonry-item:nth-child(7) { animation-delay: 300ms; }
+.masonry-item:nth-child(8) { animation-delay: 350ms; }
+.masonry-item:nth-child(9) { animation-delay: 400ms; }
+.masonry-item:nth-child(10) { animation-delay: 450ms; }
+.masonry-item:nth-child(11) { animation-delay: 500ms; }
+.masonry-item:nth-child(12) { animation-delay: 550ms; }
+
+/* Modern layout styles with dark theme support */
+.modern-header {
+    @apply flex items-center justify-between whitespace-nowrap border-b border-solid border-stone-200 px-10 py-3 dark:border-gray-700;
+}
+
+.modern-sidebar {
+    @apply flex w-72 flex-col border-r border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800;
+}
+
+.modern-main {
+    @apply flex-1 p-8;
+}
+
+.modern-nav-item {
+    @apply flex items-center gap-3 rounded-md px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-stone-300 dark:hover:bg-gray-700;
+}
+
+.modern-nav-item-active {
+    @apply flex items-center gap-3 rounded-md bg-[var(--primary-color)] bg-opacity-20 px-3 py-2 font-semibold text-gray-900 dark:text-stone-200;
+}
+
+/* Highlight styles for search results */
+.highlight {
+    background-color: var(--primary-color);
+    padding: 0 2px;
+    border-radius: 3px;
+}
+
+/* Modern grid layouts */
+.modern-grid {
+    @apply grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-3 gap-6;
+}
+
+.modern-search-result {
+    @apply flex gap-6 hover:bg-slate-100 p-4 rounded-lg transition-colors duration-200 cursor-pointer;
+}
+
+.modern-search-icon {
+    @apply text-slate-500 flex items-center justify-center rounded-lg bg-slate-100 shrink-0 size-12 mt-1;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    @apply flex items-center justify-center rounded-full h-10 w-10 text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-700;
+}
+
+/* Dark mode specific styles */
+.dark .note-card {
+    @apply border-gray-700 bg-gray-800 hover:border-yellow-400 hover:shadow-yellow-400/10;
+}
+
+.dark .note-card-title {
+    @apply text-stone-200;
+}
+
+.dark .note-card-content {
+    @apply text-gray-400;
+}
+
+.dark .note-card-meta {
+    @apply text-gray-500;
+}
+
+/* Responsive text utilities */
+.text-responsive-xs {
+    @apply text-xs sm:text-sm;
+}
+
+.text-responsive-sm {
+    @apply text-sm sm:text-base;
+}
+
+.text-responsive-base {
+    @apply text-base sm:text-lg;
+}
+
+.text-responsive-lg {
+    @apply text-lg sm:text-xl;
+}
+
+.text-responsive-xl {
+    @apply text-xl sm:text-2xl;
+}
+
+.text-responsive-2xl {
+    @apply text-2xl sm:text-3xl;
+}
+
+.text-responsive-3xl {
+    @apply text-3xl sm:text-4xl;
+}
+
+.text-responsive-4xl {
+    @apply text-4xl sm:text-5xl;
+}
+
+/* Touch-friendly button sizes */
+.btn-touch {
+    @apply min-h-[44px] min-w-[44px];
+}
+
+/* Mobile-first spacing */
+.space-responsive {
+    @apply space-y-4 sm:space-y-6 lg:space-y-8;
+}
+
+.p-responsive {
+    @apply p-4 sm:p-6 lg:p-8;
+}
+
+.px-responsive {
+    @apply px-4 sm:px-6 lg:px-8;
+}
+
+.py-responsive {
+    @apply py-4 sm:py-6 lg:py-8;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+}
+
+/* Focus visible for better accessibility */
+.focus-visible-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900;
+}
+
+/* Improved button states */
+.btn-interactive {
+    @apply transition-all duration-200 ease-in-out hover:scale-105 active:scale-95;
+}
+
+/* Card hover effects */
+.card-interactive {
+    @apply transition-all duration-200 ease-in-out hover:shadow-large hover:-translate-y-1;
+}
+
+/* Loading states */
+.loading-skeleton {
+    @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+/* Improved scrollbar for webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.7);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(75, 85, 99, 0.5);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(75, 85, 99, 0.7);
 }

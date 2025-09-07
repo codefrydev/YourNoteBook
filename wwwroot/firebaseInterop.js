@@ -59,15 +59,20 @@ async function getDocument(parent, documentId) {
  */
 async function getAllDocuments(parent) {
     try {
+        console.log(`getAllDocuments: Querying collection '${parent}'`);
         const snapshot = await db.collection(parent).get();
+        console.log(`getAllDocuments: Found ${snapshot.size} documents in collection '${parent}'`);
+        
         const documents = [];
 
         snapshot.forEach(doc => {
             const data = doc.data(); 
             data.id = doc.id;
+            console.log(`getAllDocuments: Document ${doc.id}:`, data);
             documents.push(data);
         });
 
+        console.log(`getAllDocuments: Returning ${documents.length} documents for collection '${parent}'`);
         return documents;
     } catch (error) {
         console.error('Error retrieving documents:', error);
@@ -159,6 +164,19 @@ async function getFolderWithDetails(parentPath, folderId,collectionOne,collectio
     }
 }
 
+// Function to list all collections (for debugging)
+async function listAllCollections() {
+    try {
+        console.log('Listing all collections in Firebase...');
+        const collections = await db.listCollections();
+        console.log('Available collections:', collections.map(col => col.id));
+        return collections.map(col => col.id);
+    } catch (error) {
+        console.error('Error listing collections:', error);
+        return [];
+    }
+}
+
 // Expose the function for JS interop.
 window.initializeFirebase = initializeFirebase;
 window.saveDocument = saveDocument;
@@ -166,5 +184,6 @@ window.getDocument = getDocument;
 window.getAllDocuments = getAllDocuments; 
 window.updateDocument = updateDocument;
 window.deleteDocument = deleteDocument;
-window.getFolderWithDetails = getFolderWithDetails; 
+window.getFolderWithDetails = getFolderWithDetails;
+window.listAllCollections = listAllCollections; 
 

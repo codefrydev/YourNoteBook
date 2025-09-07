@@ -1,0 +1,81 @@
+﻿@inherits LayoutComponentBase
+@using YourNoteBook.Shared.Components.UI.Snackbar
+
+<script>
+    console.log('[MainLayout] About to render SnackbarComponent');
+</script> 
+
+<div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden bg-stone-50 text-stone-900 dark:bg-gray-900 dark:text-stone-200">
+    <div class="flex h-full grow flex-col">
+        <!-- Modern Header inspired by the UIs -->
+        <header class="modern-header">
+            <div class="flex items-center gap-3 text-stone-900 dark:text-stone-200">
+                <span class="material-symbols-outlined text-3xl text-yellow-400">note_stack</span>
+                <h2 class="text-stone-900 dark:text-stone-200 text-xl font-bold leading-tight tracking-tight">NoteHub</h2>
+            </div>
+            <div class="flex flex-1 justify-end items-center gap-4">
+                <div class="flex gap-2">
+                    <button class="btn-modern-primary">
+                        <span class="material-symbols-outlined">add</span>
+                        <span class="truncate">New Note</span>
+                    </button>
+                </div>
+                <div class="relative w-full max-w-xs">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-gray-400">search</span>
+                    <input class="search-input" placeholder="Search notes" value=""/>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+                </button>
+            </div>
+        </header>
+        
+        <main class="flex-1 px-10 py-8">
+            <div class="mx-auto max-w-5xl">
+                @Body
+            </div>
+        </main>
+    </div>
+    
+    <!-- Snackbar Component -->
+    <div style="position: fixed; top: 10px; left: 10px; background: red; color: white; padding: 5px; z-index: 9999;">
+        MainLayout: About to render SnackbarComponent
+    </div>
+    <SnackbarComponent />
+    
+    <script>
+        console.log('[MainLayout] SnackbarComponent should be rendered');
+    </script>
+</div>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    
+    // Initialize theme on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+        }
+    });
+</script>
+

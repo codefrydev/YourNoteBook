@@ -1,0 +1,37 @@
+<div class="empty-state">
+    <div class="empty-icon">
+        <span class="material-symbols-outlined">@Icon</span>
+    </div>
+    <h3 class="empty-title">@Title</h3>
+    <p class="empty-subtitle">@Subtitle</p>
+    @if (ShowActions)
+    {
+        <div class="empty-actions">
+            @if (ShowCreateNoteButton)
+            {
+                <button class="btn-primary" @onclick="OnCreateNote">
+                    <span class="material-symbols-outlined">add</span>
+                    Create Note
+                </button>
+            }
+            @if (ShowAddShortcutButton)
+            {
+                <button class="btn-secondary" @onclick="OnAddShortcut">
+                    <span class="material-symbols-outlined">keyboard</span>
+                    Add Shortcut
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string Icon { get; set; } = "folder_open";
+    [Parameter] public string Title { get; set; } = "Empty Folder";
+    [Parameter] public string Subtitle { get; set; } = "This folder doesn't have any notes or shortcuts yet. Start by creating your first item.";
+    [Parameter] public bool ShowActions { get; set; } = true;
+    [Parameter] public bool ShowCreateNoteButton { get; set; } = true;
+    [Parameter] public bool ShowAddShortcutButton { get; set; } = true;
+    [Parameter] public EventCallback OnCreateNote { get; set; }
+    [Parameter] public EventCallback OnAddShortcut { get; set; }
+}

@@ -1,0 +1,194 @@
+@using Microsoft.AspNetCore.Components.Web
+@using YourNoteBook.Core.Entities
+
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-xl">description</span>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Create New Note</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Capture your thoughts and ideas</p>
+                    </div>
+                </div>
+                <button @onclick="OnCancel" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <div class="space-y-4 max-h-[60vh] overflow-y-auto">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Note Title *
+                    </label>
+                    <input @bind="NoteTitle" 
+                           @onkeypress="HandleKeyPress"
+                           placeholder="Enter note title..."
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors" />
+                    @if (!string.IsNullOrEmpty(_titleError))
+                    {
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">@_titleError</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Content *
+                    </label>
+                    <textarea @bind="NoteContent" 
+                              placeholder="Write your note content here..."
+                              rows="8"
+                              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors resize-none"></textarea>
+                    @if (!string.IsNullOrEmpty(_contentError))
+                    {
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">@_contentError</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Tags (Optional)
+                    </label>
+                    <input @bind="TagsInput" 
+                           placeholder="Enter tags separated by commas (e.g., work, important, ideas)"
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors" />
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Separate multiple tags with commas</p>
+                </div>
+
+                @if (AvailableFolders.Any())
+                {
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Folder
+                        </label>
+                        <select @bind="SelectedFolderId" 
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors">
+                            <option value="">Select a folder (optional)</option>
+                            @foreach (var folder in AvailableFolders)
+                            {
+                                <option value="@folder.Id">@folder.Name</option>
+                            }
+                        </select>
+                    </div>
+                }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <button @onclick="OnCancel" 
+                        class="flex-1 px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-xl transition-colors duration-200">
+                    Cancel
+                </button>
+                <button @onclick="CreateNote" 
+                        disabled="@(string.IsNullOrWhiteSpace(NoteTitle) || string.IsNullOrWhiteSpace(NoteContent))"
+                        class="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2">
+                    <span class="material-symbols-outlined text-lg">add</span>
+                    <span>Create Note</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback<Note> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public List<Folder> AvailableFolders { get; set; } = new();
+
+    private string NoteTitle { get; set; } = "";
+    private string NoteContent { get; set; } = "";
+    private string TagsInput { get; set; } = "";
+    private string SelectedFolderId { get; set; } = "";
+    private string _titleError = "";
+    private string _contentError = "";
+
+    private async void HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && e.CtrlKey)
+        {
+            await CreateNote();
+        }
+    }
+
+    private async Task CreateNote()
+    {
+        Console.WriteLine("[AddNoteDialog] CreateNote called");
+        _titleError = "";
+        _contentError = "";
+
+        if (string.IsNullOrWhiteSpace(NoteTitle))
+        {
+            _titleError = "Note title is required";
+            Console.WriteLine("[AddNoteDialog] Validation failed - title required");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(NoteContent))
+        {
+            _contentError = "Note content is required";
+            Console.WriteLine("[AddNoteDialog] Validation failed - content required");
+            return;
+        }
+
+        if (NoteTitle.Length > 100)
+        {
+            _titleError = "Note title must be less than 100 characters";
+            Console.WriteLine("[AddNoteDialog] Validation failed - title too long");
+            return;
+        }
+
+        if (NoteContent.Length > 10000)
+        {
+            _contentError = "Note content must be less than 10,000 characters";
+            Console.WriteLine("[AddNoteDialog] Validation failed - content too long");
+            return;
+        }
+
+        Console.WriteLine("[AddNoteDialog] Validation passed, creating note...");
+
+        // Parse tags
+        var tags = new List<Tag>();
+        if (!string.IsNullOrWhiteSpace(TagsInput))
+        {
+            var tagNames = TagsInput.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                  .Select(t => t.Trim())
+                                  .Where(t => !string.IsNullOrWhiteSpace(t))
+                                  .Distinct()
+                                  .ToList();
+
+            foreach (var tagName in tagNames)
+            {
+                tags.Add(new Tag
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = tagName,
+                    CreatedAt = DateTime.Now,
+                    ModifiedAt = DateTime.Now
+                });
+            }
+        }
+
+        var note = new Note
+        {
+            Id = Guid.NewGuid().ToString(),
+            Title = NoteTitle.Trim(),
+            Content = NoteContent.Trim(),
+            Tags = tags,
+            FolderId = SelectedFolderId,
+            Created = DateTime.Now,
+            Modified = DateTime.Now,
+            CreatedAt = DateTime.Now,
+            ModifiedAt = DateTime.Now
+        };
+
+        Console.WriteLine($"[AddNoteDialog] Note created - Title: '{note.Title}', Content length: {note.Content.Length}");
+        Console.WriteLine("[AddNoteDialog] Calling OnSave.InvokeAsync...");
+        await OnSave.InvokeAsync(note);
+        Console.WriteLine("[AddNoteDialog] OnSave.InvokeAsync completed");
+    }
+}

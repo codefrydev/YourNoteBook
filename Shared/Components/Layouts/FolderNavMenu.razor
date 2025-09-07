@@ -1,0 +1,30 @@
+<nav class="w-full">
+    @if (CurrentContext.IsAuthenticated)
+    {
+        if (InMemoryRepo.Folders.Count != 0)
+        {
+            <div class="space-y-1">
+                @foreach (var model in InMemoryRepo.Folders)
+                {
+                    <button @onclick="() => OpenFolder(model.Id)" 
+                            class="w-full flex items-center space-x-3 px-3 py-2 text-left text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg transition-colors">
+                        <span class="text-lg" style="color: @model.IconColor;">@model.Icon</span>
+                        <span>@model.Name</span>
+                    </button>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="px-3 py-2 text-gray-400 text-sm">
+                No folders available
+            </div>
+        }
+    }
+    else
+    {
+        <div class="px-3 py-2 text-gray-400 text-sm">
+            Please log in to view folders
+        </div>
+    }
+</nav>

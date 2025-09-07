@@ -1,28 +1,716 @@
 @page "/folder/{folderId}"
-@inject InMemoryRepo InMemoryRepo
-<MudPaper Class="d-flex justify-start flex-wrap flex-grow-1" Elevation="0" Color="Color.Primary">
-    <MudTabs Outlined="true" CenterItems="true" Class="w-100" Rounded="true" TabClass="px-4" MinimumTabWidth="20px" Color="Color.Primary">
-        <MudTabPanel Text="Notes" Icon="@Icons.Material.Filled.Notes" OnClick="ShowNotes"/>
-        <MudTabPanel Text="Shortcut" Icon="@Icons.Material.Filled.Shortcut" OnClick="ShowShortCut"/>
-    </MudTabs>
-</MudPaper>
-<main class="content">
-    <div class="notes-grid" id="notesContainer">
-        @if (_isNoteShowing)
-        {
-            @foreach (var model in InMemoryRepo.GetNotesByFolderId(CurrentContext.CurrentFolderId ?? "not-found")
-                          .OrderByDescending(x=>x.IsPinned).ThenByDescending(x=>x.Modified))
-            {
-                <NoteCardComponent Model="model"/> 
-            }
-        }
-        else
-        {
-            @foreach (var model in InMemoryRepo.GetShortcutsByFolderId(CurrentContext.CurrentFolderId ?? "not-found")
-                          .OrderByDescending(x=>x.IsPinned).ThenByDescending(x=>x.Modified))
-            { 
-                <ShortCutCardComponent Model="model"/>
-            }
-        } 
+@layout FolderLayout
+@implements IDisposable
+
+@if (_isLoading)
+{
+    <InlineLoadingComponent Title="Loading Folder" Subtitle="Please wait while we load your folder contents..." />
+}
+else if (CurrentFolder == null)
+{
+    <div class="error-container">
+        <div class="error-icon">
+            <span class="material-symbols-outlined">folder_off</span>
+        </div>
+        <h2 class="error-title">Folder Not Found</h2>
+        <p class="error-subtitle">The folder you're looking for doesn't exist or has been moved.</p>
+        <button @onclick="NavigateToHome" class="btn-primary">
+            <span class="material-symbols-outlined">home</span>
+            Go to Dashboard
+        </button>
     </div>
-</main>
+}
+else
+{
+    <!-- Folder Header -->
+    <FolderHeader 
+        Folder="CurrentFolder" 
+        NotesCount="Notes.Count" 
+        ShortcutsCount="Shortcuts.Count" />
+
+    <!-- Content Section -->
+    @if (Notes.Any() || Shortcuts.Any())
+    {
+        <div class="content-section">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="flex items-center justify-between">
+                    <h2 class="content-title">Contents</h2>
+                    <div class="flex items-center gap-3">
+                        @if (_isNoteShowing)
+                        {
+                            <button @onclick="CreateNote" class="btn-modern-primary">
+                                <span class="material-symbols-outlined">add</span>
+                                <span>Create Note</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="AddShortcut" class="btn-modern-primary">
+                                <span class="material-symbols-outlined">add</span>
+                                <span>Create Shortcut</span>
+                            </button>
+                        }
+                        <ContentFilter 
+                            IsNotesActive="_isNoteShowing"
+                            IsShortcutsActive="!_isNoteShowing"
+                            NotesCount="Notes.Count"
+                            ShortcutsCount="Shortcuts.Count"
+                            OnShowNotes="ShowNotes"
+                            OnShowShortcuts="ShowShortcuts" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                @if (_isNoteShowing)
+                {
+                    @foreach (var note in Notes.OrderByDescending(x => x.IsPinned).ThenByDescending(x => x.ModifiedAt))
+                    {
+                        <NoteCard Note="note" OnNoteClick="OpenNote" />
+                    }
+                }
+                else
+                {
+                    @foreach (var shortcut in Shortcuts.OrderByDescending(x => x.IsPinned).ThenByDescending(x => x.ModifiedAt))
+                    {
+                        <ShortcutCard Shortcut="shortcut" OnShortcutClick="OpenShortcut" />
+                    }
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Empty State -->
+    @if (!Notes.Any() && !Shortcuts.Any())
+    {
+        <EmptyState 
+            OnCreateNote="CreateNote"
+            OnAddShortcut="AddShortcut" />
+    }
+}
+
+@if (_showAddNoteDialog)
+{
+    <AddNoteDialog 
+        OnSave="OnNoteSaved"
+        OnCancel="OnNoteDialogCancel"
+        AvailableFolders="@InMemoryRepo.Folders" />
+}
+
+@if (_showAddShortcutDialog)
+{
+    <AddShortcutDialog 
+        OnSave="OnShortcutSaved"
+        OnCancel="OnShortcutDialogCancel"
+        AvailableFolders="@InMemoryRepo.Folders"
+        AvailableCategories="@InMemoryRepo.Categories" />
+}
+
+<style>
+    /* Loading State - Now handled by InlineLoadingComponent */
+
+    /* Error State */
+    .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5rem 0;
+    }
+
+    .error-icon {
+        width: 4rem;
+        height: 4rem;
+        color: #9ca3af;
+        margin-bottom: 1rem;
+    }
+
+    .dark .error-icon {
+        color: #6b7280;
+    }
+
+    .error-icon .material-symbols-outlined {
+        font-size: 3.75rem;
+    }
+
+    .error-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+
+    .dark .error-title {
+        color: white;
+    }
+
+    .error-subtitle {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        max-width: 28rem;
+    }
+
+    .dark .error-subtitle {
+        color: #9ca3af;
+    }
+
+    /* Folder Header */
+    .folder-header {
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        border: 1px solid #e5e7eb;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .dark .folder-header {
+        background-color: #1f2937;
+        border-color: #374151;
+    }
+
+    .folder-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .folder-icon {
+        width: 3rem;
+        height: 3rem;
+        background-color: #dbeafe;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2563eb;
+    }
+
+    .dark .folder-icon {
+        background-color: rgb(59 130 246 / 0.3);
+        color: #60a5fa;
+    }
+
+    .folder-icon .material-symbols-outlined {
+        font-size: 1.5rem;
+    }
+
+    .folder-details {
+        flex: 1;
+    }
+
+    .folder-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+
+    .dark .folder-title {
+        color: white;
+    }
+
+    .folder-description {
+        color: #6b7280;
+    }
+
+    .dark .folder-description {
+        color: #9ca3af;
+    }
+
+    .folder-stats {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .stat-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stat-icon.notes {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+
+    .dark .stat-icon.notes {
+        background-color: rgb(34 197 94 / 0.3);
+        color: #4ade80;
+    }
+
+    .stat-icon.shortcuts {
+        background-color: #fed7aa;
+        color: #ea580c;
+    }
+
+    .dark .stat-icon.shortcuts {
+        background-color: rgb(251 146 60 / 0.3);
+        color: #fb923c;
+    }
+
+    .stat-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-number {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .dark .stat-number {
+        color: white;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .dark .stat-label {
+        color: #9ca3af;
+    }
+
+    /* Content Section */
+    .content-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .content-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .content-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .dark .content-title {
+        color: white;
+    }
+
+    .content-filters {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .filter-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+        color: #6b7280;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .dark .filter-btn {
+        border-color: #374151;
+        color: #9ca3af;
+    }
+
+    .filter-btn:hover {
+        color: #111827;
+        background-color: #f9fafb;
+    }
+
+    .dark .filter-btn:hover {
+        color: white;
+        background-color: #374151;
+    }
+
+    .filter-btn.active {
+        background-color: #2563eb;
+        color: white;
+        border-color: #2563eb;
+    }
+
+    .filter-btn.active:hover {
+        background-color: #1d4ed8;
+    }
+
+    /* Content Grid */
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .content-card {
+        background-color: white;
+        border-radius: 0.75rem;
+        border: 1px solid #e5e7eb;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .dark .content-card {
+        background-color: #1f2937;
+        border-color: #374151;
+    }
+
+    .content-card:hover {
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        transform: translateY(-4px);
+    }
+
+    .note-card:hover {
+        border-color: #86efac;
+    }
+
+    .dark .note-card:hover {
+        border-color: #4ade80;
+    }
+
+    .shortcut-card:hover {
+        border-color: #fdba74;
+    }
+
+    .dark .shortcut-card:hover {
+        border-color: #fb923c;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .card-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .note-icon {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+
+    .dark .note-icon {
+        background-color: rgb(34 197 94 / 0.3);
+        color: #4ade80;
+    }
+
+    .shortcut-icon {
+        background-color: #fed7aa;
+        color: #ea580c;
+    }
+
+    .dark .shortcut-icon {
+        background-color: rgb(251 146 60 / 0.3);
+        color: #fb923c;
+    }
+
+    .card-title-section {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 0.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dark .card-title {
+        color: white;
+    }
+
+    .card-date {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .dark .card-date {
+        color: #9ca3af;
+    }
+
+    .pin-indicator {
+        width: 2rem;
+        height: 2rem;
+        background-color: #fef3c7;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d97706;
+        flex-shrink: 0;
+    }
+
+    .dark .pin-indicator {
+        background-color: rgb(245 158 11 / 0.3);
+        color: #fbbf24;
+    }
+
+    .card-content {
+        margin-bottom: 1rem;
+    }
+
+    .card-description {
+        color: #6b7280;
+        font-size: 0.875rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .dark .card-description {
+        color: #9ca3af;
+    }
+
+    .card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .tag {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border-radius: 0.375rem;
+        background-color: #dbeafe;
+        color: #1e40af;
+    }
+
+    .dark .tag {
+        background-color: rgb(59 130 246 / 0.3);
+        color: #93c5fd;
+    }
+
+    .tag.category {
+        background-color: #e9d5ff;
+        color: #7c3aed;
+    }
+
+    .dark .tag.category {
+        background-color: rgb(139 92 246 / 0.3);
+        color: #a78bfa;
+    }
+
+    .tag.more {
+        background-color: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .dark .tag.more {
+        background-color: #374151;
+        color: #9ca3af;
+    }
+
+    .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .card-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .dark .card-meta {
+        color: #9ca3af;
+    }
+
+    .shortcut-keys {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+        background-color: #f3f4f6;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .dark .shortcut-keys {
+        background-color: #374151;
+    }
+
+    .card-action {
+        width: 2rem;
+        height: 2rem;
+        background-color: #f3f4f6;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        transition: all 0.2s;
+    }
+
+    .dark .card-action {
+        background-color: #374151;
+        color: #9ca3af;
+    }
+
+    .card-action:hover {
+        background-color: #e5e7eb;
+    }
+
+    .dark .card-action:hover {
+        background-color: #4b5563;
+    }
+
+    /* Empty State */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5rem 0;
+    }
+
+    .empty-icon {
+        width: 4rem;
+        height: 4rem;
+        color: #9ca3af;
+        margin-bottom: 1.5rem;
+    }
+
+    .dark .empty-icon {
+        color: #6b7280;
+    }
+
+    .empty-icon .material-symbols-outlined {
+        font-size: 3.75rem;
+    }
+
+    .empty-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.75rem;
+    }
+
+    .dark .empty-title {
+        color: white;
+    }
+
+    .empty-subtitle {
+        color: #6b7280;
+        margin-bottom: 2rem;
+        text-align: center;
+        max-width: 28rem;
+    }
+
+    .dark .empty-subtitle {
+        color: #9ca3af;
+    }
+
+    .empty-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #2563eb;
+        color: white;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+    }
+
+    .btn-secondary {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background-color: #f3f4f6;
+        color: #374151;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dark .btn-secondary {
+        background-color: #374151;
+        color: #d1d5db;
+    }
+
+    .btn-secondary:hover {
+        background-color: #e5e7eb;
+    }
+
+    .dark .btn-secondary:hover {
+        background-color: #4b5563;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .folder-stats {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .content-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .content-filters {
+            width: 100%;
+        }
+        
+        .filter-btn {
+            flex: 1;
+            justify-content: center;
+        }
+    }
+</style>

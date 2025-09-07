@@ -1,0 +1,56 @@
+@* Example component showing how to use dynamic SEO metadata *@
+
+<div class="seo-example">
+    @if (Note != null)
+    {
+        <h1>@Note.Title</h1>
+        <p>@Note.Content</p>
+        
+        @if (Folder != null)
+        {
+            <p><strong>Folder:</strong> @Folder.Name</p>
+        }
+        
+        <p><strong>Created:</strong> @Note.Created.ToString("yyyy-MM-dd")</p>
+        <p><strong>Updated:</strong> @Note.Modified.ToString("yyyy-MM-dd")</p>
+        
+        @if (Note.Tags != null && Note.Tags.Any())
+        {
+            <div class="tags">
+                <strong>Tags:</strong>
+                @foreach (var tag in Note.Tags)
+                {
+                    <span class="tag">@tag.Name</span>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <p>No note selected</p>
+    }
+</div>
+
+<style>
+    .seo-example {
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        margin: 1rem 0;
+    }
+    
+    .tags {
+        margin-top: 1rem;
+    }
+    
+    .tag {
+        display: inline-block;
+        background-color: #f3f4f6;
+        color: #374151;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.875rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+</style>

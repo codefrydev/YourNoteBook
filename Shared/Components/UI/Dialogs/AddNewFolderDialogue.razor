@@ -1,0 +1,143 @@
+@using Microsoft.AspNetCore.Components.Web
+@using YourNoteBook.Core.Entities
+
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-xl">folder</span>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Create New Folder</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Organize your notes and shortcuts</p>
+                    </div>
+                </div>
+                <button @onclick="OnCancel" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Folder Name *
+                    </label>
+                    <input @bind="FolderName" 
+                           @onkeypress="HandleKeyPress"
+                           placeholder="Enter folder name..."
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" />
+                    @if (!string.IsNullOrEmpty(_nameError))
+                    {
+                        <p class="text-red-600 dark:text-red-400 text-sm mt-1">@_nameError</p>
+                    }
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Description (Optional)
+                    </label>
+                    <textarea @bind="FolderDescription" 
+                              placeholder="Describe what this folder is for..."
+                              rows="3"
+                              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Folder Color
+                    </label>
+                    <div class="grid grid-cols-6 gap-2">
+                        @foreach (var color in _folderColors)
+                        {
+                            <button @onclick="() => SelectedColor = color.Value" 
+                                    class="w-10 h-10 rounded-lg border-2 @(SelectedColor == color.Value ? "border-gray-900 dark:border-white" : "border-gray-300 dark:border-gray-600") hover:scale-110 transition-transform"
+                                    style="background-color: @color.Value">
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-3 pt-4">
+                    <button @onclick="OnCancel" 
+                            class="flex-1 px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-xl transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button @onclick="CreateFolder" 
+                            disabled="@(string.IsNullOrWhiteSpace(FolderName))"
+                            class="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2">
+                        <span class="material-symbols-outlined text-lg">add</span>
+                        <span>Create Folder</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback<Folder> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    private string FolderName { get; set; } = "";
+    private string FolderDescription { get; set; } = "";
+    private string SelectedColor { get; set; } = "#3B82F6";
+    private string _nameError = "";
+
+    private readonly Dictionary<string, string> _folderColors = new()
+    {
+        { "Blue", "#3B82F6" },
+        { "Green", "#10B981" },
+        { "Purple", "#8B5CF6" },
+        { "Orange", "#F59E0B" },
+        { "Pink", "#EC4899" },
+        { "Red", "#EF4444" },
+        { "Indigo", "#6366F1" },
+        { "Teal", "#14B8A6" },
+        { "Yellow", "#EAB308" },
+        { "Gray", "#6B7280" },
+        { "Emerald", "#059669" },
+        { "Violet", "#7C3AED" }
+    };
+
+    private void HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            CreateFolder();
+        }
+    }
+
+    private async Task CreateFolder()
+    {
+        _nameError = "";
+
+        if (string.IsNullOrWhiteSpace(FolderName))
+        {
+            _nameError = "Folder name is required";
+            return;
+        }
+
+        if (FolderName.Length > 50)
+        {
+            _nameError = "Folder name must be less than 50 characters";
+            return;
+        }
+
+        var folder = new Folder
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = FolderName.Trim(),
+            Description = FolderDescription?.Trim() ?? "",
+            Color = SelectedColor,
+            Created = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
+
+        await OnSave.InvokeAsync(folder);
+    }
+}

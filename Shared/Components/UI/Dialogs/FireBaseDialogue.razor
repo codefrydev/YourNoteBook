@@ -1,0 +1,178 @@
+@using Microsoft.AspNetCore.Components.Web
+@using YourNoteBook.Shared.Helpers
+@using YourNoteBook.Shared.Utilities
+@using Blazored.LocalStorage
+@using YourNoteBook.Shared.Services.Utilities
+
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <span class="text-white text-xl">🔥</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Connect Firebase</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Configure your Firebase database</p>
+                    </div>
+                </div>
+                <button @onclick="OnCancel" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+
+            <!-- Instructions -->
+            <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">📋 Setup Instructions</h3>
+                <ol class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                    <li>1. Go to <a href="https://console.firebase.google.com" target="_blank" class="underline">Firebase Console</a></li>
+                    <li>2. Create a new project or select existing one</li>
+                    <li>3. Enable Firestore Database</li>
+                    <li>4. Go to Project Settings → General → Your apps</li>
+                    <li>5. Copy the Firebase config object</li>
+                </ol>
+            </div>
+
+            <!-- Configuration Form -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Firebase Configuration JSON
+                    </label>
+                    <textarea @bind="FirebaseConfigJson" 
+                              placeholder="Paste your Firebase config JSON here..."
+                              rows="8"
+                              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm resize-none"></textarea>
+                </div>
+
+                <!-- Test Status -->
+                @if (_isTesting)
+                {
+                    <div class="flex items-center space-x-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                        <div class="animate-spin w-5 h-5 border-2 border-yellow-500 border-t-transparent rounded-full"></div>
+                        <span class="text-yellow-800 dark:text-yellow-200 font-medium">Testing connection...</span>
+                    </div>
+                }
+                else if (!string.IsNullOrEmpty(_testResult))
+                {
+                    <div class="p-3 rounded-xl border @(_testSuccess ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800" : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800")">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-lg">@(_testSuccess ? "✅" : "❌")</span>
+                            <span class="@(_testSuccess ? "text-green-800 dark:text-green-200" : "text-red-800 dark:text-red-200") font-medium">@_testResult</span>
+                        </div>
+                    </div>
+                }
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-3 pt-4">
+                    <button @onclick="TestConnection" 
+                            disabled="@(_isTesting || string.IsNullOrWhiteSpace(FirebaseConfigJson))"
+                            class="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2">
+                        <span class="material-symbols-outlined text-lg">wifi_tethering</span>
+                        <span>Test Connection</span>
+                    </button>
+                    <button @onclick="SaveConfiguration" 
+                            disabled="@(_isTesting || !_testSuccess || string.IsNullOrWhiteSpace(FirebaseConfigJson))"
+                            class="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2">
+                        <span class="material-symbols-outlined text-lg">save</span>
+                        <span>Save & Connect</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback<bool> OnSave { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    [Inject] private IFirebaseHelper FirebaseHelper { get; set; } = null!;
+    [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
+
+    private string FirebaseConfigJson { get; set; } = "";
+    private bool _isTesting = false;
+    private bool _testSuccess = false;
+    private string _testResult = "";
+
+    private async Task TestConnection()
+    {
+        if (string.IsNullOrWhiteSpace(FirebaseConfigJson))
+            return;
+
+        _isTesting = true;
+        _testResult = "";
+        StateHasChanged();
+
+        try
+        {
+            // Validate JSON format
+            var validationResult = FirebaseHelper.ValidateJson(FirebaseConfigJson);
+            if (!validationResult.Success)
+            {
+                _testResult = validationResult.Message;
+                _testSuccess = false;
+            }
+            else
+            {
+                // Save to localStorage temporarily for testing
+                await LocalStorage.SetItemAsync(Constant.BlazorLocalStorageFirebaseConfigName, FirebaseConfigJson);
+                
+                // Test Firebase connection
+                var testResult = await FirebaseHelper.ActivateFireBaseDb();
+                if (testResult?.Success == true)
+                {
+                    _testResult = "Connection successful! Firebase is ready to use.";
+                    _testSuccess = true;
+                }
+                else
+                {
+                    _testResult = testResult?.Message ?? "Connection failed. Please check your configuration.";
+                    _testSuccess = false;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _testResult = $"Error: {ex.Message}";
+            _testSuccess = false;
+        }
+        finally
+        {
+            _isTesting = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SaveConfiguration()
+    {
+        if (!_testSuccess || string.IsNullOrWhiteSpace(FirebaseConfigJson))
+            return;
+
+        try
+        {
+            // Save to localStorage
+            await LocalStorage.SetItemAsync(Constant.BlazorLocalStorageFirebaseConfigName, FirebaseConfigJson);
+            
+            // Activate Firebase
+            var result = await FirebaseHelper.ActivateFireBaseDb();
+            if (result?.Success == true)
+            {
+                await OnSave.InvokeAsync(true);
+            }
+            else
+            {
+                await OnSave.InvokeAsync(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            SnackbarService.ShowError($"Failed to save configuration: {ex.Message}");
+            await OnSave.InvokeAsync(false);
+        }
+    }
+}

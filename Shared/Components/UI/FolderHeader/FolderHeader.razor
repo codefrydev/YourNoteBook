@@ -1,0 +1,40 @@
+@using YourNoteBook.Core.Entities
+
+<div class="folder-header">
+    <div class="folder-info">
+        <div class="folder-icon">
+            <span class="material-symbols-outlined">folder</span>
+        </div>
+        <div class="folder-details">
+            <h1 class="folder-title">@Folder.Name</h1>
+            <p class="folder-description">@Folder.Description</p>
+        </div>
+    </div>
+    
+    <div class="folder-stats">
+        <div class="stat-item">
+            <div class="stat-icon notes">
+                <span class="material-symbols-outlined">description</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-number">@NotesCount</span>
+                <span class="stat-label">Notes</span>
+            </div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-icon shortcuts">
+                <span class="material-symbols-outlined">keyboard</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-number">@ShortcutsCount</span>
+                <span class="stat-label">Shortcuts</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Folder Folder { get; set; } = null!;
+    [Parameter] public int NotesCount { get; set; }
+    [Parameter] public int ShortcutsCount { get; set; }
+}

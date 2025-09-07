@@ -1,0 +1,45 @@
+@using YourNoteBook.Core.Entities
+
+<div class="content-card shortcut-card" @onclick="() => OnShortcutClick.InvokeAsync(Shortcut.Id)">
+    <div class="card-header">
+        <div class="card-icon shortcut-icon">
+            <span class="material-symbols-outlined">keyboard</span>
+        </div>
+        <div class="card-title-section">
+            <h3 class="card-title">@Shortcut.Action</h3>
+            <span class="card-date">@Shortcut.ModifiedAt.ToString("MMM dd, yyyy")</span>
+        </div>
+        @if (Shortcut.IsPinned)
+        {
+            <div class="pin-indicator">
+                <span class="material-symbols-outlined">push_pin</span>
+            </div>
+        }
+    </div>
+    
+    <div class="card-content">
+        <p class="card-description">@Shortcut.Description</p>
+    </div>
+    
+    @if (Shortcut.Category != null)
+    {
+        <div class="card-tags">
+            <span class="tag category">@Shortcut.Category.Name</span>
+        </div>
+    }
+    
+    <div class="card-footer">
+        <div class="card-meta">
+            <span class="material-symbols-outlined">keyboard</span>
+            <span class="shortcut-keys">@Shortcut.Keys</span>
+        </div>
+        <div class="card-action">
+            <span class="material-symbols-outlined">arrow_forward</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Shortcut Shortcut { get; set; } = null!;
+    [Parameter] public EventCallback<string> OnShortcutClick { get; set; }
+}

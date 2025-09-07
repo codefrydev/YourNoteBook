@@ -1,0 +1,582 @@
+@namespace YourNoteBook.Shared.Components.Layouts
+@inherits LayoutComponentBase  
+
+<div class="editor-layout">
+    <!-- Editor Header -->
+    <header class="editor-header">
+        <div class="header-content">
+            <!-- Left Section -->
+            <div class="header-left">
+                <button class="back-btn" onclick="history.back()" title="Go Back">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </button>
+                <div class="document-info">
+                    <h1 class="document-title">Untitled Document</h1>
+                    <span class="document-status">Saved</span>
+                </div>
+            </div>
+
+            <!-- Center Section - Toolbar -->
+            <div class="editor-toolbar">
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" title="Bold">
+                        <span class="material-symbols-outlined">format_bold</span>
+                    </button>
+                    <button class="toolbar-btn" title="Italic">
+                        <span class="material-symbols-outlined">format_italic</span>
+                    </button>
+                    <button class="toolbar-btn" title="Underline">
+                        <span class="material-symbols-outlined">format_underlined</span>
+                    </button>
+                </div>
+                <div class="toolbar-separator"></div>
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" title="Heading 1">
+                        <span class="material-symbols-outlined">format_h1</span>
+                    </button>
+                    <button class="toolbar-btn" title="Heading 2">
+                        <span class="material-symbols-outlined">format_h2</span>
+                    </button>
+                    <button class="toolbar-btn" title="Heading 3">
+                        <span class="material-symbols-outlined">format_h3</span>
+                    </button>
+                </div>
+                <div class="toolbar-separator"></div>
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" title="Bullet List">
+                        <span class="material-symbols-outlined">format_list_bulleted</span>
+                    </button>
+                    <button class="toolbar-btn" title="Numbered List">
+                        <span class="material-symbols-outlined">format_list_numbered</span>
+                    </button>
+                    <button class="toolbar-btn" title="Quote">
+                        <span class="material-symbols-outlined">format_quote</span>
+                    </button>
+                </div>
+                <div class="toolbar-separator"></div>
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" title="Link">
+                        <span class="material-symbols-outlined">link</span>
+                    </button>
+                    <button class="toolbar-btn" title="Image">
+                        <span class="material-symbols-outlined">image</span>
+                    </button>
+                    <button class="toolbar-btn" title="Code">
+                        <span class="material-symbols-outlined">code</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Section -->
+            <div class="header-right">
+                <button class="action-btn" title="Preview">
+                    <span class="material-symbols-outlined">preview</span>
+                </button>
+                <button class="action-btn" title="Share">
+                    <span class="material-symbols-outlined">share</span>
+                </button>
+                <button class="action-btn" title="Settings">
+                    <span class="material-symbols-outlined">settings</span>
+                </button>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <span class="material-symbols-outlined" id="theme-icon-editor">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Editor Body -->
+    <div class="editor-body">
+        <!-- Editor Sidebar (Optional) -->
+        <aside class="editor-sidebar">
+            <div class="sidebar-content">
+                <!-- Document Outline -->
+                <div class="outline-section">
+                    <h3 class="section-title">Outline</h3>
+                    <div class="outline-list">
+                        <div class="outline-item">
+                            <span class="outline-level">H1</span>
+                            <span class="outline-text">Introduction</span>
+                        </div>
+                        <div class="outline-item">
+                            <span class="outline-level">H2</span>
+                            <span class="outline-text">Getting Started</span>
+                        </div>
+                        <div class="outline-item">
+                            <span class="outline-level">H2</span>
+                            <span class="outline-text">Advanced Features</span>
+                        </div>
+                        <div class="outline-item">
+                            <span class="outline-level">H3</span>
+                            <span class="outline-text">Configuration</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3 class="section-title">Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="quick-btn">
+                            <span class="material-symbols-outlined">save</span>
+                            <span>Save</span>
+                        </button>
+                        <button class="quick-btn">
+                            <span class="material-symbols-outlined">download</span>
+                            <span>Export</span>
+                        </button>
+                        <button class="quick-btn">
+                            <span class="material-symbols-outlined">print</span>
+                            <span>Print</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Editor Area -->
+        <main class="editor-main">
+            <div class="editor-container">
+                @Body
+            </div>
+        </main>
+    </div>
+
+    <!-- Status Bar -->
+    <footer class="editor-status-bar">
+        <div class="status-content">
+            <div class="status-left">
+                <span class="status-item">Words: 0</span>
+                <span class="status-item">Characters: 0</span>
+                <span class="status-item">Lines: 1</span>
+            </div>
+            <div class="status-right">
+                <span class="status-item">Markdown</span>
+                <span class="status-item">UTF-8</span>
+                <span class="status-item">Auto-save: On</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<style>
+    .editor-layout {
+        min-height: 100vh;
+        background-color: #ffffff;
+        color: #111827;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dark .editor-layout {
+        background-color: #111827;
+        color: #f9fafb;
+    }
+
+    .editor-header {
+        background-color: white;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .dark .editor-header {
+        background-color: #1f2937;
+        border-bottom-color: #374151;
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .back-btn {
+        padding: 0.5rem;
+        color: #6b7280;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .back-btn:hover {
+        color: #374151;
+        background-color: #f3f4f6;
+    }
+
+    .dark .back-btn {
+        color: #9ca3af;
+    }
+
+    .dark .back-btn:hover {
+        color: #e5e7eb;
+        background-color: #374151;
+    }
+
+    .document-info {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .document-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dark .document-title {
+        color: white;
+    }
+
+    .document-status {
+        font-size: 0.75rem;
+        color: #10b981;
+    }
+
+    .editor-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: #f9fafb;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .dark .editor-toolbar {
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+
+    .toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .toolbar-separator {
+        width: 1px;
+        height: 1.5rem;
+        background-color: #d1d5db;
+        margin: 0 0.25rem;
+    }
+
+    .dark .toolbar-separator {
+        background-color: #4b5563;
+    }
+
+    .toolbar-btn {
+        padding: 0.375rem;
+        color: #6b7280;
+        border-radius: 0.25rem;
+        transition: all 0.2s;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .toolbar-btn:hover {
+        color: #374151;
+        background-color: #e5e7eb;
+    }
+
+    .dark .toolbar-btn {
+        color: #9ca3af;
+    }
+
+    .dark .toolbar-btn:hover {
+        color: #e5e7eb;
+        background-color: #4b5563;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    .action-btn, .theme-toggle {
+        padding: 0.5rem;
+        color: #6b7280;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .action-btn:hover, .theme-toggle:hover {
+        color: #374151;
+        background-color: #f3f4f6;
+    }
+
+    .dark .action-btn, .dark .theme-toggle {
+        color: #9ca3af;
+    }
+
+    .dark .action-btn:hover, .dark .theme-toggle:hover {
+        color: #e5e7eb;
+        background-color: #374151;
+    }
+
+    .editor-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .editor-sidebar {
+        width: 16rem;
+        background-color: #f9fafb;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dark .editor-sidebar {
+        background-color: #1f2937;
+        border-right-color: #374151;
+    }
+
+    .sidebar-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+    }
+
+    .dark .section-title {
+        color: #9ca3af;
+    }
+
+    .outline-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .outline-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .outline-item:hover {
+        background-color: #e5e7eb;
+    }
+
+    .dark .outline-item:hover {
+        background-color: #374151;
+    }
+
+    .outline-level {
+        font-size: 0.625rem;
+        font-weight: 600;
+        color: #6b7280;
+        background-color: #e5e7eb;
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.125rem;
+        min-width: 1.5rem;
+        text-align: center;
+    }
+
+    .dark .outline-level {
+        color: #9ca3af;
+        background-color: #374151;
+    }
+
+    .outline-text {
+        font-size: 0.875rem;
+        color: #374151;
+    }
+
+    .dark .outline-text {
+        color: #d1d5db;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .quick-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+        color: #374151;
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .dark .quick-btn {
+        color: #d1d5db;
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+
+    .quick-btn:hover {
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+    }
+
+    .dark .quick-btn:hover {
+        background-color: #4b5563;
+        border-color: #6b7280;
+    }
+
+    .editor-main {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .editor-container {
+        flex: 1;
+        padding: 1rem;
+        overflow: auto;
+    }
+
+    .editor-status-bar {
+        background-color: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+        padding: 0.5rem 1rem;
+    }
+
+    .dark .editor-status-bar {
+        background-color: #1f2937;
+        border-top-color: #374151;
+    }
+
+    .status-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .status-left, .status-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .status-item {
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+
+    .dark .status-item {
+        color: #9ca3af;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 1024px) {
+        .editor-sidebar {
+            width: 12rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .editor-sidebar {
+            display: none;
+        }
+        
+        .editor-toolbar {
+            display: none;
+        }
+        
+        .header-content {
+            padding: 0.5rem;
+        }
+        
+        .document-title {
+            font-size: 0.875rem;
+        }
+        
+        .status-content {
+            flex-direction: column;
+            gap: 0.25rem;
+            align-items: flex-start;
+        }
+        
+        .status-left, .status-right {
+            gap: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const themeIcon = document.getElementById('theme-icon-editor');
+        
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    
+    // Initialize theme on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme');
+        const themeIcon = document.getElementById('theme-icon-editor');
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+        }
+    });
+</script>

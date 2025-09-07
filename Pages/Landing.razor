@@ -1,107 +1,854 @@
 @page "/"
+@layout LandingLayout
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="mt-16" Color="Color.Primary"> @* Main container for the page content *@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 relative overflow-hidden">
+    <!-- Enhanced Background Elements -->
+    <div class="absolute inset-0 -z-10">
+        <!-- Animated gradient orbs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/20 to-purple-400/20 dark:from-blue-600/30 dark:to-purple-600/30 rounded-full filter blur-3xl animate-float"></div>
+        <div class="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/20 to-pink-400/20 dark:from-purple-600/30 dark:to-pink-600/30 rounded-full filter blur-3xl animate-float-delayed"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-r from-pink-400/20 to-orange-400/20 dark:from-pink-600/30 dark:to-orange-600/30 rounded-full filter blur-3xl animate-float-slow"></div>
+        
+        <!-- Grid pattern overlay -->
+        <div class="absolute inset-0 opacity-40 dark:opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%239C92AC&quot; fill-opacity=&quot;0.05&quot;%3E%3Ccircle cx=&quot;30&quot; cy=&quot;30&quot; r=&quot;1&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"></div>
+    </div>
 
-    @* --- Hero Section --- *@
-    @* A prominent section to grab user attention. *@
-    <MudGrid Justify="Justify.Center" Class="py-16 text-center">
-        <MudItem xs="12" md="8">
-            @* Main headline *@
-            <MudText Typo="Typo.h2" GutterBottom="true" Class="mb-4 font-weight-bold">
-                NoteBook still in Development
-            </MudText>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Enhanced Hero Section -->
+        <div class="relative py-24 sm:py-32 lg:py-40 text-center">
+            
+            <div class="max-w-6xl mx-auto relative z-10">
+                <!-- Enhanced Logo/Brand -->
+                <div class="mb-16 animate-fade-in-up">
+                    <div class="relative group">
+                        <div class="w-32 h-32 sm:w-36 sm:h-36 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl transform hover:scale-110 transition-all duration-500 hover:rotate-6 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"></div>
+                            <span class="text-5xl sm:text-6xl relative z-10 group-hover:scale-110 transition-transform duration-300">📚</span>
+                        </div>
+                        <!-- Floating particles around logo -->
+                        <div class="absolute -top-2 -left-2 w-4 h-4 bg-blue-400 rounded-full animate-bounce opacity-60"></div>
+                        <div class="absolute -top-1 -right-3 w-3 h-3 bg-purple-400 rounded-full animate-bounce opacity-60" style="animation-delay: 0.5s;"></div>
+                        <div class="absolute -bottom-2 -left-1 w-2 h-2 bg-pink-400 rounded-full animate-bounce opacity-60" style="animation-delay: 1s;"></div>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Typography -->
+                <div class="space-y-6">
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8 text-gray-900 dark:text-white leading-tight animate-fade-in-up" style="animation-delay: 0.2s;">
+                        <span class="block">Your Personal</span>
+                        <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-x relative">
+                            NoteBook
+                            <div class="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full opacity-50"></div>
+                        </span>
+                    </h1>
+                    
+                    <p class="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed animate-fade-in-up font-light" style="animation-delay: 0.4s;">
+                        Organize your thoughts, store your shortcuts, and keep everything 
+                        <span class="font-semibold text-blue-600 dark:text-blue-400">private</span> in your own 
+                        <span class="font-semibold text-purple-600 dark:text-purple-400">secure</span> database.
+                    </p>
+                    
+                    <!-- Trust indicators -->
+                    <div class="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-500 dark:text-gray-400 animate-fade-in-up" style="animation-delay: 0.6s;">
+                        <div class="flex items-center gap-2">
+                            <span class="text-green-500">✓</span>
+                            <span>100% Private</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-green-500">✓</span>
+                            <span>Firebase Powered</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-green-500">✓</span>
+                            <span>No Registration</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enhanced CTA Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fade-in-up mt-12" style="animation-delay: 0.8s;">
+                    @if (!CurrentContext.IsAuthenticated)
+                    {
+                        <button @onclick="AddFirebaseCode" 
+                                class="group relative px-12 py-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 w-full sm:w-auto overflow-hidden border border-white/20">
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                            <span class="relative flex items-center justify-center space-x-3">
+                                <span class="text-2xl group-hover:rotate-12 transition-transform duration-300">🔗</span>
+                                <span>Connect Database</span>
+                                <span class="text-lg group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button @onclick="OpenHomePage" 
+                                class="group relative px-12 py-6 bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 text-white text-xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 w-full sm:w-auto overflow-hidden border border-white/20">
+                            <div class="absolute inset-0 bg-gradient-to-r from-green-700 via-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                            <span class="relative flex items-center justify-center space-x-3">
+                                <span class="text-2xl group-hover:rotate-12 transition-transform duration-300">🏠</span>
+                                <span>Go to My Folders</span>
+                                <span class="text-lg group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </span>
+                        </button>
+                    }
+                    
+                    <button @onclick="OpenThemeManager" 
+                            class="group relative px-8 py-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl border-2 border-gray-200/50 dark:border-gray-700/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1 w-full sm:w-auto">
+                        <span class="flex items-center justify-center space-x-3">
+                            <span class="text-2xl group-hover:rotate-12 transition-transform duration-300">@(CurrentContext.IsDarkMode ? "🌙" : "☀️")</span>
+                            <span>@(CurrentContext.IsDarkMode ? "Light Mode" : "Dark Mode")</span>
+                        </span>
+                    </button>
+                </div>
+                
+                <!-- Enhanced Stats Preview -->
+                <div class="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 animate-fade-in-up" style="animation-delay: 1s;">
+                    <div class="group text-center p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300 hover:scale-105">
+                        <div class="text-4xl sm:text-5xl font-bold text-blue-600 dark:text-blue-400 mb-3 group-hover:scale-110 transition-transform duration-300">100%</div>
+                        <div class="text-gray-600 dark:text-gray-400 font-medium">Private & Secure</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">Your data stays yours</div>
+                    </div>
+                    <div class="group text-center p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300 hover:scale-105">
+                        <div class="text-4xl sm:text-5xl font-bold text-purple-600 dark:text-purple-400 mb-3 group-hover:scale-110 transition-transform duration-300">∞</div>
+                        <div class="text-gray-600 dark:text-gray-400 font-medium">Unlimited Notes</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">No storage limits</div>
+                    </div>
+                    <div class="group text-center p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300 hover:scale-105">
+                        <div class="text-4xl sm:text-5xl font-bold text-pink-600 dark:text-pink-400 mb-3 group-hover:scale-110 transition-transform duration-300">24/7</div>
+                        <div class="text-gray-600 dark:text-gray-400 font-medium">Always Available</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">Access anywhere</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            @* Subtitle or brief description *@
-            <MudText Typo="Typo.h5" Color="Color.Dark" Class="mb-8">
-                Write and Store your notes and shortcut and private in and store in your own database.
-            </MudText>
+        <!-- Enhanced Key Features Section -->
+        <div class="py-24 sm:py-32 lg:py-40 relative">
+            <!-- Section background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent dark:via-gray-800/5"></div>
+            
+            <div class="text-center mb-20 relative z-10">
+                <div class="inline-block px-6 py-3 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-8 animate-fade-in-up">
+                    <span class="text-blue-600 dark:text-blue-400 font-semibold text-sm uppercase tracking-wide">Features</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 dark:text-white animate-fade-in-up" style="animation-delay: 0.2s;">
+                    Why Choose <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">YourNoteBook</span>?
+                </h2>
+                <p class="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 0.4s;">
+                    Everything you need to organize your digital life with 
+                    <span class="font-semibold text-blue-600 dark:text-blue-400">complete privacy</span> and 
+                    <span class="font-semibold text-purple-600 dark:text-purple-400">full control</span>
+                </p>
+                <div class="w-40 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 mx-auto mt-8 rounded-full animate-fade-in-up" style="animation-delay: 0.6s;"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 relative z-10">
+                <!-- Feature Card 1 -->
+                <div class="group relative animate-fade-in-up" style="animation-delay: 0.8s;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                    <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-gray-700/20 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg">
+                                <span class="text-3xl">🔄</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">Real-time Sync</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                Keep your data up-to-date across all your devices instantly with Firebase integration.
+                            </p>
+                            <div class="mt-4 flex items-center text-blue-600 dark:text-blue-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span>Learn more</span>
+                                <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 2 -->
+                <div class="group relative animate-fade-in-up" style="animation-delay: 1s;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                    <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-gray-700/20 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg">
+                                <span class="text-3xl">🔒</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">Secure & Private</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                Your data stays private with your own Firebase database. No third-party access.
+                            </p>
+                            <div class="mt-4 flex items-center text-green-600 dark:text-green-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span>Learn more</span>
+                                <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 3 -->
+                <div class="group relative animate-fade-in-up" style="animation-delay: 1.2s;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                    <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-gray-700/20 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg">
+                                <span class="text-3xl">📱</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">Responsive Design</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                Beautiful interface that works perfectly on desktop, tablet, and mobile devices.
+                            </p>
+                            <div class="mt-4 flex items-center text-purple-600 dark:text-purple-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span>Learn more</span>
+                                <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 4 -->
+                <div class="group relative animate-fade-in-up" style="animation-delay: 1.4s;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                    <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-gray-700/20 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg">
+                                <span class="text-3xl">🌙</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">Dark Mode</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                Switch between light and dark themes for comfortable viewing in any environment.
+                            </p>
+                            <div class="mt-4 flex items-center text-orange-600 dark:text-orange-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span>Learn more</span>
+                                <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 5 -->
+                <div class="group relative animate-fade-in-up" style="animation-delay: 1.6s;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-pink-500 to-rose-500 rounded-3xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                    <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-gray-700/20 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-pink-500/10 to-rose-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg">
+                                <span class="text-3xl">⚡</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors duration-300">Fast & Lightweight</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                Built with Blazor WebAssembly for lightning-fast performance and offline capabilities.
+                            </p>
+                            <div class="mt-4 flex items-center text-pink-600 dark:text-pink-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span>Learn more</span>
+                                <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Card 6 -->
+                <div class="group relative animate-fade-in-up" style="animation-delay: 1.8s;">
+                    <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-3xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+                    <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-white/20 dark:border-gray-700/20 overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/10 to-blue-500/10 rounded-full -translate-y-16 translate-x-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-20 h-20 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-lg">
+                                <span class="text-3xl">🎨</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">Customizable</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                Personalize your folders with custom colors and organize them exactly how you want.
+                            </p>
+                            <div class="mt-4 flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span>Learn more</span>
+                                <span class="ml-2 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            @* Call-to-action buttons *@
-            @if (!CurrentContext.IsAuthenticated)
-            {
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="AddFirebaseCode"
-                           Class="mr-4">
-                    Connect With DataBase
-                </MudButton>
-            }
-            else
-            {
-                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" OnClick="OpenHomePage">
-                    Go To Home Page
-                </MudButton>
-            }
-            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" OnClick="OpenThemeManager">
-                Choose Theme
-            </MudButton>
-        </MudItem>
-    </MudGrid>
- 
-    <MudGrid Spacing="4" Justify="Justify.Center" Class="py-16">
-        <MudItem xs="12">
-            <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Key Features</MudText>
-            <MudDivider Class="my-4"/>
-        </MudItem>
+        <!-- Enhanced Setup Instructions Section -->
+        <div class="py-24 sm:py-32 lg:py-40 relative">
+            <!-- Section background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-50/50 to-transparent dark:via-gray-900/50"></div>
+            
+            <div class="text-center mb-20 relative z-10">
+                <div class="inline-block px-6 py-3 bg-green-100 dark:bg-green-900/30 rounded-full mb-8 animate-fade-in-up">
+                    <span class="text-green-600 dark:text-green-400 font-semibold text-sm uppercase tracking-wide">Quick Start</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 dark:text-white animate-fade-in-up" style="animation-delay: 0.2s;">
+                    Get Started in <span class="bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">4 Simple Steps</span>
+                </h2>
+                <p class="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 0.4s;">
+                    Set up your personal notebook in just a few minutes and start organizing your digital life
+                </p>
+                <div class="w-40 h-1 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 mx-auto mt-8 rounded-full animate-fade-in-up" style="animation-delay: 0.6s;"></div>
+            </div>
+            
+            <div class="max-w-6xl mx-auto relative z-10">
+                <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 sm:p-12 shadow-2xl border border-white/20 dark:border-gray-700/20 overflow-hidden">
+                    <!-- Decorative elements -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-green-500/5 to-blue-500/5 rounded-full -translate-y-32 translate-x-32"></div>
+                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-full translate-y-24 -translate-x-24"></div>
+                    
+                    <div class="relative z-10 space-y-8">
+                        <!-- Step 1 -->
+                        <div class="group animate-fade-in-up" style="animation-delay: 0.8s;">
+                            <details class="group">
+                                <summary class="cursor-pointer p-8 bg-gradient-to-r from-blue-50/80 to-blue-100/80 dark:from-blue-900/30 dark:to-blue-800/30 backdrop-blur-sm rounded-3xl hover:from-blue-100/80 hover:to-blue-200/80 dark:hover:from-blue-800/30 dark:hover:to-blue-700/30 transition-all duration-500 flex items-center space-x-6 shadow-xl hover:shadow-2xl border border-blue-200/50 dark:border-blue-700/30">
+                                    <div class="relative">
+                                        <span class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">1</span>
+                                        <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                            <span class="text-white text-xs">✓</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-2xl mb-2">Create Firebase Account</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 text-lg">Set up your Firebase project to get started</p>
+                                    </div>
+                                    <span class="text-blue-500 group-open:rotate-180 transition-transform duration-500 text-3xl">▼</span>
+                                </summary>
+                                <div class="p-8 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-800/30 dark:to-gray-700/30 backdrop-blur-sm rounded-3xl mt-6 shadow-inner border border-gray-200/50 dark:border-gray-600/30">
+                                    <p class="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">Visit <a href="https://firebase.google.com" target="_blank" class="text-blue-500 hover:text-blue-600 underline font-semibold hover:no-underline transition-all duration-300">Firebase Console</a> and create a new project.</p>
+                                    <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/30">
+                                        <div class="flex items-start space-x-4">
+                                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-blue-600 dark:text-blue-400 text-sm font-bold">1</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Go to Firebase Console</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-blue-600 dark:text-blue-400 text-sm font-bold">2</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Click "Create a project"</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-blue-600 dark:text-blue-400 text-sm font-bold">3</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Follow the setup wizard</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <!-- Step 2 -->
+                        <div class="group animate-fade-in-up" style="animation-delay: 1s;">
+                            <details class="group">
+                                <summary class="cursor-pointer p-8 bg-gradient-to-r from-green-50/80 to-green-100/80 dark:from-green-900/30 dark:to-green-800/30 backdrop-blur-sm rounded-3xl hover:from-green-100/80 hover:to-green-200/80 dark:hover:from-green-800/30 dark:hover:to-green-700/30 transition-all duration-500 flex items-center space-x-6 shadow-xl hover:shadow-2xl border border-green-200/50 dark:border-green-700/30">
+                                    <div class="relative">
+                                        <span class="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">2</span>
+                                        <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                            <span class="text-white text-xs">✓</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-2xl mb-2">Get Database Configuration</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 text-lg">Enable Firestore and get your configuration</p>
+                                    </div>
+                                    <span class="text-green-500 group-open:rotate-180 transition-transform duration-500 text-3xl">▼</span>
+                                </summary>
+                                <div class="p-8 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-800/30 dark:to-gray-700/30 backdrop-blur-sm rounded-3xl mt-6 shadow-inner border border-gray-200/50 dark:border-gray-600/30">
+                                    <p class="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">Enable Firestore and get your configuration.</p>
+                                    <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/30">
+                                        <div class="flex items-start space-x-4">
+                                            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-green-600 dark:text-green-400 text-sm font-bold">1</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Enable Firestore Database</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-green-600 dark:text-green-400 text-sm font-bold">2</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Go to Project Settings</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-green-600 dark:text-green-400 text-sm font-bold">3</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Copy Web App Config</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <!-- Step 3 -->
+                        <div class="group animate-fade-in-up" style="animation-delay: 1.2s;">
+                            <details class="group">
+                                <summary class="cursor-pointer p-8 bg-gradient-to-r from-purple-50/80 to-purple-100/80 dark:from-purple-900/30 dark:to-purple-800/30 backdrop-blur-sm rounded-3xl hover:from-purple-100/80 hover:to-purple-200/80 dark:hover:from-purple-800/30 dark:hover:to-purple-700/30 transition-all duration-500 flex items-center space-x-6 shadow-xl hover:shadow-2xl border border-purple-200/50 dark:border-purple-700/30">
+                                    <div class="relative">
+                                        <span class="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">3</span>
+                                        <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                            <span class="text-white text-xs">✓</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-2xl mb-2">Connect Your Database</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 text-lg">Paste your Firebase configuration into the app</p>
+                                    </div>
+                                    <span class="text-purple-500 group-open:rotate-180 transition-transform duration-500 text-3xl">▼</span>
+                                </summary>
+                                <div class="p-8 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-800/30 dark:to-gray-700/30 backdrop-blur-sm rounded-3xl mt-6 shadow-inner border border-gray-200/50 dark:border-gray-600/30">
+                                    <p class="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">Paste your Firebase configuration into the app.</p>
+                                    <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/30">
+                                        <div class="flex items-start space-x-4">
+                                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-purple-600 dark:text-purple-400 text-sm font-bold">1</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Click "Connect Database" button</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-purple-600 dark:text-purple-400 text-sm font-bold">2</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Paste your config JSON</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-purple-600 dark:text-purple-400 text-sm font-bold">3</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Click "Test Connection"</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                        
+                        <!-- Step 4 -->
+                        <div class="group animate-fade-in-up" style="animation-delay: 1.4s;">
+                            <details class="group">
+                                <summary class="cursor-pointer p-8 bg-gradient-to-r from-orange-50/80 to-orange-100/80 dark:from-orange-900/30 dark:to-orange-800/30 backdrop-blur-sm rounded-3xl hover:from-orange-100/80 hover:to-orange-200/80 dark:hover:from-orange-800/30 dark:hover:to-orange-700/30 transition-all duration-500 flex items-center space-x-6 shadow-xl hover:shadow-2xl border border-orange-200/50 dark:border-orange-700/30">
+                                    <div class="relative">
+                                        <span class="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold shadow-lg group-hover:scale-110 transition-transform duration-300">4</span>
+                                        <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                            <span class="text-white text-xs">✓</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-2xl mb-2">Start Organizing</h3>
+                                        <p class="text-gray-600 dark:text-gray-300 text-lg">You're all set! Start creating folders and organizing your notes</p>
+                                    </div>
+                                    <span class="text-orange-500 group-open:rotate-180 transition-transform duration-500 text-3xl">▼</span>
+                                </summary>
+                                <div class="p-8 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-800/30 dark:to-gray-700/30 backdrop-blur-sm rounded-3xl mt-6 shadow-inner border border-gray-200/50 dark:border-gray-600/30">
+                                    <p class="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">You're all set! Start creating folders and organizing your notes.</p>
+                                    <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/30">
+                                        <div class="flex items-start space-x-4">
+                                            <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-orange-600 dark:text-orange-400 text-sm font-bold">1</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Create your first folder</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-orange-600 dark:text-orange-400 text-sm font-bold">2</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Add notes and shortcuts</p>
+                                        </div>
+                                        <div class="flex items-start space-x-4 mt-4">
+                                            <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                                <span class="text-orange-600 dark:text-orange-400 text-sm font-bold">3</span>
+                                            </div>
+                                            <p class="text-gray-800 dark:text-gray-200 text-base">Organize and customize</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-       @for (var i = 0; i < 5; i++)
-        { 
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Elevation="3" Class="d-flex flex-column align-center text-center" Style="height: 100%;">
-                    <img src="https://codefrydev.in/images/IconCodefrydev.svg" alt="CFD Image"/>
-                    <MudCardContent Class="pa-6 d-flex flex-column align-items-center">
-                        <MudIcon Icon="@Icons.Material.Filled.Sync" Color="Color.Primary" Size="Size.Large" Class="mb-4"/>
-                        <MudText Typo="Typo.h6" GutterBottom="true">Real-time Sync</MudText>
-                        <MudText Typo="Typo.body2" Color="Color.Dark">Keep your data up-to-date across all your devices
-                            instantly.
-                        </MudText>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
+        <!-- Enhanced Video Section -->
+        <div class="py-24 sm:py-32 lg:py-40 relative">
+            <!-- Section background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-red-50/30 to-transparent dark:via-red-900/20"></div>
+            
+            <div class="text-center mb-20 relative z-10">
+                <div class="inline-block px-6 py-3 bg-red-100 dark:bg-red-900/30 rounded-full mb-8 animate-fade-in-up">
+                    <span class="text-red-600 dark:text-red-400 font-semibold text-sm uppercase tracking-wide">Tutorial</span>
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 text-gray-900 dark:text-white animate-fade-in-up" style="animation-delay: 0.2s;">
+                    Watch the <span class="bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">Tutorial</span>
+                </h2>
+                <p class="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed animate-fade-in-up" style="animation-delay: 0.4s;">
+                    Learn how to set up and use YourNoteBook in just a few minutes with our comprehensive guide
+                </p>
+                <div class="w-40 h-1 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 mx-auto mt-8 rounded-full animate-fade-in-up" style="animation-delay: 0.6s;"></div>
+            </div>
+            
+            <div class="max-w-6xl mx-auto relative z-10">
+                <div class="group relative animate-fade-in-up" style="animation-delay: 0.8s;">
+                    <!-- Video container with enhanced styling -->
+                    <div class="relative aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50 dark:border-gray-700/50 group-hover:shadow-3xl transition-all duration-500 group-hover:scale-[1.02]">
+                        <!-- Gradient overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 via-pink-500/10 to-purple-500/10 z-10"></div>
+                        
+                        <!-- Play button overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="w-20 h-20 bg-white/90 dark:bg-gray-800/90 rounded-full flex items-center justify-center shadow-xl backdrop-blur-sm">
+                                <div class="w-0 h-0 border-l-[16px] border-l-red-500 border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-1"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Video iframe -->
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/SKSVlXR5l4E?si=qun0xRPRqENW6Aru" title="Guide to use Notebook" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="absolute inset-0 w-full h-full"></iframe>
+                    </div>
+                    
+                    <!-- Video info card -->
+                    <div class="mt-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 dark:border-gray-700/20">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center">
+                                    <span class="text-white text-xl">📹</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Complete Setup Guide</h3>
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">Step-by-step tutorial covering everything you need to know</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-500 dark:text-gray-400">Duration</div>
+                                <div class="text-lg font-bold text-gray-900 dark:text-white">5 min</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase Dialog -->
+@if (_showFirebaseDialog)
+{
+    <FireBaseDialogue OnSave="OnFirebaseSaved" OnCancel="OnFirebaseDialogCancel" />
+}
+
+<style>
+    /* Enhanced Animations */
+    @@keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
         }
-    </MudGrid>
- 
-    <MudPaper
-        Style="padding:16px; background-color:#ffffffd6;border:4px solid #ffffffb3; border-radius:30px;box-shadow: inset  0 0 10px rgba(0, 0, 0, 0.1);">
-        <MudExpansionPanels Style=" border-radius:30px;box-shadow:inset 0 0 10px rgba(0, 0, 0, 0.1);">
-            <MudExpansionPanel Text="Account Creation" DisableGutters="true" Class="pl-3" Dense="true">
-                <pre>
-                <code>
-Create Firebase Account
-                            </code>
-                        </pre>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Database string" DisableGutters="true" Class="pl-3" Dense="true">
-                <MudImage Src="CornerRule.gif" Fluid="true"/>
-                <pre>
-                <code>
-Copy Config File From Firebase
-                        </code>
-                    </pre>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Fill cofig Data" DisableGutters="true" Class="pl-3" Dense="true">
-                <MudImage Src="EdgeRule.gif" Fluid="true"/>
-                <pre>
-                <code>
-Copy Config Data to form 
-                        </code>
-                    </pre>
-            </MudExpansionPanel>
-            <MudExpansionPanel Text="Rest Cells behaviour" DisableGutters="true" Class="pl-3 mb-4" Dense="true">
-                <MudImage Src="RestRule.gif" Fluid="true"/>
-                <pre>
-                <code>
-Click On Test after filling the form 
-                </code>
-                </pre>
-            </MudExpansionPanel>
-        </MudExpansionPanels>
-    </MudPaper> 
-    <MudPaper Height="720px" Class="mt-4">
-        <iframe width="1280" height="720" src="https://www.youtube.com/embed/SKSVlXR5l4E?si=qun0xRPRqENW6Aru" title="Guide to use Notebook" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </MudPaper>
-</MudContainer>
-
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @@keyframes gradient-x {
+        0%, 100% {
+            background-size: 200% 200%;
+            background-position: left center;
+        }
+        50% {
+            background-size: 200% 200%;
+            background-position: right center;
+        }
+    }
+    
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-20px) rotate(180deg);
+        }
+    }
+    
+    @@keyframes float-delayed {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-15px) rotate(-180deg);
+        }
+    }
+    
+    @@keyframes float-slow {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(90deg);
+        }
+    }
+    
+    @@keyframes shimmer {
+        0% {
+            transform: translateX(-100%);
+        }
+        100% {
+            transform: translateX(100%);
+        }
+    }
+    
+    @@keyframes pulse-glow {
+        0%, 100% {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        50% {
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+        }
+    }
+    
+    /* Animation Classes */
+    .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+        opacity: 0;
+    }
+    
+    .animate-gradient-x {
+        background-size: 200% 200%;
+        animation: gradient-x 3s ease infinite;
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .animate-float-delayed {
+        animation: float-delayed 8s ease-in-out infinite;
+        animation-delay: 2s;
+    }
+    
+    .animate-float-slow {
+        animation: float-slow 10s ease-in-out infinite;
+        animation-delay: 4s;
+    }
+    
+    .animate-shimmer {
+        animation: shimmer 2s ease-in-out infinite;
+    }
+    
+    .animate-pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    /* Enhanced Shadows */
+    .shadow-3xl {
+        box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .shadow-4xl {
+        box-shadow: 0 50px 80px -20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .shadow-inner {
+        box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    .shadow-glow {
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+    }
+    
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    /* Enhanced Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(45deg, #2563eb, #7c3aed);
+        transform: scale(1.1);
+    }
+    
+    /* Dark mode scrollbar */
+    .dark ::-webkit-scrollbar-track {
+        background: #374151;
+    }
+    
+    .dark ::-webkit-scrollbar-thumb {
+        background: linear-gradient(45deg, #1e40af, #7c3aed);
+    }
+    
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(45deg, #1d4ed8, #8b5cf6);
+    }
+    
+    /* Enhanced Hover Effects */
+    .group:hover .group-hover\:scale-110 {
+        transform: scale(1.1);
+    }
+    
+    .group:hover .group-hover\:rotate-12 {
+        transform: rotate(12deg);
+    }
+    
+    .group:hover .group-hover\:rotate-6 {
+        transform: rotate(6deg);
+    }
+    
+    /* Enhanced Button Effects */
+    button {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    button:hover {
+        transform: translateY(-2px);
+    }
+    
+    button:active {
+        transform: translateY(0px);
+    }
+    
+    /* Enhanced Card Effects */
+    .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    /* Glass Morphism Effects */
+    .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .dark .glass-effect {
+        background: rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Focus States */
+    button:focus-visible,
+    details summary:focus-visible {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+        border-radius: 8px;
+    }
+    
+    /* Reduced Motion Support */
+    @@media (prefers-reduced-motion: reduce) {
+        .animate-fade-in-up,
+        .animate-gradient-x,
+        .animate-float,
+        .animate-float-delayed,
+        .animate-float-slow,
+        .animate-shimmer,
+        .animate-pulse-glow {
+            animation: none;
+        }
+        
+        .group-hover\:scale-110,
+        .group-hover\:rotate-12,
+        .group-hover\:rotate-6 {
+            transform: none;
+        }
+        
+        button:hover,
+        .card-hover:hover {
+            transform: none;
+        }
+    }
+    
+    /* Enhanced Responsive Design */
+    @@media (max-width: 640px) {
+        .text-8xl {
+            font-size: 3.5rem;
+        }
+        .text-7xl {
+            font-size: 3rem;
+        }
+        .text-6xl {
+            font-size: 2.5rem;
+        }
+        .text-5xl {
+            font-size: 2rem;
+        }
+        
+        /* Mobile-specific animations */
+        .animate-float,
+        .animate-float-delayed,
+        .animate-float-slow {
+            animation-duration: 8s;
+        }
+    }
+    
+    @@media (max-width: 480px) {
+        .text-8xl {
+            font-size: 2.5rem;
+        }
+        .text-7xl {
+            font-size: 2.25rem;
+        }
+        .text-6xl {
+            font-size: 2rem;
+        }
+        .text-5xl {
+            font-size: 1.75rem;
+        }
+    }
+    
+    /* High contrast mode support */
+    @@media (prefers-contrast: high) {
+        .bg-gradient-to-r,
+        .bg-gradient-to-br {
+            background: #000 !important;
+            color: #fff !important;
+        }
+        
+        .dark .bg-gradient-to-r,
+        .dark .bg-gradient-to-br {
+            background: #fff !important;
+            color: #000 !important;
+        }
+    }
+    
+    /* Print styles */
+    @@media print {
+        .animate-fade-in-up,
+        .animate-gradient-x,
+        .animate-float,
+        .animate-float-delayed,
+        .animate-float-slow,
+        .animate-shimmer,
+        .animate-pulse-glow {
+            animation: none !important;
+        }
+        
+        .shadow-3xl,
+        .shadow-4xl,
+        .shadow-glow {
+            box-shadow: none !important;
+        }
+        
+        .backdrop-blur-sm {
+            backdrop-filter: none !important;
+        }
+    }
+</style>
 
 @code
 {
-    string ImageUrl = "https://codefrydev.in/images/IconCodefrydev.svg";
+    // Landing page code-behind is handled in Landing.razor.cs
 }
+

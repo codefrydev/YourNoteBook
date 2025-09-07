@@ -1,0 +1,52 @@
+@using YourNoteBook.Core.Entities
+
+<div class="content-card note-card" @onclick="() => OnNoteClick.InvokeAsync(Note.Id)">
+    <div class="card-header">
+        <div class="card-icon note-icon">
+            <span class="material-symbols-outlined">description</span>
+        </div>
+        <div class="card-title-section">
+            <h3 class="card-title">@Note.Title</h3>
+            <span class="card-date">@Note.ModifiedAt.ToString("MMM dd, yyyy")</span>
+        </div>
+        @if (Note.IsPinned)
+        {
+            <div class="pin-indicator">
+                <span class="material-symbols-outlined">push_pin</span>
+            </div>
+        }
+    </div>
+    
+    <div class="card-content">
+        <p class="card-description">@Note.Content</p>
+    </div>
+    
+    @if (Note.Tags.Any())
+    {
+        <div class="card-tags">
+            @foreach (var tag in Note.Tags.Take(3))
+            {
+                <span class="tag">@tag.Name</span>
+            }
+            @if (Note.Tags.Count > 3)
+            {
+                <span class="tag more">+@(Note.Tags.Count - 3)</span>
+            }
+        </div>
+    }
+    
+    <div class="card-footer">
+        <div class="card-meta">
+            <span class="material-symbols-outlined">schedule</span>
+            <span>@Note.ModifiedAt.ToString("HH:mm")</span>
+        </div>
+        <div class="card-action">
+            <span class="material-symbols-outlined">arrow_forward</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Note Note { get; set; } = null!;
+    [Parameter] public EventCallback<string> OnNoteClick { get; set; }
+}

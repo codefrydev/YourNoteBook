@@ -1,0 +1,343 @@
+
+<div class="full-page-loading">
+    <div class="full-page-content">
+        <!-- Animated Logo -->
+        <div class="full-page-logo">
+            <div class="full-page-logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7V5C3 3.89543 3.89543 3 5 3H9L11 5H19C20.1046 5 21 5.89543 21 7V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17V7Z" 
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 11H16M8 15H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="full-page-logo-text">YourNoteBook</div>
+        </div>
+
+        <!-- Modern Loading Animation -->
+        <div class="full-page-animation">
+            <div class="full-page-dots">
+                <div class="full-page-dot"></div>
+                <div class="full-page-dot"></div>
+                <div class="full-page-dot"></div>
+            </div>
+        </div>
+
+        <!-- Loading Text -->
+        <div class="full-page-text">
+            <h2 class="full-page-title">@Title</h2>
+            <p class="full-page-subtitle">@Subtitle</p>
+        </div>
+
+        <!-- Progress Bar (Optional) -->
+        @if (ShowProgress)
+        {
+            <div class="full-page-progress-container">
+                <div class="full-page-progress-bar">
+                    <div class="full-page-progress-fill" style="width: @Progress%"></div>
+                </div>
+                <div class="full-page-progress-text">@Progress%</div>
+            </div>
+        }
+
+        <!-- Loading Tips (Optional) -->
+        @if (ShowTips)
+        {
+            <div class="full-page-tips">
+                <div class="full-page-tip-item">
+                    <span class="full-page-tip-icon">💡</span>
+                    <span class="full-page-tip-text">@GetRandomTip()</span>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Background Animation -->
+    <div class="full-page-background">
+        <div class="full-page-bg-circle full-page-circle-1"></div>
+        <div class="full-page-bg-circle full-page-circle-2"></div>
+        <div class="full-page-bg-circle full-page-circle-3"></div>
+    </div>
+</div>
+
+<style>
+    .full-page-loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        overflow: hidden;
+    }
+
+    .dark .full-page-loading {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    }
+
+    .full-page-content {
+        text-align: center;
+        z-index: 10;
+        position: relative;
+    }
+
+    .full-page-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .full-page-logo-icon {
+        width: 4rem;
+        height: 4rem;
+        color: white;
+        margin-bottom: 1rem;
+        animation: fullPageLogoFloat 3s ease-in-out infinite;
+    }
+
+    .full-page-logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.05em;
+    }
+
+    .full-page-animation {
+        margin-bottom: 2rem;
+    }
+
+    .full-page-dots {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .full-page-dot {
+        width: 0.75rem;
+        height: 0.75rem;
+        background-color: white;
+        border-radius: 50%;
+        animation: fullPageDotBounce 1.4s ease-in-out infinite both;
+    }
+
+    .full-page-dot:nth-child(1) { animation-delay: -0.32s; }
+    .full-page-dot:nth-child(2) { animation-delay: -0.16s; }
+    .full-page-dot:nth-child(3) { animation-delay: 0s; }
+
+    .full-page-text {
+        margin-bottom: 2rem;
+    }
+
+    .full-page-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 0.5rem;
+        opacity: 0.9;
+    }
+
+    .full-page-subtitle {
+        font-size: 0.875rem;
+        color: white;
+        opacity: 0.7;
+        margin: 0;
+    }
+
+    .full-page-progress-container {
+        margin-bottom: 2rem;
+        width: 20rem;
+        max-width: 90vw;
+    }
+
+    .full-page-progress-bar {
+        width: 100%;
+        height: 0.25rem;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 0.125rem;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+
+    .full-page-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #60a5fa, #3b82f6);
+        border-radius: 0.125rem;
+        transition: width 0.3s ease;
+        animation: fullPageProgressShimmer 2s ease-in-out infinite;
+    }
+
+    .full-page-progress-text {
+        font-size: 0.75rem;
+        color: white;
+        opacity: 0.8;
+        text-align: center;
+    }
+
+    .full-page-tips {
+        margin-top: 2rem;
+    }
+
+    .full-page-tip-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 0.5rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .full-page-tip-icon {
+        font-size: 1rem;
+    }
+
+    .full-page-tip-text {
+        font-size: 0.875rem;
+        color: white;
+        opacity: 0.9;
+    }
+
+    .full-page-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .full-page-bg-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        animation: fullPageFloat 6s ease-in-out infinite;
+    }
+
+    .full-page-circle-1 {
+        width: 20rem;
+        height: 20rem;
+        top: -10rem;
+        left: -10rem;
+        animation-delay: 0s;
+    }
+
+    .full-page-circle-2 {
+        width: 15rem;
+        height: 15rem;
+        bottom: -7.5rem;
+        right: -7.5rem;
+        animation-delay: 2s;
+    }
+
+    .full-page-circle-3 {
+        width: 10rem;
+        height: 10rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation-delay: 4s;
+    }
+
+    /* Animations */
+    @@keyframes fullPageLogoFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    @@keyframes fullPageDotBounce {
+        0%, 80%, 100% { 
+            transform: scale(0);
+            opacity: 0.5;
+        }
+        40% { 
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @@keyframes fullPageProgressShimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+
+    @@keyframes fullPageFloat {
+        0%, 100% { 
+            transform: translateY(0px) rotate(0deg);
+            opacity: 0.7;
+        }
+        50% { 
+            transform: translateY(-20px) rotate(180deg);
+            opacity: 0.3;
+        }
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .full-page-logo-icon {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .full-page-logo-text {
+            font-size: 1.25rem;
+        }
+
+        .full-page-title {
+            font-size: 1.125rem;
+        }
+
+        .full-page-progress-container {
+            width: 16rem;
+        }
+
+        .full-page-circle-1 {
+            width: 15rem;
+            height: 15rem;
+            top: -7.5rem;
+            left: -7.5rem;
+        }
+
+        .full-page-circle-2 {
+            width: 12rem;
+            height: 12rem;
+            bottom: -6rem;
+            right: -6rem;
+        }
+
+        .full-page-circle-3 {
+            width: 8rem;
+            height: 8rem;
+        }
+    }
+</style>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Loading";
+    [Parameter] public string Subtitle { get; set; } = "Please wait while we prepare everything for you...";
+    [Parameter] public bool ShowProgress { get; set; } = false;
+    [Parameter] public int Progress { get; set; } = 0;
+    [Parameter] public bool ShowTips { get; set; } = false;
+
+    private readonly string[] _tips = {
+        "Organize your notes with folders for better structure",
+        "Use tags to categorize and find your content quickly",
+        "Create shortcuts for frequently accessed items",
+        "Sync your data across devices with Firebase",
+        "Use the search feature to find any note instantly",
+        "Dark mode is available for comfortable reading",
+        "Export your notes in various formats",
+        "Backup your data regularly for safety"
+    };
+
+    private string GetRandomTip()
+    {
+        var random = new Random();
+        return _tips[random.Next(_tips.Length)];
+    }
+}

@@ -1,0 +1,118 @@
+@using YourNoteBook.Shared.Services.Utilities
+@implements IDisposable
+
+
+<div class="fixed bottom-4 right-4 z-[9999] transition-all duration-300 ease-in-out @(_isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0")">
+    @if (_isVisible && !string.IsNullOrEmpty(_message))
+    {
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-w-sm w-full p-4 @GetBackgroundColor()">
+            <div class="flex items-start space-x-3">
+                <div class="flex-shrink-0">
+                    <span class="text-lg">@GetIcon()</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium @GetTextColor()">@_message</p>
+                </div>
+                <div class="flex-shrink-0">
+                    <button @onclick="Hide" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Inject] private SnackbarService SnackbarService { get; set; } = null!;
+
+    private bool _isVisible = false;
+    private string _message = string.Empty;
+    private SnackbarType _type = SnackbarType.Info;
+    private Timer? _hideTimer;
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("[SnackbarComponent] OnInitialized - Subscribing to OnShow event");
+        SnackbarService.OnShow += OnSnackbarShow;
+        Console.WriteLine("[SnackbarComponent] OnInitialized - Subscription complete");
+    }
+
+    private void OnSnackbarShow(SnackbarMessage message)
+    {
+        Console.WriteLine($"[SnackbarComponent] OnSnackbarShow called - Message: '{message.Message}', Type: {message.Type}, IsVisible: {message.IsVisible}");
+        
+        _message = message.Message;
+        _type = message.Type;
+        _isVisible = message.IsVisible;
+
+        Console.WriteLine($"[SnackbarComponent] State updated - _message: '{_message}', _type: {_type}, _isVisible: {_isVisible}");
+
+        if (_isVisible)
+        {
+            // Clear existing timer
+            _hideTimer?.Dispose();
+            
+            // Set new timer to auto-hide
+            _hideTimer = new Timer(_ => Hide(), null, message.Duration, Timeout.Infinite);
+            Console.WriteLine($"[SnackbarComponent] Timer set for {message.Duration}ms");
+        }
+
+        Console.WriteLine($"[SnackbarComponent] Calling StateHasChanged()");
+        StateHasChanged();
+        Console.WriteLine($"[SnackbarComponent] StateHasChanged() completed");
+    }
+
+    private void Hide()
+    {
+        Console.WriteLine("[SnackbarComponent] Hide() called");
+        _isVisible = false;
+        _hideTimer?.Dispose();
+        _hideTimer = null;
+        Console.WriteLine("[SnackbarComponent] Hide() - calling StateHasChanged()");
+        StateHasChanged();
+        Console.WriteLine("[SnackbarComponent] Hide() completed");
+    }
+
+    private string GetBackgroundColor()
+    {
+        return _type switch
+        {
+            SnackbarType.Success => "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800",
+            SnackbarType.Error => "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
+            SnackbarType.Warning => "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800",
+            SnackbarType.Info => "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",
+            _ => "bg-gray-50 dark:bg-gray-900/20 border-gray-200 dark:border-gray-800"
+        };
+    }
+
+    private string GetTextColor()
+    {
+        return _type switch
+        {
+            SnackbarType.Success => "text-green-800 dark:text-green-200",
+            SnackbarType.Error => "text-red-800 dark:text-red-200",
+            SnackbarType.Warning => "text-yellow-800 dark:text-yellow-200",
+            SnackbarType.Info => "text-blue-800 dark:text-blue-200",
+            _ => "text-gray-800 dark:text-gray-200"
+        };
+    }
+
+    private string GetIcon()
+    {
+        return _type switch
+        {
+            SnackbarType.Success => "✅",
+            SnackbarType.Error => "❌",
+            SnackbarType.Warning => "⚠️",
+            SnackbarType.Info => "ℹ️",
+            _ => "ℹ️"
+        };
+    }
+
+    public void Dispose()
+    {
+        SnackbarService.OnShow -= OnSnackbarShow;
+        _hideTimer?.Dispose();
+    }
+}

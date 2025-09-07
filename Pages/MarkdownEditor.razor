@@ -1,35 +1,39 @@
 @page "/markdown-editor"
+@layout EditorLayout
 @using Markdig
 @inject IJSRuntime JsRuntime
 @implements IDisposable
 
-<MudContainer MaxWidth="MaxWidth.False">
-    <MudAppBar Elevation="4">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@DownloadMarkdown">Download</MudButton>
-    </MudAppBar>
+<div class="max-w-full">
+    <header class="bg-white dark:bg-gray-800 shadow-sm p-4 mb-4">
+        <div class="flex justify-end">
+            <button @onclick="DownloadMarkdown" class="btn btn-primary">
+                <span class="mr-2">💾</span>Download
+            </button>
+        </div>
+    </header>
 
-    <MudGrid Class="mt-4">
-        <MudItem xs="12">
-            <MudPaper Class="p-4">
-                <MudText Typo="Typo.h6">Editor</MudText>
-                <MudTextField @bind-Value="MarkdownContent"
-                              Placeholder="Start writing your markdown here..."
-                              Lines="20"
-                              FullWidth="true"
-                              Immediate="true"/>
-            </MudPaper>
-        </MudItem>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+        <div class="card">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Editor</h3>
+                <textarea @bind="MarkdownContent"
+                          placeholder="Start writing your markdown here..."
+                          rows="20"
+                          class="input resize-none font-mono text-sm"></textarea>
+            </div>
+        </div>
 
-        <MudItem xs="12">
-            <MudPaper Class="p-4">
-                <MudText Typo="Typo.h6">Preview</MudText>
-                <div class="mud-markdown-preview" @ref="_previewElement">
+        <div class="card">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Preview</h3>
+                <div class="prose dark:prose-invert max-w-none" @ref="_previewElement">
                     @((MarkupString)RenderedHtml)
                 </div>
-            </MudPaper>
-        </MudItem>
-    </MudGrid> 
-</MudContainer>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     private ElementReference _previewElement;
