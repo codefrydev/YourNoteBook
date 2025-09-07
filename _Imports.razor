@@ -9,10 +9,24 @@
 
 
 @using YourNoteBook
-@using YourNoteBook.Layout
-@using MudBlazor
-@using YourNoteBook.Components
-@using YourNoteBook.Components.Popup
-@using YourNoteBook.Data
-@using YourNoteBook.Utils
-@using YourNoteBook.Models
+@using YourNoteBook.Core.Entities
+@using YourNoteBook.Core.Interfaces
+@using YourNoteBook.Core.Abstractions
+@using YourNoteBook.Shared.Services.StateManagement
+@using YourNoteBook.Shared.Services.DataManagement
+@using YourNoteBook.Infrastructure.Services.Firebase
+@using YourNoteBook.Shared.Utilities
+@using YourNoteBook.Shared.Helpers
+@using YourNoteBook.Shared.Models.Configuration
+@using YourNoteBook.Shared.Models.DTOs.ResponseModels
+@using YourNoteBook.Shared.Models.Results
+@using YourNoteBook.Shared.Services.Utilities
+@using YourNoteBook.Shared.Components.UI.NoteCard
+@using YourNoteBook.Shared.Components.UI.ShortcutCard
+@using YourNoteBook.Shared.Components.UI.FolderHeader
+@using YourNoteBook.Shared.Components.UI.ContentFilter
+@using YourNoteBook.Shared.Components.UI.EmptyState
+@using YourNoteBook.Shared.Components.Layouts
+@using YourNoteBook.Shared.Components.Loading
+@using YourNoteBook.Shared.Components.UI.AppBar
+@using YourNoteBook.Shared.Components.UI.Dialogs

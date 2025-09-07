@@ -1,39 +1,158 @@
 using Microsoft.AspNetCore.Components;
-using YourNoteBook.Utils;
+using Microsoft.JSInterop;
+using YourNoteBook.Infrastructure.Data.Context;
+using YourNoteBook.Core.Entities;
+using YourNoteBook.Core.Interfaces;
+using YourNoteBook.Shared.Utilities;
+using YourNoteBook.Shared.Services.Utilities;
 
 namespace YourNoteBook.Pages;
 
-public partial class Folder : ComponentBase
+public partial class Folder : ComponentBase, IDisposable
 {
     [Parameter] public string FolderId { get; set; } = string.Empty;
-    private bool _isNoteShowing;
+    private bool _isNoteShowing = true; // Default to showing notes
+    private bool _isLoading = true;
+    private bool _isDisposed = false;
+    
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-    protected override Task OnInitializedAsync()
+    [Inject] private IManager<Note> NotesManager { get; set; } = null!;
+    [Inject] private IManager<Shortcut> ShortcutManager { get; set; } = null!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
+    [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
+
+    // Computed properties that react to InMemoryRepo changes
+    public Core.Entities.Folder? CurrentFolder => InMemoryRepo.GetFolderById(FolderId);
+    public List<Note> Notes => InMemoryRepo.GetNotesByFolderId(FolderId);
+    public List<Shortcut> Shortcuts => InMemoryRepo.GetShortcutsByFolderId(FolderId);
+    
+    protected override async Task OnInitializedAsync()
     {
         if (!CurrentContext.IsAuthenticated)
         {
             NavigationManager.NavigateTo("");
+            return;
         }
-        return base.OnInitializedAsync();
+        
+        // Set the current folder ID from the route parameter
+        if (!string.IsNullOrEmpty(FolderId))
+        {
+            CurrentContext.CurrentFolderId = FolderId;
+        }
+        
+        // Subscribe to data changes
+        InMemoryRepo.OnChange += OnDataChanged;
+        
+        // Load data from Firebase into InMemoryRepo
+        await LoadAllData();
+        
+        
+        _isLoading = false;
+        StateHasChanged();
+        
+        await base.OnInitializedAsync();
     }
 
-    private void ShowShortCut()
+    private async void OnDataChanged()
+    {
+        if (_isDisposed) return;
+        
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    /// <summary>
+    /// Refreshes data from Firebase and updates UI
+    /// </summary>
+    public async Task RefreshDataAsync()
+    {
+        if (_isDisposed) return;
+        
+        await LoadAllData();
+        StateHasChanged();
+    }
+
+    private void ShowShortcuts()
     {
         _isNoteShowing = false;
+        StateHasChanged();
     }
 
     private void ShowNotes()
     {
         _isNoteShowing = true;
+        StateHasChanged();
     }
 
-    protected override void OnInitialized()
+    private void NavigateToHome()
     {
-        InMemoryRepo.OnChange += StateHasChanged;
+        NavigationManager.NavigateTo("/");
     }
+
+    private void OpenNote(string noteId)
+    {
+        // For now, we'll just show an alert. In a real app, you might navigate to a note editor
+        JsRuntime.InvokeVoidAsync("alert", $"Opening note: {noteId}");
+    }
+
+    private void OpenShortcut(string shortcutId)
+    {
+        // For now, we'll just show an alert. In a real app, you might execute the shortcut
+        JsRuntime.InvokeVoidAsync("alert", $"Executing shortcut: {shortcutId}");
+    }
+
+    private void CreateNote()
+    {
+        // TODO: Implement note creation
+        JsRuntime.InvokeVoidAsync("alert", "Create Note functionality not yet implemented");
+    }
+
+    private void AddShortcut()
+    {
+        // TODO: Implement shortcut creation
+        JsRuntime.InvokeVoidAsync("alert", "Add Shortcut functionality not yet implemented");
+    }
+
+    private async Task LoadAllData()
+    {
+        if (!CurrentContext.IsAuthenticated)
+            return;
+            
+        try
+        {
+            _isLoading = true;
+            StateHasChanged();
+            
+            // Load all notes and shortcuts from Firebase
+            var allNotes = await NotesManager.GetAllSync();
+            var allShortcuts = await ShortcutManager.GetAllSync();
+            
+            // Update InMemoryRepo - single source of truth
+            InMemoryRepo.Notes = allNotes.ToList();
+            InMemoryRepo.Shortcuts = allShortcuts.ToList();
+            
+            // Trigger change notification
+            InMemoryRepo.NotifyDataChanged();
+        }
+        catch (Exception ex)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", $"Error loading data: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
 
     public void Dispose()
     {
-        InMemoryRepo.OnChange -= StateHasChanged;
+        if (!_isDisposed)
+        {
+            InMemoryRepo.OnChange -= OnDataChanged;
+            _isDisposed = true;
+        }
     }
 }

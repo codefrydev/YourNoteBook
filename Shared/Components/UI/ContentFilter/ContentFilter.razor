@@ -1,0 +1,29 @@
+<div class="content-filters">
+    <button class="filter-btn @(IsNotesActive ? "active" : "")" @onclick="ShowNotes">
+        <span class="material-symbols-outlined">description</span>
+        Notes (@NotesCount)
+    </button>
+    <button class="filter-btn @(IsShortcutsActive ? "active" : "")" @onclick="ShowShortcuts">
+        <span class="material-symbols-outlined">keyboard</span>
+        Shortcuts (@ShortcutsCount)
+    </button>
+</div>
+
+@code {
+    [Parameter] public bool IsNotesActive { get; set; } = true;
+    [Parameter] public bool IsShortcutsActive { get; set; } = false;
+    [Parameter] public int NotesCount { get; set; }
+    [Parameter] public int ShortcutsCount { get; set; }
+    [Parameter] public EventCallback OnShowNotes { get; set; }
+    [Parameter] public EventCallback OnShowShortcuts { get; set; }
+
+    private void ShowNotes()
+    {
+        OnShowNotes.InvokeAsync();
+    }
+
+    private void ShowShortcuts()
+    {
+        OnShowShortcuts.InvokeAsync();
+    }
+}

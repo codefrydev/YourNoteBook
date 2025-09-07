@@ -1,0 +1,688 @@
+@namespace YourNoteBook.Shared.Components.Layouts
+@inherits LayoutComponentBase  
+
+<div class="data-layout">
+    <!-- Data Header -->
+    <header class="data-header">
+        <div class="header-content">
+            <!-- Left Section -->
+            <div class="header-left">
+                <button class="back-btn" onclick="history.back()" title="Go Back">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </button>
+                <div class="file-info">
+                    <div class="file-icon">
+                        <span class="material-symbols-outlined">table_chart</span>
+                    </div>
+                    <div class="file-details">
+                        <h1 class="file-title">data.csv</h1>
+                        <span class="file-status">Modified</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Section - Data Tools -->
+            <div class="data-toolbar">
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" title="Add Row">
+                        <span class="material-symbols-outlined">add_row</span>
+                    </button>
+                    <button class="toolbar-btn" title="Add Column">
+                        <span class="material-symbols-outlined">add_column</span>
+                    </button>
+                    <button class="toolbar-btn" title="Delete Row">
+                        <span class="material-symbols-outlined">delete_row</span>
+                    </button>
+                </div>
+                <div class="toolbar-separator"></div>
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" title="Sort Ascending">
+                        <span class="material-symbols-outlined">sort</span>
+                    </button>
+                    <button class="toolbar-btn" title="Filter">
+                        <span class="material-symbols-outlined">filter_list</span>
+                    </button>
+                    <button class="toolbar-btn" title="Search">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                </div>
+                <div class="toolbar-separator"></div>
+                <div class="toolbar-group">
+                    <button class="toolbar-btn" title="Import">
+                        <span class="material-symbols-outlined">upload</span>
+                    </button>
+                    <button class="toolbar-btn" title="Export">
+                        <span class="material-symbols-outlined">download</span>
+                    </button>
+                    <button class="toolbar-btn" title="Format">
+                        <span class="material-symbols-outlined">format_align_left</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Section -->
+            <div class="header-right">
+                <button class="action-btn" title="Undo">
+                    <span class="material-symbols-outlined">undo</span>
+                </button>
+                <button class="action-btn" title="Redo">
+                    <span class="material-symbols-outlined">redo</span>
+                </button>
+                <button class="action-btn" title="Save">
+                    <span class="material-symbols-outlined">save</span>
+                </button>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <span class="material-symbols-outlined" id="theme-icon-data">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Data Body -->
+    <div class="data-body">
+        <!-- Data Sidebar -->
+        <aside class="data-sidebar">
+            <div class="sidebar-content">
+                <!-- File Info -->
+                <div class="file-info-section">
+                    <h3 class="section-title">File Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Rows:</span>
+                            <span class="info-value">1,250</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Columns:</span>
+                            <span class="info-value">8</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Size:</span>
+                            <span class="info-value">2.4 MB</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Encoding:</span>
+                            <span class="info-value">UTF-8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column Tools -->
+                <div class="column-tools">
+                    <h3 class="section-title">Column Tools</h3>
+                    <div class="column-list">
+                        <div class="column-item">
+                            <span class="column-name">ID</span>
+                            <div class="column-actions">
+                                <button class="column-btn" title="Sort">
+                                    <span class="material-symbols-outlined">sort</span>
+                                </button>
+                                <button class="column-btn" title="Filter">
+                                    <span class="material-symbols-outlined">filter_list</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="column-item">
+                            <span class="column-name">Name</span>
+                            <div class="column-actions">
+                                <button class="column-btn" title="Sort">
+                                    <span class="material-symbols-outlined">sort</span>
+                                </button>
+                                <button class="column-btn" title="Filter">
+                                    <span class="material-symbols-outlined">filter_list</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="column-item">
+                            <span class="column-name">Email</span>
+                            <div class="column-actions">
+                                <button class="column-btn" title="Sort">
+                                    <span class="material-symbols-outlined">sort</span>
+                                </button>
+                                <button class="column-btn" title="Filter">
+                                    <span class="material-symbols-outlined">filter_list</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3 class="section-title">Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="quick-btn">
+                            <span class="material-symbols-outlined">table_view</span>
+                            <span>Table View</span>
+                        </button>
+                        <button class="quick-btn">
+                            <span class="material-symbols-outlined">bar_chart</span>
+                            <span>Chart View</span>
+                        </button>
+                        <button class="quick-btn">
+                            <span class="material-symbols-outlined">analytics</span>
+                            <span>Statistics</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Data Area -->
+        <main class="data-main">
+            <div class="data-container">
+                @Body
+            </div>
+        </main>
+    </div>
+
+    <!-- Status Bar -->
+    <footer class="data-status-bar">
+        <div class="status-content">
+            <div class="status-left">
+                <span class="status-item">Row 1, Column A</span>
+                <span class="status-item">Selected: 1 cell</span>
+                <span class="status-item">Mode: Edit</span>
+            </div>
+            <div class="status-right">
+                <span class="status-item">CSV</span>
+                <span class="status-item">UTF-8</span>
+                <span class="status-item">Auto-save: On</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<style>
+    .data-layout {
+        min-height: 100vh;
+        background-color: #ffffff;
+        color: #111827;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dark .data-layout {
+        background-color: #111827;
+        color: #f9fafb;
+    }
+
+    .data-header {
+        background-color: white;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .dark .data-header {
+        background-color: #1f2937;
+        border-bottom-color: #374151;
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .back-btn {
+        padding: 0.5rem;
+        color: #6b7280;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .back-btn:hover {
+        color: #374151;
+        background-color: #f3f4f6;
+    }
+
+    .dark .back-btn {
+        color: #9ca3af;
+    }
+
+    .dark .back-btn:hover {
+        color: #e5e7eb;
+        background-color: #374151;
+    }
+
+    .file-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .file-icon {
+        width: 2rem;
+        height: 2rem;
+        background-color: #dbeafe;
+        border-radius: 0.375rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2563eb;
+    }
+
+    .dark .file-icon {
+        background-color: rgb(59 130 246 / 0.3);
+        color: #60a5fa;
+    }
+
+    .file-details {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .file-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .dark .file-title {
+        color: white;
+    }
+
+    .file-status {
+        font-size: 0.75rem;
+        color: #f59e0b;
+    }
+
+    .data-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: #f9fafb;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .dark .data-toolbar {
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+
+    .toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .toolbar-separator {
+        width: 1px;
+        height: 1.5rem;
+        background-color: #d1d5db;
+        margin: 0 0.25rem;
+    }
+
+    .dark .toolbar-separator {
+        background-color: #4b5563;
+    }
+
+    .toolbar-btn {
+        padding: 0.375rem;
+        color: #6b7280;
+        border-radius: 0.25rem;
+        transition: all 0.2s;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .toolbar-btn:hover {
+        color: #374151;
+        background-color: #e5e7eb;
+    }
+
+    .dark .toolbar-btn {
+        color: #9ca3af;
+    }
+
+    .dark .toolbar-btn:hover {
+        color: #e5e7eb;
+        background-color: #4b5563;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-width: 0;
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    .action-btn, .theme-toggle {
+        padding: 0.5rem;
+        color: #6b7280;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .action-btn:hover, .theme-toggle:hover {
+        color: #374151;
+        background-color: #f3f4f6;
+    }
+
+    .dark .action-btn, .dark .theme-toggle {
+        color: #9ca3af;
+    }
+
+    .dark .action-btn:hover, .dark .theme-toggle:hover {
+        color: #e5e7eb;
+        background-color: #374151;
+    }
+
+    .data-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .data-sidebar {
+        width: 18rem;
+        background-color: #f9fafb;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dark .data-sidebar {
+        background-color: #1f2937;
+        border-right-color: #374151;
+    }
+
+    .sidebar-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+    }
+
+    .dark .section-title {
+        color: #9ca3af;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.5rem;
+        background-color: white;
+        border-radius: 0.375rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .dark .info-item {
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+
+    .dark .info-label {
+        color: #9ca3af;
+    }
+
+    .info-value {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .dark .info-value {
+        color: white;
+    }
+
+    .column-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .column-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem;
+        background-color: white;
+        border-radius: 0.375rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .dark .column-item {
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+
+    .column-name {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #374151;
+    }
+
+    .dark .column-name {
+        color: #d1d5db;
+    }
+
+    .column-actions {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .column-btn {
+        padding: 0.25rem;
+        color: #6b7280;
+        border-radius: 0.25rem;
+        transition: all 0.2s;
+        border: none;
+        background: none;
+        cursor: pointer;
+    }
+
+    .column-btn:hover {
+        color: #374151;
+        background-color: #f3f4f6;
+    }
+
+    .dark .column-btn {
+        color: #9ca3af;
+    }
+
+    .dark .column-btn:hover {
+        color: #e5e7eb;
+        background-color: #4b5563;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .quick-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+        color: #374151;
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+
+    .dark .quick-btn {
+        color: #d1d5db;
+        background-color: #374151;
+        border-color: #4b5563;
+    }
+
+    .quick-btn:hover {
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+    }
+
+    .dark .quick-btn:hover {
+        background-color: #4b5563;
+        border-color: #6b7280;
+    }
+
+    .data-main {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .data-container {
+        flex: 1;
+        padding: 1rem;
+        overflow: auto;
+    }
+
+    .data-status-bar {
+        background-color: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+        padding: 0.5rem 1rem;
+    }
+
+    .dark .data-status-bar {
+        background-color: #1f2937;
+        border-top-color: #374151;
+    }
+
+    .status-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .status-left, .status-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .status-item {
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+
+    .dark .status-item {
+        color: #9ca3af;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 1024px) {
+        .data-sidebar {
+            width: 14rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .data-sidebar {
+            display: none;
+        }
+        
+        .data-toolbar {
+            display: none;
+        }
+        
+        .header-content {
+            padding: 0.5rem;
+        }
+        
+        .file-title {
+            font-size: 0.875rem;
+        }
+        
+        .status-content {
+            flex-direction: column;
+            gap: 0.25rem;
+            align-items: flex-start;
+        }
+        
+        .status-left, .status-right {
+            gap: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const themeIcon = document.getElementById('theme-icon-data');
+        
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    
+    // Initialize theme on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme');
+        const themeIcon = document.getElementById('theme-icon-data');
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+        }
+    });
+</script>

@@ -1,11 +1,11 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using YourNoteBook.Components.Popup;
-using YourNoteBook.Data;
-using YourNoteBook.Helper;
-using YourNoteBook.Models;
-using YourNoteBook.Utils;
+using Microsoft.JSInterop;
+using YourNoteBook.Infrastructure.Data.Context;
+using YourNoteBook.Shared.Helpers;
+using YourNoteBook.Core.Entities;
+using YourNoteBook.Core.Interfaces;
+using YourNoteBook.Shared.Utilities;
 
 namespace YourNoteBook.Pages;
 
@@ -13,9 +13,8 @@ public partial class Landing : ComponentBase
 {
     [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
     [Inject] private IFirebaseHelper FirebaseHelper { get; set; } = null!;
-    [Inject] private IManager<FolderModel> FolderManager { get; set; } = null!;
-    [Inject] private ISnackbar Snackbar { get; set; } = null!;
-    [Inject] private IDialogService DialogService { get; set; } = null!;
+    [Inject] private IManager<Core.Entities.Folder> FolderManager { get; set; } = null!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     protected override async Task OnInitializedAsync()
@@ -50,40 +49,50 @@ public partial class Landing : ComponentBase
         try
         {
             var result = await FolderManager.GetAllSync();
-            InMemoryRepo.Folders = result.ToList();
+            InMemoryRepo.Folders = result.Cast<Core.Entities.Folder>().ToList();
         }
         catch (Exception ex)
         {
-            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
-            Snackbar.Add($"Error loading contacts: {ex.Message}", Severity.Error);
+            await JsRuntime.InvokeVoidAsync("alert", $"Error loading contacts: {ex.Message}");
         }
     }
 
-    private async Task AddFirebaseCode()
+    private bool _showFirebaseDialog = false;
+
+    private void AddFirebaseCode()
     {
-        var options = new DialogOptions
+        _showFirebaseDialog = true;
+    }
+
+    private async Task OnFirebaseSaved(bool success)
+    {
+        _showFirebaseDialog = false;
+        
+        if (success)
         {
-            CloseOnEscapeKey = true,
-            BackgroundClass = "my-custom-class",
-            CloseButton = true,
-        };
-        var dialog = await DialogService.ShowAsync<FireBaseDialogue>("Simple Dialog", options);
-        var result = await dialog.Result;
-        if (result is { Canceled: false, Data: bool })
+            CurrentContext.IsAuthenticated = true;
+            await LoadAllData();
+            await JsRuntime.InvokeVoidAsync("alert", "✅ Firebase connected successfully! You can now create folders and notes.");
+        }
+        else
         {
-            CurrentContext.IsAuthenticated = (bool)result.Data;
+            await JsRuntime.InvokeVoidAsync("alert", "❌ Failed to connect to Firebase. Please check your configuration.");
         }
     }
 
-    private void  OpenHomePage()
+    private void OnFirebaseDialogCancel()
+    {
+        _showFirebaseDialog = false;
+    }
+
+    private void OpenHomePage()
     {
         NavigationManager.NavigateTo("Home");
     }
+    
     private async Task OpenThemeManager()
     {
-        var options = PopUpDialogueStyle.GetDefaultDialogOptions();
-
-        _ = await DialogService.ShowAsync<MudThemeChooser>(options.Title, options.Options);
+        await JsRuntime.InvokeVoidAsync("alert", "Theme management is now handled by Tailwind CSS!");
         StateHasChanged();
     }
 }

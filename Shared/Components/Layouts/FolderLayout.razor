@@ -1,0 +1,466 @@
+@namespace YourNoteBook.Shared.Components.Layouts
+@inherits LayoutComponentBase  
+
+<div class="app-container">
+    <!-- Modern Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <!-- Logo and Title -->
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 7V5C3 3.89543 3.89543 3 5 3H9L11 5H19C20.1046 5 21 5.89543 21 7V17C21 18.1046 20.1046 19 19 19H5C3.89543 19 3 18.1046 3 17V7Z" 
+                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 11H16M8 15H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h1 class="app-title">YourNoteBook</h1>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-icon">
+                    <span class="material-symbols-outlined">search</span>
+                </div>
+                <input type="text" placeholder="Search notes, shortcuts..." class="search-input" />
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button class="action-btn" title="Notifications">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <button class="action-btn" title="Settings">
+                    <span class="material-symbols-outlined">settings</span>
+                </button>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+                </button>
+                <div class="user-avatar">
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVKh-4nO9OFQV5z0BPegucoA3Dz_0m_TOObVhRT32kACloK6X3TYQyUH7qwdZOXITgLljZ5L5KqvHJiukvLVFJQSHlQ0nuBlaEXBhWLIoDXw5bf7Xxi0loIVqbE7RSBC3v2qq3G7sCQQXOpac6yhXZV-x8HPAkX49DL8NmlG7R8Tacxywnnlv8MD0JtizmGneD6U11LgeI6VaDU63E3oDL9qOOfQPaWxlBt35Su3z7H61bnVuNKULabWCRTunXaMom-Neur85RvWVT" 
+                         alt="User Avatar" class="avatar-img" />
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="app-body">
+        <!-- Modern Sidebar -->
+        <aside class="modern-sidebar">
+            <div class="sidebar-content">
+                <!-- Navigation -->
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <h3 class="nav-section-title">Workspace</h3>
+                        <a href="/" class="nav-item">
+                            <span class="material-symbols-outlined">home</span>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="/folders" class="nav-item">
+                            <span class="material-symbols-outlined">folder</span>
+                            <span>All Folders</span>
+                        </a>
+                        <a href="/notes" class="nav-item">
+                            <span class="material-symbols-outlined">description</span>
+                            <span>All Notes</span>
+                        </a>
+                    </div>
+
+                    <div class="nav-section">
+                        <h3 class="nav-section-title">Quick Access</h3>
+                        <a href="/recent" class="nav-item">
+                            <span class="material-symbols-outlined">history</span>
+                            <span>Recent</span>
+                        </a>
+                        <a href="/favorites" class="nav-item">
+                            <span class="material-symbols-outlined">star</span>
+                            <span>Favorites</span>
+                        </a>
+                        <a href="/shared" class="nav-item">
+                            <span class="material-symbols-outlined">share</span>
+                            <span>Shared</span>
+                        </a>
+                    </div>
+
+                    <div class="nav-section">
+                        <h3 class="nav-section-title">Tools</h3>
+                        <a href="/shortcuts" class="nav-item">
+                            <span class="material-symbols-outlined">keyboard</span>
+                            <span>Shortcuts</span>
+                        </a>
+                        <a href="/tags" class="nav-item">
+                            <span class="material-symbols-outlined">tag</span>
+                            <span>Tags</span>
+                        </a>
+                        <a href="/trash" class="nav-item">
+                            <span class="material-symbols-outlined">delete</span>
+                            <span>Trash</span>
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-actions">
+                    <button class="create-btn primary">
+                        <span class="material-symbols-outlined">add</span>
+                        <span>New Note</span>
+                    </button>
+                    <button class="create-btn secondary">
+                        <span class="material-symbols-outlined">folder_plus</span>
+                        <span>New Folder</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                @Body
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+    .app-container {
+        min-height: 100vh;
+        background-color: #f9fafb;
+        color: #111827;
+    }
+
+    .dark .app-container {
+        background-color: #111827;
+        color: #f9fafb;
+    }
+
+    .app-header {
+        background-color: white;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .dark .app-header {
+        background-color: #1f2937;
+        border-bottom-color: #374151;
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        max-width: 80rem;
+        margin: 0 auto;
+    }
+
+    .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .logo-icon {
+        width: 2rem;
+        height: 2rem;
+        color: #2563eb;
+    }
+
+    .dark .logo-icon {
+        color: #60a5fa;
+    }
+
+    .app-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .dark .app-title {
+        color: white;
+    }
+
+    .search-container {
+        position: relative;
+        flex: 1;
+        max-width: 28rem;
+        margin: 0 2rem;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+        background-color: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+    .dark .search-input {
+        background-color: #374151;
+        border-color: #4b5563;
+        color: #f9fafb;
+    }
+
+    .search-input:focus {
+        outline: none;
+        ring: 2px;
+        ring-color: #3b82f6;
+        border-color: transparent;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-btn, .theme-toggle {
+        padding: 0.5rem;
+        color: #6b7280;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover, .theme-toggle:hover {
+        color: #374151;
+        background-color: #f3f4f6;
+    }
+
+    .dark .action-btn, .dark .theme-toggle {
+        color: #9ca3af;
+    }
+
+    .dark .action-btn:hover, .dark .theme-toggle:hover {
+        color: #e5e7eb;
+        background-color: #374151;
+    }
+
+    .user-avatar {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-left: 0.5rem;
+    }
+
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .app-body {
+        display: flex;
+        flex: 1;
+    }
+
+    .modern-sidebar {
+        width: 16rem;
+        background-color: white;
+        border-right: 1px solid #e5e7eb;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dark .modern-sidebar {
+        background-color: #1f2937;
+        border-right-color: #374151;
+    }
+
+    .sidebar-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 1rem;
+    }
+
+    .sidebar-nav {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .nav-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .nav-section-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+    }
+
+    .dark .nav-section-title {
+        color: #9ca3af;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        color: #374151;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+    .dark .nav-item {
+        color: #d1d5db;
+    }
+
+    .nav-item:hover {
+        color: #111827;
+        background-color: #f3f4f6;
+    }
+
+    .dark .nav-item:hover {
+        color: white;
+        background-color: #374151;
+    }
+
+    .nav-item.active {
+        background-color: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .dark .nav-item.active {
+        background-color: rgb(59 130 246 / 0.2);
+        color: #93c5fd;
+    }
+
+    .sidebar-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .create-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .create-btn.primary {
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .create-btn.primary:hover {
+        background-color: #1d4ed8;
+    }
+
+    .create-btn.secondary {
+        background-color: #f3f4f6;
+        color: #374151;
+    }
+
+    .dark .create-btn.secondary {
+        background-color: #374151;
+        color: #d1d5db;
+    }
+
+    .create-btn.secondary:hover {
+        background-color: #e5e7eb;
+    }
+
+    .dark .create-btn.secondary:hover {
+        background-color: #4b5563;
+    }
+
+    .main-content {
+        flex: 1;
+        overflow: auto;
+    }
+
+    .content-wrapper {
+        padding: 1.5rem;
+        max-width: 80rem;
+        margin: 0 auto;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .modern-sidebar {
+            width: 4rem;
+        }
+        
+        .nav-item span:not(.material-symbols-outlined) {
+            display: none;
+        }
+        
+        .nav-section-title {
+            display: none;
+        }
+        
+        .create-btn span:not(.material-symbols-outlined) {
+            display: none;
+        }
+        
+        .search-container {
+            margin: 0 1rem;
+        }
+        
+        .header-content {
+            padding: 1rem;
+        }
+    }
+</style>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    
+    // Initialize theme on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            themeIcon.textContent = 'light_mode';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.textContent = 'dark_mode';
+        }
+    });
+</script>
