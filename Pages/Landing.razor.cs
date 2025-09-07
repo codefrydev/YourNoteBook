@@ -22,6 +22,10 @@ public partial class Landing : ComponentBase
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        
+        // Initialize theme from localStorage
+        await InitializeTheme();
+        
         var wasSuccess = await BlazoredLocalStorageHelper.RetrieveFromLocalStorage(LocalStorage);
         if (wasSuccess)
         {
@@ -33,6 +37,35 @@ public partial class Landing : ComponentBase
             await LoadAllData();
             // Automatically redirect to Home page if already authenticated
             NavigationManager.NavigateTo("/Home");
+        }
+    }
+    
+    private async Task InitializeTheme()
+    {
+        try
+        {
+            // Get saved theme from localStorage
+            var savedTheme = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "theme");
+            
+            if (!string.IsNullOrEmpty(savedTheme))
+            {
+                CurrentContext.IsDarkMode = savedTheme == "dark";
+            }
+            else
+            {
+                // Check system preference if no saved theme
+                var prefersDark = await JsRuntime.InvokeAsync<bool>("eval", "window.matchMedia('(prefers-color-scheme: dark)').matches");
+                CurrentContext.IsDarkMode = prefersDark;
+            }
+            
+            // Apply the theme to the DOM
+            await JsRuntime.InvokeVoidAsync("eval", $"document.documentElement.classList.toggle('dark', {CurrentContext.IsDarkMode.ToString().ToLower()})");
+        }
+        catch (Exception)
+        {
+            // Fallback to light mode if there's an error
+            CurrentContext.IsDarkMode = false;
+            await JsRuntime.InvokeVoidAsync("eval", "document.documentElement.classList.remove('dark')");
         }
     }
 
@@ -98,7 +131,26 @@ public partial class Landing : ComponentBase
     
     private async Task OpenThemeManager()
     {
-        SnackbarService.ShowInfo("Theme management is now handled by Tailwind CSS!");
-        StateHasChanged();
+        try
+        {
+            // Toggle the dark mode state
+            CurrentContext.IsDarkMode = !CurrentContext.IsDarkMode;
+            
+            // Apply the theme change to the DOM
+            await JsRuntime.InvokeVoidAsync("eval", $"document.documentElement.classList.toggle('dark', {CurrentContext.IsDarkMode.ToString().ToLower()})");
+            
+            // Save the theme preference to localStorage
+            await JsRuntime.InvokeVoidAsync("localStorage.setItem", "theme", CurrentContext.IsDarkMode ? "dark" : "light");
+            
+            // Show feedback to user
+            var themeText = CurrentContext.IsDarkMode ? "Dark" : "Light";
+            SnackbarService.ShowSuccess($"Switched to {themeText} theme!");
+            
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            SnackbarService.ShowError($"Failed to toggle theme: {ex.Message}");
+        }
     }
 }
