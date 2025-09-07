@@ -220,6 +220,17 @@
     <!-- Material Icons with fallback -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" onerror="console.log('Material Icons failed to load, using fallback icons')">
     
+    <!-- Google Analytics -->
+    <script>
+        var dnt,doNotTrack=!1;
+        if(!1&&(dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes"),!doNotTrack){
+            window.dataLayer=window.dataLayer||[];
+            function gtag(){dataLayer.push(arguments)}
+            gtag("js",new Date),gtag("config","G-VM01Q3R43D")
+        }
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VM01Q3R43D"></script>
+    
     <!-- Custom Styles -->
     <script src="highlight.js"></script>
     <link rel="stylesheet" href="global.css">
@@ -514,6 +525,7 @@
         </div>
     </div>
     <script src="firebaseInterop.js"></script> 
+    <script src="seo-interop.js"></script>
     <script src="_content/Blazored.LocalStorage/Blazored.LocalStorage.js" onerror="console.log('Blazored.LocalStorage.js not found, continuing without it')"></script>
     
     <script>

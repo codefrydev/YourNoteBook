@@ -7,6 +7,8 @@ using YourNoteBook.Core.Entities;
 using YourNoteBook.Core.Interfaces;
 using YourNoteBook.Shared.Utilities;
 using YourNoteBook.Shared.Services.Utilities;
+using YourNoteBook.Shared.Services.SEO;
+using YourNoteBook.Shared.Models.SEO;
 
 namespace YourNoteBook.Pages;
 
@@ -19,6 +21,7 @@ public partial class Landing : ComponentBase
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     [Inject] private SnackbarService SnackbarService { get; set; } = null!;
+    [Inject] private ISeoMetadataService SeoService { get; set; } = null!;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -38,6 +41,9 @@ public partial class Landing : ComponentBase
             // Automatically redirect to Home page if already authenticated
             NavigationManager.NavigateTo("/Home");
         }
+        
+        // Set SEO metadata for landing page
+        await SetSeoMetadataAsync();
     }
     
     private async Task InitializeTheme()
@@ -151,6 +157,62 @@ public partial class Landing : ComponentBase
         catch (Exception ex)
         {
             SnackbarService.ShowError($"Failed to toggle theme: {ex.Message}");
+        }
+    }
+    
+    private async Task SetSeoMetadataAsync()
+    {
+        try
+        {
+            // Set basic page metadata
+            await SeoService.SetPageMetadataAsync(
+                title: "YourNoteBook - Modern Note Taking App",
+                description: "Organize your thoughts and ideas with YourNoteBook. A modern, intuitive note-taking application with folder organization, tags, and cloud sync.",
+                keywords: "note taking, notes app, productivity, organization, cloud sync, digital notebook",
+                imageUrl: "https://yournotebook.com/icon-192.png",
+                url: "https://yournotebook.com"
+            );
+
+            // Set Open Graph metadata
+            await SeoService.SetOpenGraphAsync(
+                title: "YourNoteBook - Modern Note Taking App",
+                description: "Organize your thoughts and ideas with YourNoteBook. A modern, intuitive note-taking application with folder organization, tags, and cloud sync.",
+                imageUrl: "https://yournotebook.com/icon-192.png",
+                url: "https://yournotebook.com"
+            );
+
+            // Set Twitter Card metadata
+            await SeoService.SetTwitterCardAsync(
+                title: "YourNoteBook - Modern Note Taking App",
+                description: "Organize your thoughts and ideas with YourNoteBook. A modern, intuitive note-taking application with folder organization, tags, and cloud sync.",
+                imageUrl: "https://yournotebook.com/icon-192.png",
+                url: "https://yournotebook.com"
+            );
+
+            // Set JSON-LD structured data
+            var websiteJsonLd = new WebSiteJsonLd
+            {
+                Name = "YourNoteBook",
+                Description = "A modern note-taking application for organizing your thoughts and ideas",
+                Url = "https://yournotebook.com"
+            };
+
+            var softwareAppJsonLd = new SoftwareApplicationJsonLd
+            {
+                Name = "YourNoteBook",
+                Description = "A modern note-taking application for organizing your thoughts and ideas",
+                Url = "https://yournotebook.com",
+                ApplicationCategory = "ProductivityApplication",
+                OperatingSystem = "Web Browser",
+                Offers = new List<string> { "Free" }
+            };
+
+            await SeoService.SetJsonLdAsync(websiteJsonLd);
+        }
+        catch (Exception ex)
+        {
+            // Log error but don't break the page
+            Console.WriteLine($"Error setting SEO metadata: {ex.Message}");
         }
     }
 }

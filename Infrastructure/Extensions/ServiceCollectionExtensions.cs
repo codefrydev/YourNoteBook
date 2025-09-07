@@ -11,6 +11,7 @@ using YourNoteBook.Shared.Helpers;
 using YourNoteBook.Shared.Services.DataManagement;
 using YourNoteBook.Shared.Services.StateManagement;
 using YourNoteBook.Shared.Services.Utilities;
+using YourNoteBook.Shared.Services.SEO;
 using YourNoteBook.Shared.Utilities;
 using YourNoteBook.Infrastructure.Data.Context;
 
@@ -59,6 +60,10 @@ public static class ServiceCollectionExtensions
 
         // Add snackbar service
         services.AddSingleton<SnackbarService>();
+
+        // Add SEO metadata service
+        services.AddScoped<ISeoMetadataService, SeoMetadataService>();
+        services.AddScoped<IDynamicSeoService, DynamicSeoService>();
     }
 }
 

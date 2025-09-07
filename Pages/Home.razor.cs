@@ -6,6 +6,8 @@ using YourNoteBook.Core.Interfaces;
 using YourNoteBook.Shared.Utilities;
 using YourNoteBook.Shared.Models.Configuration;
 using YourNoteBook.Shared.Services.Utilities;
+using YourNoteBook.Shared.Services.SEO;
+using YourNoteBook.Shared.Models.SEO;
 
 namespace YourNoteBook.Pages;
 
@@ -21,6 +23,7 @@ public partial class Home : ComponentBase, IDisposable
     [Inject] private IJSRuntime JsRuntime { get; set; } = null!;
     [Inject] private InMemoryRepo InMemoryRepo { get; set; } = null!;
     [Inject] private SnackbarService SnackbarService { get; set; } = null!;
+    [Inject] private ISeoMetadataService SeoService { get; set; } = null!;
 
     // Computed properties that react to InMemoryRepo changes
     public List<Core.Entities.Folder> Folders => InMemoryRepo.Folders;
@@ -51,6 +54,9 @@ public partial class Home : ComponentBase, IDisposable
         StateHasChanged();
         
         await JsRuntime.InvokeVoidAsync("console.log", "Home page initialization complete");
+        
+        // Set SEO metadata for home page
+        await SetSeoMetadataAsync();
         
         await base.OnInitializedAsync();
     }
@@ -380,6 +386,72 @@ public partial class Home : ComponentBase, IDisposable
         {
             InMemoryRepo.OnChange -= OnDataChanged;
             _isDisposed = true;
+        }
+    }
+    
+    private async Task SetSeoMetadataAsync()
+    {
+        try
+        {
+            var folderCount = Folders.Count;
+            var noteCount = Notes.Count;
+            var shortcutCount = Shortcuts.Count;
+            
+            // Dynamic title and description based on content
+            var title = $"YourNoteBook Dashboard - {folderCount} Folders, {noteCount} Notes";
+            var description = $"Manage your digital workspace with {folderCount} folders, {noteCount} notes, and {shortcutCount} shortcuts. Organize your thoughts and boost productivity.";
+            
+            // Set basic page metadata
+            await SeoService.SetPageMetadataAsync(
+                title: title,
+                description: description,
+                keywords: "dashboard, notes, folders, productivity, organization, digital workspace",
+                imageUrl: "https://yournotebook.com/icon-192.png",
+                url: "https://yournotebook.com/home"
+            );
+
+            // Set Open Graph metadata
+            await SeoService.SetOpenGraphAsync(
+                title: title,
+                description: description,
+                imageUrl: "https://yournotebook.com/icon-192.png",
+                url: "https://yournotebook.com/home"
+            );
+
+            // Set Twitter Card metadata
+            await SeoService.SetTwitterCardAsync(
+                title: title,
+                description: description,
+                imageUrl: "https://yournotebook.com/icon-192.png",
+                url: "https://yournotebook.com/home"
+            );
+
+            // Set JSON-LD structured data for dashboard
+            var webPageJsonLd = new WebPageJsonLd
+            {
+                Name = title,
+                Description = description,
+                Url = "https://yournotebook.com/home",
+                DatePublished = DateTime.Now.ToString("yyyy-MM-dd"),
+                DateModified = DateTime.Now.ToString("yyyy-MM-dd")
+            };
+
+            // Create breadcrumb for navigation
+            var breadcrumbJsonLd = new BreadcrumbListJsonLd
+            {
+                ItemListElement = new List<BreadcrumbItemJsonLd>
+                {
+                    new() { Position = 1, Name = "Home", Item = "https://yournotebook.com" },
+                    new() { Position = 2, Name = "Dashboard", Item = "https://yournotebook.com/home" }
+                }
+            };
+
+            await SeoService.SetJsonLdAsync(webPageJsonLd);
+        }
+        catch (Exception ex)
+        {
+            // Log error but don't break the page
+            Console.WriteLine($"Error setting SEO metadata: {ex.Message}");
         }
     }
 }
